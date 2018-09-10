@@ -1,10 +1,14 @@
 import React from 'react'
+import { Container } from 'semantic-ui-react'
 import Navigation from './Navigation'
+import 'semantic-ui-css/semantic.min.css'
 
 let AppLayout = ({ children }) => (
   <div>
     <Navigation />
-    {children}
+    <Container>
+      {children}
+    </Container>
   </div>
 )
 
