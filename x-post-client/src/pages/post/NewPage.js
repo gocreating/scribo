@@ -5,7 +5,7 @@ import XEditor from '../../editor/XEditor'
 
 let NewPage = ({ children }) => (
   <AppLayout>
-    <Segment basic>
+    <Segment basic compact>
       <Header>
         New Post
       </Header>

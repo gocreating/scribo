@@ -1,62 +1,99 @@
 import React, { Component } from 'react'
+import { Grid, Form, TextArea } from 'semantic-ui-react'
 import {
   SortableContainer,
   SortableElement,
   SortableHandle,
   arrayMove,
 } from 'react-sortable-hoc'
+import '@fortawesome/fontawesome-free/css/all.css'
+import './XEditor.css'
 
 let DragHandle = SortableHandle(() => (
-  <span>::</span>
+  <i className="handle fas fa-arrows-alt"></i>
 ))
 
-let SortableItem = SortableElement(({ value }) => {
-  return (
-    <li>
-      <DragHandle />
-      {value}
-    </li>
-  )
-})
+class Block extends Component {
+  render() {
+    let { value } = this.props
+    let { text } = value
 
-let SortableList = SortableContainer(({ items }) => {
+    return (
+      <div className="block">
+        <Grid>
+          <Grid.Row>
+            <Grid.Column width={1}>
+              <DragHandle />
+            </Grid.Column>
+            <Grid.Column width={13}>
+              <Form>
+                <TextArea defaultValue={text} />
+              </Form>
+            </Grid.Column>
+            <Grid.Column width={2}>
+              {text}
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
+      </div>
+    )
+  }
+}
+let SortableBlock = SortableElement(Block)
+
+let BlockList = SortableContainer(({ blocks }) => {
   return (
-    <ul>
-      {items.map((value, index) => (
-        <SortableItem
+    <div>
+      {blocks.map((value, index) => (
+        <SortableBlock
           key={`item-${index}`}
           index={index}
           value={value}
         />
       ))}
-    </ul>
+    </div>
   )
 })
 
-class SortableComponent extends Component {
+class XEditor extends Component {
   state = {
-    items: ['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5', 'Item 6'],
+    blocks: [
+      { text: 'Item 1' },
+      { text: 'Item 2' },
+      { text: 'Item 3' },
+      { text: 'Item 4' },
+      { text: 'Item 5' },
+      { text: 'Item 6' },
+    ],
+  }
+
+  onSortStart = ({ node, index, collection }) => {
+    this.setState({ sorting: true, target: index })
   }
 
   onSortEnd = ({ oldIndex, newIndex }) => {
-    let { items } = this.state
+    let { blocks } = this.state
 
     this.setState({
-      items: arrayMove(items, oldIndex, newIndex),
+      blocks: arrayMove(blocks, oldIndex, newIndex),
     })
   }
 
   render() {
-    let { items } = this.state
+    let { blocks } = this.state
 
     return (
-      <SortableList
-        items={items}
-        onSortEnd={this.onSortEnd}
-        useDragHandle={true}
-      />
+      <div>
+        <BlockList
+          blocks={blocks}
+          onSortStart={this.onSortStart}
+          onSortEnd={this.onSortEnd}
+          useDragHandle
+          helperClass="dragging"
+        />
+      </div>
     )
   }
 }
 
-export default SortableComponent
+export default XEditor

@@ -1,0 +1,11 @@
+.block {
+  position: relative;
+  margin: 1px 0;
+  padding: 1px;
+}
+.block.dragging {
+  outline: 1px dotted #999;
+}
+.block .handle {
+  cursor: move;
+}
