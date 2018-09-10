@@ -1,59 +1,7 @@
 import React, { Component } from 'react'
-import { Grid, Form, TextArea } from 'semantic-ui-react'
-import {
-  SortableContainer,
-  SortableElement,
-  SortableHandle,
-  arrayMove,
-} from 'react-sortable-hoc'
-import '@fortawesome/fontawesome-free/css/all.css'
+import { arrayMove } from 'react-sortable-hoc'
+import BlockList from './BlockList'
 import './XEditor.css'
-
-let DragHandle = SortableHandle(() => (
-  <i className="handle fas fa-arrows-alt"></i>
-))
-
-class Block extends Component {
-  render() {
-    let { value } = this.props
-    let { text } = value
-
-    return (
-      <div className="block">
-        <Grid>
-          <Grid.Row>
-            <Grid.Column width={1}>
-              <DragHandle />
-            </Grid.Column>
-            <Grid.Column width={13}>
-              <Form>
-                <TextArea defaultValue={text} />
-              </Form>
-            </Grid.Column>
-            <Grid.Column width={2}>
-              {text}
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
-      </div>
-    )
-  }
-}
-let SortableBlock = SortableElement(Block)
-
-let BlockList = SortableContainer(({ blocks }) => {
-  return (
-    <div>
-      {blocks.map((value, index) => (
-        <SortableBlock
-          key={`item-${index}`}
-          index={index}
-          value={value}
-        />
-      ))}
-    </div>
-  )
-})
 
 class XEditor extends Component {
   state = {
@@ -88,8 +36,8 @@ class XEditor extends Component {
           blocks={blocks}
           onSortStart={this.onSortStart}
           onSortEnd={this.onSortEnd}
-          useDragHandle
           helperClass="dragging"
+          useDragHandle
         />
       </div>
     )
