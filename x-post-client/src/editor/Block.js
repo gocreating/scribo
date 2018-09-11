@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Grid } from 'semantic-ui-react'
 import { SortableElement } from 'react-sortable-hoc'
-import BlockHandle from './BlockHandle'
+import BlockToolbar from './BlockToolbar'
 
 class Block extends Component {
   render() {
@@ -17,15 +17,14 @@ class Block extends Component {
             </Grid.Column>
             <Grid.Column width={7}>
               {text}
+              {text}
             </Grid.Column>
             <Grid.Column width={2}>
               {text}
             </Grid.Column>
           </Grid.Row>
         </Grid>
-        <div className="toolbar">
-          <BlockHandle />
-        </div>
+        <BlockToolbar />
       </div>
     )
   }
