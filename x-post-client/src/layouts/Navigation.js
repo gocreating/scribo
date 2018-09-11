@@ -13,6 +13,7 @@ let Navigation = () => (
                 <img
                   src="/img/x-post.png"
                   style={{ height: 32 }}
+                  alt="logo"
                 />
               </Link>
             </Menu.Item>
