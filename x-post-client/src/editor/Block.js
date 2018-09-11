@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Grid, Form, TextArea } from 'semantic-ui-react'
+import { Grid } from 'semantic-ui-react'
 import { SortableElement } from 'react-sortable-hoc'
 import BlockHandle from './BlockHandle'
 
@@ -12,19 +12,20 @@ class Block extends Component {
       <div className="block">
         <Grid>
           <Grid.Row>
-            <Grid.Column width={1}>
-              <BlockHandle />
+            <Grid.Column width={7}>
+              {text}
             </Grid.Column>
-            <Grid.Column width={13}>
-              <Form>
-                <TextArea defaultValue={text} />
-              </Form>
+            <Grid.Column width={7}>
+              {text}
             </Grid.Column>
             <Grid.Column width={2}>
               {text}
             </Grid.Column>
           </Grid.Row>
         </Grid>
+        <div className="toolbar">
+          <BlockHandle />
+        </div>
       </div>
     )
   }

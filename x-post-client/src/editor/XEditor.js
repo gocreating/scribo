@@ -31,13 +31,15 @@ class XEditor extends Component {
     let { blocks } = this.state
 
     return (
-      <div>
+      <div className="blocklist">
         <BlockList
           blocks={blocks}
           onSortStart={this.onSortStart}
           onSortEnd={this.onSortEnd}
           helperClass="dragging"
+          lockAxis="y"
           useDragHandle
+          lockToContainerEdges
         />
       </div>
     )

@@ -6,7 +6,7 @@ let BlockList = ({ blocks }) => (
   <div>
     {blocks.map((value, index) => (
       <Block
-        key={`item-${index}`}
+        key={`block-${index}`}
         index={index}
         value={value}
       />
