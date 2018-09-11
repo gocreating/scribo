@@ -11,7 +11,10 @@ class BlockToolbar extends Component {
       <div className="toolbar">
         <Menu icon borderless fluid vertical compact size="mini">
           <BlockHandle />
-          <Menu.Item link>
+          <Menu.Item
+            link
+            onClick={this.props.onPrependClick}
+          >
             <span className="fa-layers fa-fw">
               <FontAwesomeIcon
                 icon={faPlusSquare}
@@ -23,7 +26,10 @@ class BlockToolbar extends Component {
               />
             </span>
           </Menu.Item>
-          <Menu.Item link>
+          <Menu.Item
+            link
+            onClick={this.props.onAppendClick}
+          >
             <span className="fa-layers fa-fw">
               <FontAwesomeIcon
                 icon={faAngleDown}
@@ -35,7 +41,10 @@ class BlockToolbar extends Component {
               />
             </span>
           </Menu.Item>
-          <Menu.Item link>
+          <Menu.Item
+            link
+            onClick={this.props.onRemoveClick}
+          >
             <FontAwesomeIcon icon={faTrash} />
           </Menu.Item>
         </Menu>

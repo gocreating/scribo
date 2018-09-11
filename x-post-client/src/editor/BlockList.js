@@ -8,6 +8,7 @@ let BlockList = ({ blocks }) => (
       <Block
         key={`block-${index}`}
         index={index}
+        idx={index}
         value={value}
       />
     ))}
