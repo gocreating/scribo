@@ -38,6 +38,12 @@ let xBlock = (config) => (WrappedComponent) => {
       removeBlockByIndex(idx)
     }
 
+    updateValue = (value) => {
+      let { setValueByIndex, idx } = this.props
+
+      setValueByIndex(idx, value)
+    }
+
     render() {
       let { preview, value } = this.props
 
@@ -46,6 +52,7 @@ let xBlock = (config) => (WrappedComponent) => {
           <WrappedComponent
             preview={preview}
             value={value}
+            updateValue={this.updateValue}
           />
           <BlockToolbar
             preview={preview}

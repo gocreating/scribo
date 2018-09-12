@@ -15,7 +15,7 @@ class XEditor extends Component {
         id: shortid.generate(),
         type: BlockTypes.PLAIN_TEXT,
         preview: false,
-        value: 'test',
+        value: '',
       },
     ],
   }
@@ -37,6 +37,23 @@ class XEditor extends Component {
         {
           ...block,
           preview: Boolean(preview),
+        },
+        ...this.state.blocks.slice(idx + 1)
+      ],
+    }
+
+    this.setState(newState)
+  }
+
+  setValueByIndex = (idx, value) => {
+    let block = this.state.blocks[idx];
+    let newState = {
+      ...this.state,
+      blocks: [
+        ...this.state.blocks.slice(0, idx),
+        {
+          ...block,
+          value,
         },
         ...this.state.blocks.slice(idx + 1)
       ],
@@ -86,6 +103,7 @@ class XEditor extends Component {
     let showContent = blocks.length > 0
     let blockHelpers = {
       setPreviewByIndex: this.setPreviewByIndex,
+      setValueByIndex: this.setValueByIndex,
       insertBlockBeforeIndex: this.insertBlockBeforeIndex,
       removeBlockByIndex: this.removeBlockByIndex,
     }
@@ -119,6 +137,9 @@ class XEditor extends Component {
             </Button>
           </Container>
         )}
+        <pre>
+          {JSON.stringify(this.state.blocks, null, 2)}
+        </pre>
       </XEditorContext.Provider>
     )
   }

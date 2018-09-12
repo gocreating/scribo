@@ -1,0 +1,12 @@
+textarea.plaintext.editor {
+  border: 0px;
+}
+textarea.plaintext.editor,
+p.plaintext.content {
+  font-size: 20px;
+  text-align: justify;
+  line-height: 1.875em;
+  min-height: 1.875em;
+  padding: 0px;
+  margin: 10px 0;
+}
