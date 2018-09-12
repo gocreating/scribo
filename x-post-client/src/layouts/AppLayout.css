@@ -1,3 +1,11 @@
+@import url(//fonts.googleapis.com/earlyaccess/cwtexming.css);
+@import url(//fonts.googleapis.com/earlyaccess/cwtexyen.css);
+@import url(//fonts.googleapis.com/css?family=Open+Sans);
+
+.web-font {
+  font-family: 'Open Sans', 'cwTeXMing', serif !important;
+}
+
 body {
   background-color: #efefef;
 }
