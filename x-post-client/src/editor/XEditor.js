@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Container, Header, Button } from 'semantic-ui-react'
 import { arrayMove } from 'react-sortable-hoc'
+import BlockTypes from '../constants/BlockTypes'
 import BlockList from './BlockList'
 import './XEditor.css'
 
@@ -9,25 +10,30 @@ export let XEditorContext = React.createContext()
 class XEditor extends Component {
   state = {
     blocks: [
-      { text: 'Item 1' },
-      { text: 'Item 2' },
-      { text: 'Item 3' },
-      { text: 'Item 4' },
-      { text: 'Item 5' },
-      { text: 'Item 6' },
+      {
+        type: BlockTypes.PLAIN_TEXT,
+        value: 'test',
+      },
     ],
   }
 
   initBlock = () => {
-    this.insertBlockBeforeIndex(0, 'Let\'s go!')
+    this.insertBlockBeforeIndex(
+      0,
+      BlockTypes.PLAIN_TEXT,
+      'Let\'s go!'
+    )
   }
 
-  insertBlockBeforeIndex = (idx, text) => {
+  insertBlockBeforeIndex = (idx, type, value) => {
     this.setState({
       ...this.state,
       blocks: [
         ...this.state.blocks.slice(0, idx),
-        { text: text },
+        {
+          type: type,
+          value: value,
+        },
         ...this.state.blocks.slice(idx)
       ],
     })

@@ -1,17 +1,24 @@
 import React from 'react'
 import { SortableContainer } from 'react-sortable-hoc'
-import Block from './Block'
+import PlainText from './blocks/PlainText'
+import BlockTypes from '../constants/BlockTypes'
 
 let BlockList = ({ blocks }) => (
   <div>
-    {blocks.map((value, index) => (
-      <Block
-        key={`block-${index}`}
-        index={index}
-        idx={index}
-        value={value}
-      />
-    ))}
+    {blocks.map((block, index) => {
+      let { type, value } = block;
+
+      if (type === BlockTypes.PLAIN_TEXT) {
+        return (
+          <PlainText
+            key={`block-${index}`}
+            index={index}
+            idx={index}
+            value={value}
+          />
+        )
+      }
+    })}
   </div>
 )
 
