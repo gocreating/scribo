@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import shortid from 'shortid'
 import { Container, Header, Button } from 'semantic-ui-react'
 import { arrayMove } from 'react-sortable-hoc'
 import BlockTypes from '../constants/BlockTypes'
@@ -11,6 +12,7 @@ class XEditor extends Component {
   state = {
     blocks: [
       {
+        id: shortid.generate(),
         type: BlockTypes.PLAIN_TEXT,
         preview: false,
         value: 'test',
@@ -49,6 +51,7 @@ class XEditor extends Component {
       blocks: [
         ...this.state.blocks.slice(0, idx),
         {
+          id: shortid.generate(),
           type: type,
           preview: false,
           value: value,
