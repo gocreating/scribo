@@ -1,19 +1,35 @@
 import React, { Component } from 'react'
 import { Menu } from 'semantic-ui-react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faAngleUp, faAngleDown, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { faEye, faEyeSlash, faAngleUp, faAngleDown, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { faPlusSquare } from '@fortawesome/free-regular-svg-icons'
 import BlockHandle from './BlockHandle'
 
 class BlockToolbar extends Component {
   render() {
+    let {
+      preview,
+      onPreviewClick,
+      onPrependClick,
+      onAppendClick,
+      onRemoveClick,
+    } = this.props
+
     return (
       <div className="toolbar">
         <Menu icon borderless fluid vertical compact size="mini">
           <BlockHandle />
           <Menu.Item
             link
-            onClick={this.props.onPrependClick}
+            onClick={onPreviewClick}
+          >
+            <FontAwesomeIcon
+              icon={preview ? faEyeSlash : faEye}
+            />
+          </Menu.Item>
+          <Menu.Item
+            link
+            onClick={onPrependClick}
           >
             <span className="fa-layers fa-fw">
               <FontAwesomeIcon
@@ -28,7 +44,7 @@ class BlockToolbar extends Component {
           </Menu.Item>
           <Menu.Item
             link
-            onClick={this.props.onAppendClick}
+            onClick={onAppendClick}
           >
             <span className="fa-layers fa-fw">
               <FontAwesomeIcon
@@ -43,7 +59,7 @@ class BlockToolbar extends Component {
           </Menu.Item>
           <Menu.Item
             link
-            onClick={this.props.onRemoveClick}
+            onClick={onRemoveClick}
           >
             <FontAwesomeIcon icon={faTrash} />
           </Menu.Item>

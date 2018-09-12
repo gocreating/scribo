@@ -1,23 +1,37 @@
 import React, { Component } from 'react'
-import { Grid } from 'semantic-ui-react'
+import { Grid, Form, TextArea } from 'semantic-ui-react'
 import xBlock from '../hoc/xBlock'
 import BlockTypes from '../../constants/BlockTypes'
 
 class PlainText extends Component {
-  render() {
+  renderContent = () => {
     let { value } = this.props
+
+    return value
+  }
+
+  renderEditor = () => {
+    return (
+      <Form>
+        <TextArea
+          placeholder="Write something..."
+        />
+      </Form>
+    )
+  }
+
+  render() {
+    let { preview } = this.props
 
     return (
       <Grid>
         <Grid.Row>
-          <Grid.Column width={7}>
-            {value}
-          </Grid.Column>
-          <Grid.Column width={7}>
-            {value}
-          </Grid.Column>
-          <Grid.Column width={2}>
-            {value}
+          <Grid.Column>
+            {
+              preview ?
+              this.renderContent():
+              this.renderEditor()
+            }
           </Grid.Column>
         </Grid.Row>
       </Grid>

@@ -12,6 +12,7 @@ class XEditor extends Component {
     blocks: [
       {
         type: BlockTypes.PLAIN_TEXT,
+        preview: false,
         value: 'test',
       },
     ],
@@ -25,6 +26,23 @@ class XEditor extends Component {
     )
   }
 
+  setPreviewByIndex = (idx, preview) => {
+    let block = this.state.blocks[idx];
+    let newState = {
+      ...this.state,
+      blocks: [
+        ...this.state.blocks.slice(0, idx),
+        {
+          ...block,
+          preview: Boolean(preview),
+        },
+        ...this.state.blocks.slice(idx + 1)
+      ],
+    }
+
+    this.setState(newState)
+  }
+
   insertBlockBeforeIndex = (idx, type, value) => {
     this.setState({
       ...this.state,
@@ -32,6 +50,7 @@ class XEditor extends Component {
         ...this.state.blocks.slice(0, idx),
         {
           type: type,
+          preview: false,
           value: value,
         },
         ...this.state.blocks.slice(idx)
@@ -62,12 +81,14 @@ class XEditor extends Component {
   render() {
     let { blocks } = this.state
     let showContent = blocks.length > 0
+    let blockHelpers = {
+      setPreviewByIndex: this.setPreviewByIndex,
+      insertBlockBeforeIndex: this.insertBlockBeforeIndex,
+      removeBlockByIndex: this.removeBlockByIndex,
+    }
 
     return (
-      <XEditorContext.Provider value={{
-        insertBlockBeforeIndex: this.insertBlockBeforeIndex,
-        removeBlockByIndex: this.removeBlockByIndex,
-      }}>
+      <XEditorContext.Provider value={blockHelpers}>
         {showContent ? (
           <div className="blocklist">
             <BlockList

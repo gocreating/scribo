@@ -5,15 +5,16 @@ import BlockTypes from '../constants/BlockTypes'
 
 let BlockList = ({ blocks }) => (
   <div>
-    {blocks.map((block, index) => {
-      let { type, value } = block;
+    {blocks.map((block, idx) => {
+      let { type, preview, value } = block;
 
       if (type === BlockTypes.PLAIN_TEXT) {
         return (
           <PlainText
-            key={`block-${index}`}
-            index={index}
-            idx={index}
+            key={`block-${idx}`}
+            index={idx}
+            idx={idx}
+            preview={preview}
             value={value}
           />
         )

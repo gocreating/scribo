@@ -10,6 +10,17 @@ let xBlock = (config) => (WrappedComponent) => {
   } = config
 
   class BlockContainer extends Component {
+    handlePreviewClick = () => {
+      let {
+        setPreviewByIndex,
+        idx,
+        preview,
+        value,
+      } = this.props
+
+      setPreviewByIndex(idx, !preview)
+    }
+
     handlePrependClick = () => {
       let { insertBlockBeforeIndex, idx } = this.props
 
@@ -29,14 +40,17 @@ let xBlock = (config) => (WrappedComponent) => {
     }
 
     render() {
-      let { value } = this.props
+      let { preview, value } = this.props
 
       return (
         <div className="block-container">
           <WrappedComponent
+            preview={preview}
             value={value}
           />
           <BlockToolbar
+            preview={preview}
+            onPreviewClick={this.handlePreviewClick}
             onPrependClick={this.handlePrependClick}
             onAppendClick={this.handleAppendClick}
             onRemoveClick={this.handleRemoveClick}
