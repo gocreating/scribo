@@ -15,7 +15,6 @@ let xBlock = (config) => (WrappedComponent) => {
         setPreviewByIndex,
         idx,
         preview,
-        value,
       } = this.props
 
       setPreviewByIndex(idx, !preview)

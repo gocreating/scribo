@@ -19,6 +19,7 @@ let BlockList = ({ blocks }) => (
           />
         )
       }
+      return null;
     })}
   </div>
 )
