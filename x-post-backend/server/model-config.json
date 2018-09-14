@@ -14,25 +14,25 @@
     ]
   },
   "User": {
-    "dataSource": "db"
+    "dataSource": "memoryDs"
   },
   "AccessToken": {
-    "dataSource": "db",
+    "dataSource": "memoryDs",
     "public": false
   },
   "ACL": {
-    "dataSource": "db",
+    "dataSource": "memoryDs",
     "public": false
   },
   "RoleMapping": {
-    "dataSource": "db",
+    "dataSource": "memoryDs",
     "public": false,
     "options": {
       "strictObjectIDCoercion": true
     }
   },
   "Role": {
-    "dataSource": "db",
+    "dataSource": "memoryDs",
     "public": false
   }
 }

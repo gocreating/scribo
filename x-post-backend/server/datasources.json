@@ -1,6 +1,7 @@
 {
-  "db": {
-    "name": "db",
-    "connector": "memory"
+  "memoryDs": {
+    "name": "memoryDs",
+    "connector": "memory",
+    "file": "./db.json"
   }
 }
