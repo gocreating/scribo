@@ -1,6 +1,6 @@
 import React from 'react'
 import { SortableContainer } from 'react-sortable-hoc'
-import PlainText from './blocks/PlainText'
+import PlainTextEditor from './blocks/PlainText/PlainTextEditor'
 import BlockTypes from '../constants/BlockTypes'
 
 let BlockList = ({ blocks }) => (
@@ -10,7 +10,7 @@ let BlockList = ({ blocks }) => (
 
       if (type === BlockTypes.PLAIN_TEXT) {
         return (
-          <PlainText
+          <PlainTextEditor
             key={id}
             index={idx}
             idx={idx}
