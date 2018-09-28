@@ -4,10 +4,7 @@ import BlockToolbar from '../BlockToolbar'
 import { XEditorContext } from '../XEditor'
 
 let xBlock = (config) => (WrappedComponent) => {
-  let {
-    type,
-    defaultValues,
-  } = config
+  let { defaultValues } = config
 
   class BlockContainer extends Component {
     handlePreviewClick = () => {
@@ -24,22 +21,30 @@ let xBlock = (config) => (WrappedComponent) => {
       let {
         createBlock,
         insertBlockBeforeIndex,
+        block,
         idx,
       } = this.props
-      let block = createBlock(type, defaultValues)
+      let newBlock = createBlock(
+        block.type,
+        defaultValues
+      )
 
-      insertBlockBeforeIndex(idx, block)
+      insertBlockBeforeIndex(idx, newBlock)
     }
 
     handleAppendClick = () => {
       let {
         createBlock,
         insertBlockBeforeIndex,
+        block,
         idx,
       } = this.props
-      let block = createBlock(type, defaultValues)
+      let newBlock = createBlock(
+        block.type,
+        defaultValues
+      )
 
-      insertBlockBeforeIndex(idx + 1, block)
+      insertBlockBeforeIndex(idx + 1, newBlock)
     }
 
     handleRemoveClick = () => {
