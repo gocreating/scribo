@@ -1,10 +1,10 @@
 import React from 'react'
 import './PlainText.css'
 
-let PlainText = ({ value }) => (
+let PlainText = ({ values }) => (
   <p className="plaintext content web-font">
     {
-      value
+      values
         .split('\n')
         .map((line, idx) => (
           <span key={`${idx}-${line}`}>

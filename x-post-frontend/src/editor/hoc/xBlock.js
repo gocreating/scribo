@@ -6,7 +6,7 @@ import { XEditorContext } from '../XEditor'
 let xBlock = (config) => (WrappedComponent) => {
   let {
     type,
-    defaultValue,
+    defaultValues,
   } = config
 
   class BlockContainer extends Component {
@@ -14,22 +14,36 @@ let xBlock = (config) => (WrappedComponent) => {
       let {
         setPreviewByIndex,
         idx,
-        preview,
+        block,
       } = this.props
 
-      setPreviewByIndex(idx, !preview)
+      setPreviewByIndex(idx, !block.preview)
     }
 
     handlePrependClick = () => {
-      let { insertBlockBeforeIndex, idx } = this.props
+      let {
+        insertBlockBeforeIndex,
+        idx,
+      } = this.props
 
-      insertBlockBeforeIndex(idx, type, defaultValue)
+      insertBlockBeforeIndex(
+        idx,
+        type,
+        defaultValues
+      )
     }
 
     handleAppendClick = () => {
-      let { insertBlockBeforeIndex, idx } = this.props
+      let {
+        insertBlockBeforeIndex,
+        idx,
+      } = this.props
 
-      insertBlockBeforeIndex(idx + 1, type, defaultValue)
+      insertBlockBeforeIndex(
+        idx + 1,
+        type,
+        defaultValues
+      )
     }
 
     handleRemoveClick = () => {
@@ -38,24 +52,41 @@ let xBlock = (config) => (WrappedComponent) => {
       removeBlockByIndex(idx)
     }
 
-    updateValue = (value) => {
-      let { setValueByIndex, idx } = this.props
+    updateValues = (values) => {
+      let { setValuesByIndex, idx } = this.props
 
-      setValueByIndex(idx, value)
+      setValuesByIndex(idx, values)
+    }
+
+    // helper for handling redux-form Field onChange
+    autoUpdateValues = (e, newValue, previousValue, name) => {
+      let { block } = this.props
+
+      this.updateValues({
+        ...block.values,
+        [name]: newValue,
+      })
     }
 
     render() {
-      let { preview, value } = this.props
+      let {
+        block,
+        formValues,
+      } = this.props
 
       return (
         <div className="block-container">
           <WrappedComponent
-            preview={preview}
-            value={value}
-            updateValue={this.updateValue}
+            block={block}
+            autoUpdateValues={this.autoUpdateValues}
+            // injected context helpers
+            updateValues={this.updateValues}
+            // redux-form props
+            form={block.id}
+            initialValues={block.values}
           />
           <BlockToolbar
-            preview={preview}
+            preview={block.preview}
             onPreviewClick={this.handlePreviewClick}
             onPrependClick={this.handlePrependClick}
             onAppendClick={this.handleAppendClick}

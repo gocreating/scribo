@@ -15,7 +15,9 @@ class XEditor extends Component {
         id: shortid.generate(),
         type: BlockTypes.PLAIN_TEXT,
         preview: false,
-        value: '',
+        values: {
+          text: 'xx',
+        },
       },
     ],
   }
@@ -24,7 +26,9 @@ class XEditor extends Component {
     this.insertBlockBeforeIndex(
       0,
       BlockTypes.PLAIN_TEXT,
-      'Let\'s go!'
+      {
+        text: 'Let\'s go!',
+      }
     )
   }
 
@@ -45,7 +49,7 @@ class XEditor extends Component {
     this.setState(newState)
   }
 
-  setValueByIndex = (idx, value) => {
+  setValuesByIndex = (idx, values) => {
     let block = this.state.blocks[idx];
     let newState = {
       ...this.state,
@@ -53,7 +57,7 @@ class XEditor extends Component {
         ...this.state.blocks.slice(0, idx),
         {
           ...block,
-          value,
+          values,
         },
         ...this.state.blocks.slice(idx + 1)
       ],
@@ -62,7 +66,7 @@ class XEditor extends Component {
     this.setState(newState)
   }
 
-  insertBlockBeforeIndex = (idx, type, value) => {
+  insertBlockBeforeIndex = (idx, type, values) => {
     this.setState({
       ...this.state,
       blocks: [
@@ -71,7 +75,7 @@ class XEditor extends Component {
           id: shortid.generate(),
           type: type,
           preview: false,
-          value: value,
+          values: values,
         },
         ...this.state.blocks.slice(idx)
       ],
@@ -103,7 +107,7 @@ class XEditor extends Component {
     let showContent = blocks.length > 0
     let blockHelpers = {
       setPreviewByIndex: this.setPreviewByIndex,
-      setValueByIndex: this.setValueByIndex,
+      setValuesByIndex: this.setValuesByIndex,
       insertBlockBeforeIndex: this.insertBlockBeforeIndex,
       removeBlockByIndex: this.removeBlockByIndex,
     }

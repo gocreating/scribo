@@ -1,37 +1,31 @@
 import React, { Component } from 'react'
-import { Grid, Form, TextArea } from 'semantic-ui-react'
-import { withFormik } from 'formik'
+import { compose } from 'recompose'
+import { Field, reduxForm } from 'redux-form'
+import { Grid, Form } from 'semantic-ui-react'
 import xBlock from '../../hoc/xBlock'
 import BlockTypes from '../../../constants/BlockTypes'
 import PlainText from './PlainText'
+import TextArea from '../../../fields/TextArea'
 
 class PlainTextEditor extends Component {
-  componentWillUpdate(nextProps) {
-    let cp = this.props
-    let np = nextProps
-
-    if (cp.values.text !== np.values.text) {
-      cp.updateValue(np.values.text)
-    }
-  }
-
   renderPreview = () => {
-    let { value } = this.props
+    let { block } = this.props
 
     return (
-      <PlainText value={value} />
+      <PlainText values={block.values.text} />
     )
   }
 
   renderEditor = () => {
-    let { values, handleChange } = this.props
+    let { block, autoUpdateValues } = this.props
 
     return (
       <Form>
-        <TextArea
+        <Field
           name="text"
-          onChange={handleChange}
-          value={values.text}
+          component={TextArea}
+          value={block.values.text}
+          onChange={autoUpdateValues}
           placeholder="Write something..."
           rows={1}
           autoHeight
@@ -42,14 +36,14 @@ class PlainTextEditor extends Component {
   }
 
   render() {
-    let { preview } = this.props
+    let { block } = this.props
 
     return (
       <Grid>
         <Grid.Row>
           <Grid.Column>
-            {preview && this.renderPreview()}
-            {!preview && this.renderEditor()}
+            {block.preview && this.renderPreview()}
+            {!block.preview && this.renderEditor()}
           </Grid.Column>
         </Grid.Row>
       </Grid>
@@ -57,11 +51,13 @@ class PlainTextEditor extends Component {
   }
 }
 
-export default xBlock({
-  type: BlockTypes.PLAIN_TEXT,
-  defaultValue: '',
-})(withFormik({
-  mapPropsToValues: (props) => ({
-    text: props.value,
+let enhance = compose(
+  xBlock({
+    type: BlockTypes.PLAIN_TEXT,
+    defaultValues: {
+      text: '',
+    },
   }),
-})(PlainTextEditor))
+  reduxForm()
+)
+export default enhance(PlainTextEditor)

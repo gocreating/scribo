@@ -6,16 +6,15 @@ import BlockTypes from '../constants/BlockTypes'
 let BlockList = ({ blocks }) => (
   <div>
     {blocks.map((block, idx) => {
-      let { id, type, preview, value } = block;
-
-      if (type === BlockTypes.PLAIN_TEXT) {
+      if (block.type === BlockTypes.PLAIN_TEXT) {
         return (
           <PlainTextEditor
-            key={id}
+            key={block.id}
+            block={block}
+            // react-sortable-hoc props
             index={idx}
+            // xBlock hoc props
             idx={idx}
-            preview={preview}
-            value={value}
           />
         )
       }
