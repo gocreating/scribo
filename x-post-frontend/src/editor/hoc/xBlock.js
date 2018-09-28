@@ -71,10 +71,7 @@ let xBlock = (config) => (WrappedComponent) => {
     }
 
     render() {
-      let {
-        block,
-        formValues,
-      } = this.props
+      let { block } = this.props
 
       return (
         <div className="block-container">
