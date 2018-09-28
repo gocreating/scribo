@@ -1,7 +1,7 @@
 import React from 'react'
 import AppLayout from '../../layouts/AppLayout'
 
-let NotFoundPage = ({ children }) => (
+let NotFoundPage = () => (
   <AppLayout>
     Page Not Found.
   </AppLayout>

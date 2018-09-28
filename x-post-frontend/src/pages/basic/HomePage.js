@@ -1,7 +1,7 @@
 import React from 'react'
 import AppLayout from '../../layouts/AppLayout'
 
-let HomePage = ({ children }) => (
+let HomePage = () => (
   <AppLayout>
     Home
   </AppLayout>

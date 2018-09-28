@@ -3,7 +3,7 @@ import { Segment, Header } from 'semantic-ui-react'
 import AppLayout from '../../layouts/AppLayout'
 import XEditor from '../../editor/XEditor'
 
-let NewPage = ({ children }) => (
+let NewPage = () => (
   <AppLayout>
     <Segment basic compact>
       <Header>
