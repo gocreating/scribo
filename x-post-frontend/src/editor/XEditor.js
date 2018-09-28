@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import shortid from 'shortid'
-import { Container, Header, Button } from 'semantic-ui-react'
 import { arrayMove } from 'react-sortable-hoc'
 import BlockTypes from '../constants/BlockTypes'
 import BlockList from './BlockList'
+import BlankBlock from '../utils/BlankBlock'
 import './XEditor.css'
 
 export let XEditorContext = React.createContext()
@@ -117,7 +117,7 @@ class XEditor extends Component {
 
     return (
       <XEditorContext.Provider value={blockHelpers}>
-        {showContent ? (
+        {showContent && (
           <div className="blocklist">
             <BlockList
               blocks={blocks}
@@ -128,21 +128,9 @@ class XEditor extends Component {
               lockToContainerEdges
             />
           </div>
-        ) : (
-          <Container textAlign="center">
-            <Header as="h2">
-              No Content
-              <Header.Subheader>
-                You don't have an block now. Please add a new block.
-              </Header.Subheader>
-            </Header>
-            <Button
-              color="yellow"
-              onClick={this.initBlock}
-            >
-              Add the first block
-            </Button>
-          </Container>
+        )}
+        {!showContent && (
+          <BlankBlock />
         )}
         <pre>
           {JSON.stringify(this.state.blocks, null, 2)}
