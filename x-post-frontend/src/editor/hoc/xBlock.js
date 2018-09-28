@@ -22,28 +22,24 @@ let xBlock = (config) => (WrappedComponent) => {
 
     handlePrependClick = () => {
       let {
+        createBlock,
         insertBlockBeforeIndex,
         idx,
       } = this.props
+      let block = createBlock(type, defaultValues)
 
-      insertBlockBeforeIndex(
-        idx,
-        type,
-        defaultValues
-      )
+      insertBlockBeforeIndex(idx, block)
     }
 
     handleAppendClick = () => {
       let {
+        createBlock,
         insertBlockBeforeIndex,
         idx,
       } = this.props
+      let block = createBlock(type, defaultValues)
 
-      insertBlockBeforeIndex(
-        idx + 1,
-        type,
-        defaultValues
-      )
+      insertBlockBeforeIndex(idx + 1, block)
     }
 
     handleRemoveClick = () => {

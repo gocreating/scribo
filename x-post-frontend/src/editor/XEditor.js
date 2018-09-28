@@ -23,60 +23,63 @@ class XEditor extends Component {
   }
 
   initBlock = () => {
-    this.insertBlockBeforeIndex(
-      0,
-      BlockTypes.PLAIN_TEXT,
-      {
+    let block = this.createBlock(
+      BlockTypes.PLAIN_TEXT, {
         text: 'Let\'s go!',
+      }
+    )
+    this.insertBlockBeforeIndex(0, block)
+  }
+
+  createBlock = (type, values, rest) => {
+    return {
+      id: shortid.generate(),
+      type,
+      values,
+      preview: false,
+      ...rest,
+    }
+  }
+
+  setBlockPropertiesByIndex = (idx, properties) => {
+    let block = this.state.blocks[idx];
+    let newState = {
+      ...this.state,
+      blocks: [
+        ...this.state.blocks.slice(0, idx),
+        {
+          ...block,
+          ...properties,
+        },
+        ...this.state.blocks.slice(idx + 1)
+      ],
+    }
+
+    this.setState(newState)
+  }
+
+  setPreviewByIndex = (idx, preview) => {
+    this.setBlockPropertiesByIndex(
+      idx, {
+        preview: Boolean(preview),
       }
     )
   }
 
-  setPreviewByIndex = (idx, preview) => {
-    let block = this.state.blocks[idx];
-    let newState = {
-      ...this.state,
-      blocks: [
-        ...this.state.blocks.slice(0, idx),
-        {
-          ...block,
-          preview: Boolean(preview),
-        },
-        ...this.state.blocks.slice(idx + 1)
-      ],
-    }
-
-    this.setState(newState)
-  }
-
   setValuesByIndex = (idx, values) => {
-    let block = this.state.blocks[idx];
-    let newState = {
-      ...this.state,
-      blocks: [
-        ...this.state.blocks.slice(0, idx),
-        {
-          ...block,
-          values,
-        },
-        ...this.state.blocks.slice(idx + 1)
-      ],
-    }
-
-    this.setState(newState)
+    this.setBlockPropertiesByIndex(
+      idx, {
+        values: values,
+      }
+    )
   }
 
-  insertBlockBeforeIndex = (idx, type, values) => {
+  insertBlockBeforeIndex = (idx, block) => {
     this.setState({
       ...this.state,
       blocks: [
         ...this.state.blocks.slice(0, idx),
-        {
-          id: shortid.generate(),
-          type: type,
-          preview: false,
-          values: values,
-        },
+        block,
         ...this.state.blocks.slice(idx)
       ],
     })
@@ -104,6 +107,8 @@ class XEditor extends Component {
     let { blocks } = this.state
     let showContent = blocks.length > 0
     let blockHelpers = {
+      createBlock: this.createBlock,
+      setBlockPropertiesByIndex: this.setBlockPropertiesByIndex,
       setPreviewByIndex: this.setPreviewByIndex,
       setValuesByIndex: this.setValuesByIndex,
       insertBlockBeforeIndex: this.insertBlockBeforeIndex,
