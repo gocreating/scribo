@@ -83,15 +83,13 @@ class XEditor extends Component {
   }
 
   removeBlockByIndex = (idx) => {
-    if (window.confirm('Sure?')) {
-      this.setState({
-        ...this.state,
-        blocks: [
-          ...this.state.blocks.splice(0, idx),
-          ...this.state.blocks.splice(1)
-        ],
-      })
-    }
+    this.setState({
+      ...this.state,
+      blocks: [
+        ...this.state.blocks.splice(0, idx),
+        ...this.state.blocks.splice(1)
+      ],
+    })
   }
 
   onSortEnd = ({ oldIndex, newIndex }) => {

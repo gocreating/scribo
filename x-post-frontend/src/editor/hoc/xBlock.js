@@ -49,7 +49,9 @@ let xBlock = (config) => (WrappedComponent) => {
     handleRemoveClick = () => {
       let { removeBlockByIndex, idx } = this.props
 
-      removeBlockByIndex(idx)
+      if (window.confirm('Sure?')) {
+        removeBlockByIndex(idx)
+      }
     }
 
     updateValues = (values) => {
