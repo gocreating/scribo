@@ -15,10 +15,16 @@
       "type": "string",
       "required": true,
       "id": true
+    },
+    "createdAt": {
+      "type": "date",
+      "defaultFn": "now"
     }
   },
   "mixins": {
-    "TimeStamp" : true
+    "TimeStamp" : {
+      "required": false
+    }
   },
   "validations": [],
   "relations": {},
