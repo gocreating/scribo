@@ -7,11 +7,19 @@
     "validateUpsert": true
   },
   "properties": {
+    "realm": false,
+    "credentials": false,
+    "challenges": false,
+    "username": false,
+    "emailVerified": false,
+    "status": false,
+    "created": false,
+    "lastUpdated": false,
     "id": {
       "type": "string",
       "id": true
     },
-    "username": {
+    "email": {
       "type": "string",
       "required": true,
       "id": true
@@ -21,6 +29,10 @@
       "defaultFn": "now"
     }
   },
+  "hidden": [
+    "createdAt",
+    "updatedAt"
+  ],
   "mixins": {
     "TimeStamp" : {
       "required": false
@@ -28,6 +40,23 @@
   },
   "validations": [],
   "relations": {},
-  "acls": [],
+  "acls": [
+    {
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "DENY"
+    },
+    {
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW",
+      "property": [
+        "create",
+        "xlogin",
+        "logout",
+        "findById"
+      ]
+    }
+  ],
   "methods": {}
 }
