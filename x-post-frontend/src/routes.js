@@ -3,6 +3,9 @@ let routes = [{
   path: '/',
   component: () => import('./pages/basic/HomePage'),
 }, {
+  path: '/user/signup',
+  component: () => import('./pages/user/NewPage'),
+}, {
   path: '/post/new',
   component: () => import('./pages/post/NewPage'),
 }, {

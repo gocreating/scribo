@@ -1,5 +1,5 @@
 import React from 'react'
-import { Grid, Menu, Container } from 'semantic-ui-react'
+import { Grid, Menu, Container, Button } from 'semantic-ui-react'
 import { Link } from 'react-router-dom'
 
 let Navigation = () => (
@@ -19,6 +19,11 @@ let Navigation = () => (
             </Menu.Item>
             <Menu.Item name="Home" as={Link} to="/" />
             <Menu.Item name="New Post" as={Link} to="/post/new" />
+            <Menu.Menu position="right">
+              <Menu.Item>
+                <Button primary as={Link} to="/user/signup">Sign Up</Button>
+              </Menu.Item>
+            </Menu.Menu>
           </Container>
         </Menu>
       </Grid.Column>
