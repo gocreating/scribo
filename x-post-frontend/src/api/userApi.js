@@ -7,6 +7,9 @@ class UserApi extends ApiClient {
   signin(user) {
     return this.post('/app-users/login', { data: user })
   }
+  logout() {
+    return this.post('/app-users/logout')
+  }
 }
 
 let userApi = new UserApi()

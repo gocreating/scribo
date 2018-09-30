@@ -1,13 +1,32 @@
 import superagent from 'superagent'
 import ApiBaseUrl from '../constants/ApiBaseUrl'
+import configureStore from '../configureStore'
+import { selectors } from '../ducks/auth'
 
 let methods = ['get', 'post', 'put', 'patch', 'del']
 
 export default class ApiClient {
+  accessToken = null
+
   constructor(base = ApiBaseUrl.MAIN) {
     methods.forEach((method) => {
-      this[method] = (path, { params, data, files } = {}) => {
+      this[method] = (path, {
+        params,
+        data,
+        files,
+        accessToken,
+      } = {}) => {
         let request = superagent[method](`${base}${path}`)
+        let state = configureStore.store.getState()
+        let storedToken = selectors.getAccessToken(state.auth)
+        let token = (
+          accessToken ||
+          this.accessToken ||
+          storedToken
+        )
+        if (token) {
+          request = request.set('Authorization', token)
+        }
 
         if (params) {
           request = request.query(params)
@@ -29,15 +48,8 @@ export default class ApiClient {
       }
     })
   }
-  /*
-   * There's a V8 bug where, when using Babel, exporting classes with only
-   * constructors sometimes fails. Until it's patched, this is a solution to
-   * "ApiClient is not defined" from issue #14.
-   * https://github.com/erikras/react-redux-universal-hot-example/issues/14
-   *
-   * Relevant Babel bug (but they claim it's V8): https://phabricator.babeljs.io/T2455
-   *
-   * Remove it at your own risk.
-   */
-  empty() {}
+
+  setAccessToken(accessToken) {
+    this.accessToken = accessToken
+  }
 }
