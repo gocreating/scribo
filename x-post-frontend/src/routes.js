@@ -6,6 +6,9 @@ let routes = [{
   path: '/user/signup',
   component: () => import('./pages/user/NewPage'),
 }, {
+  path: '/user/signin',
+  component: () => import('./pages/user/SigninPage'),
+}, {
   path: '/post/new',
   component: () => import('./pages/post/NewPage'),
 }, {
