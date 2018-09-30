@@ -3,18 +3,7 @@ import { Switch, Route } from 'react-router-dom'
 import { ConnectedRouter } from 'connected-react-router'
 import Loadable from 'react-loadable'
 import PageLoading from './utils/PageLoading'
-
-let routes = [{
-  exact: true,
-  path: '/',
-  component: () => import('./pages/basic/HomePage'),
-}, {
-  path: '/post/new',
-  component: () => import('./pages/post/NewPage'),
-}, {
-  path: '*',
-  component: () => import('./pages/basic/NotFoundPage'),
-}]
+import routes from './routes'
 
 let asyncRoutes = routes.map(({ path, component, ...rest }, idx) => (
   <Route
