@@ -31,5 +31,9 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
+  },
+  "devDependencies": {
+    "eslint-plugin-class-property": "^1.1.0",
+    "eslint-plugin-react-native": "^3.3.0"
   }
 }
