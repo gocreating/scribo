@@ -13,6 +13,7 @@ import { persistStore, persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 import { reducer as formReducer } from 'redux-form'
 import thunk from 'redux-thunk'
+import authReducer from './ducks/auth'
 
 let history = createBrowserHistory()
 let persistConfig = {
@@ -22,6 +23,7 @@ let persistConfig = {
 }
 let rootReducer = combineReducers({
   form: formReducer,
+  auth: authReducer,
 })
 let persistedReducer = persistReducer(persistConfig, rootReducer)
 let store = createStore(
