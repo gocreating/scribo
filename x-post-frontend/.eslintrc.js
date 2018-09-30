@@ -22,6 +22,7 @@ module.exports = {
     "semi": ["error", "never"],
   },
   "globals": {
+    "document": true,
     "alert": true,
     "FormData": true,
   }
