@@ -36,10 +36,8 @@ let store = createStore(
 )
 let persistor = persistStore(store)
 
-export default () => {
-  return {
-    store: store,
-    history: history,
-    persistor: persistor,
-  }
+export default {
+  store: store,
+  history: history,
+  persistor: persistor,
 }

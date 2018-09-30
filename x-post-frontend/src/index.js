@@ -6,7 +6,7 @@ import registerServiceWorker from './registerServiceWorker'
 import configureStore from './configureStore'
 import App from './App'
 
-let { store, history, persistor } = configureStore()
+let { store, history, persistor } = configureStore
 
 ReactDOM.render((
   <Provider store={store}>
