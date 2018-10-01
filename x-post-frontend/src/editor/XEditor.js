@@ -42,7 +42,7 @@ class XEditor extends Component {
   }
 
   setBlockPropertiesByIndex = (idx, properties) => {
-    let block = this.state.blocks[idx];
+    let block = this.state.blocks[idx]
     let newState = {
       ...this.state,
       blocks: [
