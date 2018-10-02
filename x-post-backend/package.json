@@ -7,6 +7,7 @@
   },
   "scripts": {
     "lint": "eslint .",
+    "local": "cross-env NODE_ENV=local nodemon .",
     "dev": "cross-env NODE_ENV=development nodemon .",
     "test": "cross-env NODE_ENV=test mocha --timeout 50000 test/main-endpoints.js",
     "posttest": "npm run lint",
