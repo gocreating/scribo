@@ -34,7 +34,7 @@
     "updatedAt"
   ],
   "mixins": {
-    "TimeStamp" : {
+    "TimeStamp": {
       "required": false
     }
   },
