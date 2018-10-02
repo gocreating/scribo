@@ -1,4 +1,5 @@
 export default {
   USER_SIGNUP: 'USER_SIGNUP',
   USER_SIGNIN: 'USER_SIGNIN',
+  POST_NEW: 'POST_NEW',
 }
