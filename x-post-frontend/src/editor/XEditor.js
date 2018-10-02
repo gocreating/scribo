@@ -136,9 +136,6 @@ class XEditor extends Component {
         {!showContent && (
           <BlankBlock />
         )}
-        <pre>
-          {JSON.stringify(this.state.blocks, null, 2)}
-        </pre>
       </XEditorContext.Provider>
     )
   }
