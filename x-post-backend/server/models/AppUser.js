@@ -7,6 +7,11 @@ module.exports = (AppUser) => {
     'create',
     'logout',
     'findById',
+    '__get__posts',
+    '__create__posts',
+    '__findById__posts',
+    '__updateById__posts',
+    '__destroyById__posts',
   ])
 
   AppUser.observe('before save', (ctx, next) => {

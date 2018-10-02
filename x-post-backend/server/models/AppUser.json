@@ -39,7 +39,13 @@
     }
   },
   "validations": [],
-  "relations": {},
+  "relations": {
+    "posts": {
+      "type": "hasMany",
+      "model": "Post",
+      "foreignKey": "authorId"
+    }
+  },
   "acls": [
     {
       "principalType": "ROLE",
@@ -54,7 +60,19 @@
         "create",
         "xlogin",
         "logout",
-        "findById"
+        "findById",
+        "__get__posts",
+        "__findById__posts"
+      ]
+    },
+    {
+      "principalType": "ROLE",
+      "principalId": "$owner",
+      "permission": "ALLOW",
+      "property": [
+        "__create__posts",
+        "__updateById__posts",
+        "__destroyById__posts"
       ]
     }
   ],
