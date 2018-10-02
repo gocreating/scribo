@@ -6,7 +6,7 @@ module.exports = {
     "ecmaFeatures": {
       "experimentalObjectRestSpread": true,
       "jsx": true,
-    }
+    },
   },
   "plugins": [
     "react",
@@ -14,7 +14,6 @@ module.exports = {
     "class-property",
   ],
   "extends": [
-    "eslint:recommended",
     "plugin:react/recommended",
   ],
   "rules": {
