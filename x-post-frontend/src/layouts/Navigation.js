@@ -20,9 +20,10 @@ let Navigation = ({ isAuth, logout }) => (
                 />
               </Link>
             </Menu.Item>
-            <Menu.Item name="Home" as={Link} to="/" />
-            <Menu.Item name="New Post" as={Link} to="/post/new" />
             <Menu.Menu position="right">
+              {isAuth && (
+                <Menu.Item name="New Post" as={Link} to="/post/new" />
+              )}
               {isAuth && (
                 <Menu.Item onClick={logout}>
                   Logout
