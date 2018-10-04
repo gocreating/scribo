@@ -29,7 +29,7 @@ class NewPage extends Component {
 
   render() {
     return (
-      <AppLayout>
+      <AppLayout placeholder>
         <NewForm onSubmit={this.handleSubmit} />
       </AppLayout>
     )
