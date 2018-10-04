@@ -1,5 +1,8 @@
-import { createActions } from 'redux-actions'
+import { createActions, handleActions } from 'redux-actions'
+import { normalize } from 'normalizr'
 import postApi from '../api/postApi'
+import { addEntities } from './entity'
+import { post as postSchema } from '../schema'
 
 // Action Creators
 const plainActionCreators = createActions({
@@ -7,12 +10,20 @@ const plainActionCreators = createActions({
   POST_LIST_API_FAILURE: (res) => ({ res }),
   POST_CREATE_API_SUCCESS: (res) => ({ res }),
   POST_CREATE_API_FAILURE: (res) => ({ res }),
+  SET_PAGE: (pageId, postIds) => ({ pageId, postIds }),
 })
 const thunkActionCreators = {
   postListApiRequest: (userId) => async (dispatch) => {
     try {
-      let response = await postApi.list(userId)
+      let response = await postApi.list(userId, {
+        params: {
+          filter: { include: 'author' },
+        },
+      })
       dispatch(postListApiSuccess(response))
+      let { result, entities } = normalize(response.body, [postSchema])
+      dispatch(addEntities(entities))
+      dispatch(setPage(1, result))
       return response.body
     } catch ({ response }) {
       dispatch(postListApiFailure(response))
@@ -36,8 +47,39 @@ export const {
   postCreateApiFailure,
   postListApiSuccess,
   postListApiFailure,
+  setPage,
 } = plainActionCreators
 export const {
   postCreateApiRequest,
   postListApiRequest,
 } = thunkActionCreators
+
+// Reducer
+const defaultState = {
+  pages: {},
+}
+export default handleActions({
+  [addEntities]: (state, { payload: { entities } }) => ({
+    ...state,
+    ...entities.posts,
+  }),
+  [setPage]: (state, { payload: { pageId, postIds } }) => ({
+    ...state,
+    pages: {
+      ...state.pages,
+      [pageId]: {
+        elements: postIds,
+      },
+    },
+  }),
+}, defaultState)
+
+export let selectors = {
+  getPosts: (state) => {
+    let page = state.pages['1'] || {}
+    let elements = page.elements || []
+    let posts = elements.map(postId => state[postId])
+
+    return posts
+  },
+}
