@@ -17,31 +17,29 @@ let xBlock = (config) => (WrappedComponent) => {
       setPreviewByIndex(idx, !block.preview)
     }
 
-    handlePrependClick = () => {
+    handlePrependClick = (blockType, insertValues, e) => {
       let {
         createBlock,
         insertBlockBeforeIndex,
-        block,
         idx,
       } = this.props
       let newBlock = createBlock(
-        block.type,
-        defaultValues
+        blockType,
+        insertValues
       )
 
       insertBlockBeforeIndex(idx, newBlock)
     }
 
-    handleAppendClick = () => {
+    handleAppendClick = (blockType, insertValues, e) => {
       let {
         createBlock,
         insertBlockBeforeIndex,
-        block,
         idx,
       } = this.props
       let newBlock = createBlock(
-        block.type,
-        defaultValues
+        blockType,
+        insertValues
       )
 
       insertBlockBeforeIndex(idx + 1, newBlock)

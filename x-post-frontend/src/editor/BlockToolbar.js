@@ -1,9 +1,18 @@
 import React, { Component } from 'react'
-import { Menu } from 'semantic-ui-react'
+import { Menu, Dropdown } from 'semantic-ui-react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEye, faEyeSlash, faAngleUp, faAngleDown, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { faPlusSquare } from '@fortawesome/free-regular-svg-icons'
 import BlockHandle from './BlockHandle'
+import BlockTypes from '../constants/BlockTypes'
+
+const AvailableBlocks = [{
+  type: BlockTypes.PLAIN_TEXT,
+  label: 'Plain Text',
+  insertValues: {
+    text: '',
+  },
+}]
 
 class BlockToolbar extends Component {
   render() {
@@ -27,10 +36,7 @@ class BlockToolbar extends Component {
               icon={preview ? faEyeSlash : faEye}
             />
           </Menu.Item>
-          <Menu.Item
-            link
-            onClick={onPrependClick}
-          >
+          <Dropdown item icon={
             <span className="fa-layers fa-fw">
               <FontAwesomeIcon
                 icon={faPlusSquare}
@@ -41,11 +47,23 @@ class BlockToolbar extends Component {
                 transform="shrink-1 down-6"
               />
             </span>
-          </Menu.Item>
-          <Menu.Item
-            link
-            onClick={onAppendClick}
-          >
+          }>
+            <Dropdown.Menu>
+              {AvailableBlocks.map(block => (
+                <Dropdown.Item
+                  key={block.type}
+                  onClick={onPrependClick.bind(
+                    this,
+                    block.type,
+                    block.insertValues
+                  )}
+                >
+                  {block.label}
+                </Dropdown.Item>
+              ))}
+            </Dropdown.Menu>
+          </Dropdown>
+          <Dropdown item icon={
             <span className="fa-layers fa-fw">
               <FontAwesomeIcon
                 icon={faAngleDown}
@@ -56,7 +74,22 @@ class BlockToolbar extends Component {
                 transform="shrink-1 down-6"
               />
             </span>
-          </Menu.Item>
+          }>
+            <Dropdown.Menu>
+              {AvailableBlocks.map(block => (
+                <Dropdown.Item
+                  key={block.type}
+                  onClick={onAppendClick.bind(
+                    this,
+                    block.type,
+                    block.insertValues
+                  )}
+                >
+                  {block.label}
+                </Dropdown.Item>
+              ))}
+            </Dropdown.Menu>
+          </Dropdown>
           <Menu.Item
             link
             onClick={onRemoveClick}
