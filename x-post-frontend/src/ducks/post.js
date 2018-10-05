@@ -3,6 +3,7 @@ import { normalize } from 'normalizr'
 import postApi from '../api/postApi'
 import { addEntities } from './entity'
 import { post as postSchema } from '../schema'
+import createApiError from '../utils/createApiError'
 
 // Action Creators
 const plainActionCreators = createActions({
@@ -25,7 +26,8 @@ const thunkActionCreators = {
       dispatch(addEntities(entities))
       dispatch(setPage(1, result))
       return response.body
-    } catch ({ response }) {
+    } catch (error) {
+      let response = createApiError(error)
       dispatch(postListApiFailure(response))
       return response.body
     }

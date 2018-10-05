@@ -1,6 +1,7 @@
 import { createActions } from 'redux-actions'
 import { setAuth, clearAuth } from './auth'
 import userApi from '../api/userApi'
+import createApiError from '../utils/createApiError'
 
 // Action Creators
 const plainActionCreators = createActions({
@@ -17,7 +18,8 @@ const thunkActionCreators = {
       let response = await userApi.signup(user)
       dispatch(signupApiSuccess(response))
       return response.body
-    } catch ({ response }) {
+    } catch (error) {
+      let response = createApiError(error)
       dispatch(signupApiFailure(response))
       return response.body
     }
@@ -40,7 +42,8 @@ const thunkActionCreators = {
       ))
       dispatch(signinApiSuccess(response))
       return response.body
-    } catch ({ response }) {
+    } catch (error) {
+      let response = createApiError(error)
       dispatch(signinApiFailure(response))
       return response.body
     }
@@ -51,7 +54,8 @@ const thunkActionCreators = {
       dispatch(clearAuth())
       dispatch(logoutApiSuccess(response))
       return response.body
-    } catch ({ response }) {
+    } catch (error) {
+      let response = createApiError(error)
       dispatch(logoutApiFailure(response))
       return response.body
     }
