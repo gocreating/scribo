@@ -8,13 +8,9 @@ import PlainText from './PlainText'
 import TextArea from '../../../fields/TextArea'
 
 class PlainTextEditor extends Component {
-  renderPreview = () => {
-    let { block } = this.props
-
-    return (
-      <PlainText values={block.values.text} />
-    )
-  }
+  renderPreview = () => (
+    <PlainText block={this.props.block} />
+  )
 
   renderEditor = () => {
     let { block, autoUpdateValues } = this.props
