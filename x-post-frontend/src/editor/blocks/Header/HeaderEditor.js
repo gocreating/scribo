@@ -3,6 +3,7 @@ import { compose } from 'recompose'
 import { Field, reduxForm } from 'redux-form'
 import { Grid, Form } from 'semantic-ui-react'
 import xBlock from '../../hoc/xBlock'
+import propsToolbar from '../../hoc/propsToolbar'
 import BlockTypes from '../../../constants/BlockTypes'
 import Header from './Header'
 import TextArea from '../../../fields/TextArea'
@@ -59,6 +60,18 @@ let enhance = compose(
       text: '',
       level: 1,
     },
+  }),
+  propsToolbar({
+    items: [{
+      label: 'H1',
+      propsMap: { level: 1 },
+    }, {
+      label: 'H2',
+      propsMap: { level: 2 },
+    }, {
+      label: 'H3',
+      propsMap: { level: 3 },
+    }],
   }),
   reduxForm()
 )

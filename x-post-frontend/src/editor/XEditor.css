@@ -35,3 +35,23 @@
 .block-container .toolbar .handle {
   cursor: move;
 }
+
+/* props toolbar */
+.block-container .props-toolbar {
+  visibility: hidden;
+  position: absolute;
+  left: 0px;
+  bottom: 100%;
+  width: 100%;
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+.block-container:hover .props-toolbar {
+  visibility: visible;
+}
+.props-toolbar-container {
+  background-color: #fff;
+  /* below are cpoied from .ui.compact.menu */
+  display: inline-flex;
+  margin: 0;
+}
