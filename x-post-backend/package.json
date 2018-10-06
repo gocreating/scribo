@@ -14,7 +14,7 @@
     "nsp": "nsp check",
     "production": "cross-env NODE_ENV=production node .",
     "dump": "node ./dump.js",
-    "deploy-heroku": "cd .. && git subtree push --force --prefix x-post-backend heroku master",
+    "deploy-heroku": "cd .. && git subtree push --prefix x-post-backend heroku master",
     "deploy": "npm run dump && npm run deploy-heroku"
   },
   "dependencies": {
