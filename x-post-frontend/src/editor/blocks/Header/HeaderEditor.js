@@ -5,7 +5,6 @@ import { Grid, Form } from 'semantic-ui-react'
 import xBlock from '../../hoc/xBlock'
 import BlockTypes from '../../../constants/BlockTypes'
 import Header from './Header'
-import Input from '../../../fields/Input'
 import TextArea from '../../../fields/TextArea'
 
 class HeaderEditor extends Component {
