@@ -12,7 +12,8 @@
     "test": "cross-env NODE_ENV=test mocha --timeout 50000 test/main-endpoints.js",
     "posttest": "npm run lint",
     "nsp": "nsp check",
-    "production": "cross-env NODE_ENV=production node ."
+    "production": "cross-env NODE_ENV=production node .",
+    "start": "npm run production"
   },
   "dependencies": {
     "compression": "^1.0.3",
