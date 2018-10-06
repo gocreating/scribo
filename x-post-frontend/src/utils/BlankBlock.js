@@ -1,7 +1,7 @@
 import React from 'react'
 import { Container, Header, Button } from 'semantic-ui-react'
 
-let BlankBlock = () => (
+let BlankBlock = ({ onInitClick }) => (
   <Container textAlign="center">
     <Header as="h2">
       No Content
@@ -11,7 +11,7 @@ let BlankBlock = () => (
     </Header>
     <Button
       color="yellow"
-      onClick={this.initBlock}
+      onClick={onInitClick}
     >
       Add the first block
     </Button>

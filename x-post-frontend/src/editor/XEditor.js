@@ -148,7 +148,7 @@ class XEditor extends Component {
           </div>
         )}
         {!showContent && (
-          <BlankBlock />
+          <BlankBlock onInitClick={this.initBlock} />
         )}
       </XEditorContext.Provider>
     )
