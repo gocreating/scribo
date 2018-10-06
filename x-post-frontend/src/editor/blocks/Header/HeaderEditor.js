@@ -27,7 +27,6 @@ class HeaderEditor extends Component {
         <Field
           name="text"
           component={TextArea}
-          value={block.values.text}
           onChange={autoUpdateValues}
           rows={1}
           autoHeight

@@ -82,6 +82,7 @@ let xBlock = (config) => (WrappedComponent) => {
             // redux-form props
             form={block.id}
             initialValues={block.values}
+            enableReinitialize
           />
           <BlockToolbar
             preview={block.preview}

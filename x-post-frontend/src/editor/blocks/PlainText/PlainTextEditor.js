@@ -20,7 +20,6 @@ class PlainTextEditor extends Component {
         <Field
           name="text"
           component={TextArea}
-          value={block.values.text}
           onChange={autoUpdateValues}
           placeholder="Write something..."
           rows={1}
