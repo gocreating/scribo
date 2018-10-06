@@ -21,3 +21,5 @@ db.json
 datasources.development.json
 datasources.test.json
 datasources.production.json
+.env
+.env.private.js

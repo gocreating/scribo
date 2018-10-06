@@ -31,6 +31,7 @@
   "devDependencies": {
     "eslint": "^3.17.1",
     "eslint-config-loopback": "^8.0.0",
+    "jsesc": "^2.5.1",
     "nsp": "^2.1.0"
   },
   "repository": {
