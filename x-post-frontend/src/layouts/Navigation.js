@@ -14,7 +14,7 @@ let Navigation = ({ isAuth, logout }) => (
             <Menu.Item header>
               <Link to="/">
                 <img
-                  src="/img/x-post.png"
+                  src={process.env.PUBLIC_URL + '/img/x-post.png'}
                   style={{ height: 32 }}
                   alt="logo"
                 />

@@ -16,7 +16,9 @@ import thunk from 'redux-thunk'
 import authReducer from './ducks/auth'
 import postReducer from './ducks/post'
 
-let history = createBrowserHistory()
+let history = createBrowserHistory({
+  basename: '/x-post',
+})
 let persistConfig = {
   key: 'root',
   storage,
