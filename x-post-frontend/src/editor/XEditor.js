@@ -13,6 +13,15 @@ class XEditor extends Component {
     blocks: [
       {
         id: shortid.generate(),
+        type: BlockTypes.HEADER,
+        preview: false,
+        values: {
+          text: 'This is a Very Super Long Title Wa Ha Ha Ha Ha Ha Ha Ha Ha Ha Ha Ha Ha Ha Ha Test',
+          level: 1,
+        },
+      },
+      {
+        id: shortid.generate(),
         type: BlockTypes.PLAIN_TEXT,
         preview: false,
         values: {

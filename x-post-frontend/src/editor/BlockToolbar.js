@@ -12,6 +12,13 @@ const AvailableBlocks = [{
   insertValues: {
     text: '',
   },
+}, {
+  type: BlockTypes.HEADER,
+  label: 'Header',
+  insertValues: {
+    text: '',
+    level: 1,
+  },
 }]
 
 class BlockToolbar extends Component {

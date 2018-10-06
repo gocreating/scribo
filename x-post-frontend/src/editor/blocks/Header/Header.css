@@ -1,0 +1,33 @@
+textarea.header-level-1.editor,
+textarea.header-level-2.editor,
+textarea.header-level-3.editor,
+textarea.header-level-4.editor,
+textarea.header-level-5.editor,
+textarea.header-level-6.editor {
+  border: 0px;
+}
+
+textarea.header-level-1.editor,
+textarea.header-level-2.editor,
+textarea.header-level-3.editor,
+textarea.header-level-4.editor,
+textarea.header-level-5.editor,
+textarea.header-level-6.editor,
+.header-level-1.content,
+.header-level-2.content,
+.header-level-3.content,
+.header-level-4.content,
+.header-level-5.content,
+.header-level-6.content {
+  padding: 0px;
+  margin: 10px 0;
+  overflow-wrap: break-word;
+}
+
+textarea.header-level-1.editor,
+.header-level-1.content {
+  font-size: 40px;
+  line-height: 1.875em;
+  min-height: 1.875em;
+  margin: 30px 0;
+}
