@@ -15,7 +15,8 @@
     "production": "cross-env NODE_ENV=production node .",
     "dump": "node ./dump.js",
     "deploy-heroku": "cd .. && git subtree push --prefix x-post-backend heroku master",
-    "deploy": "npm run dump && npm run deploy-heroku"
+    "deploy-heroku-force": "cd .. && git push heroku `git subtree split --prefix x-post-backend master`:master --force",
+    "deploy": "npm run dump && npm run deploy-heroku-force"
   },
   "dependencies": {
     "compression": "^1.0.3",
