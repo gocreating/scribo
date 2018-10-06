@@ -80,9 +80,14 @@ class XEditor extends Component {
   }
 
   setValuesByIndex = (idx, values) => {
+    let block = this.state.blocks[idx]
+
     this.setBlockPropertiesByIndex(
       idx, {
-        values: values,
+        values: {
+          ...block.values,
+          ...values,
+        },
       }
     )
   }
