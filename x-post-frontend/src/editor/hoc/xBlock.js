@@ -4,8 +4,6 @@ import BlockToolbar from '../BlockToolbar'
 import { XEditorContext } from '../XEditor'
 
 let xBlock = (config) => (WrappedComponent) => {
-  let { defaultValues } = config
-
   class BlockContainer extends Component {
     handlePreviewClick = () => {
       let {

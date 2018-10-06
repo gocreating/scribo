@@ -9,7 +9,7 @@ import TextArea from '../../../fields/TextArea'
 
 class HeaderEditor extends Component {
   handleKeyPress = (e) => {
-    if (e.key == 'Enter') {
+    if (e.key === 'Enter') {
       e.preventDefault()
     }
   }

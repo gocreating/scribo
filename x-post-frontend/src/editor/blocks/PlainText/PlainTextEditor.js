@@ -13,7 +13,7 @@ class PlainTextEditor extends Component {
   )
 
   renderEditor = () => {
-    let { block, autoUpdateValues } = this.props
+    let { autoUpdateValues } = this.props
 
     return (
       <Form>
