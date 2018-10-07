@@ -12,6 +12,7 @@ import { createBrowserHistory } from 'history'
 import { persistStore, persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 import { reducer as formReducer } from 'redux-form'
+import { createLogger } from 'redux-logger'
 import thunk from 'redux-thunk'
 import authReducer from './ducks/auth'
 import userReducer from './ducks/user'
@@ -32,15 +33,21 @@ let rootReducer = combineReducers({
   posts: postReducer,
 })
 let persistedReducer = persistReducer(persistConfig, rootReducer)
+let logger = createLogger({
+  diff: true,
+  collapsed: true,
+})
+let middlewares = [
+  thunk,
+  routerMiddleware(history),
+]
+if (process.env.NODE_ENV === 'development') {
+  middlewares.unshift(logger)
+}
 let store = createStore(
   connectRouter(history)(persistedReducer),
   {},
-  compose(
-    applyMiddleware(
-      thunk,
-      routerMiddleware(history)
-    )
-  )
+  compose(applyMiddleware(...middlewares))
 )
 let persistor = persistStore(store)
 
