@@ -15,6 +15,9 @@ let routes = [{
   path: '/post/new',
   component: () => import('./pages/post/NewPage'),
 }, {
+  path: '/user/:userId/post/:postId',
+  component: () => import('./pages/post/ShowPage'),
+}, {
   path: '*',
   component: () => import('./pages/basic/NotFoundPage'),
 }]

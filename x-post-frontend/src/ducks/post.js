@@ -113,4 +113,5 @@ export let selectors = {
 
     return posts
   },
+  getPost: (state, postId) => (state[postId] || {}),
 }
