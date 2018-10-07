@@ -1,6 +1,7 @@
-import { createActions } from 'redux-actions'
+import { createActions, handleActions } from 'redux-actions'
 import { setAuth, clearAuth } from './auth'
 import userApi from '../api/userApi'
+import { addEntities } from './entity'
 import createApiError from '../utils/createApiError'
 
 // Action Creators
@@ -75,3 +76,12 @@ export const {
   signinApiRequest,
   logoutApiRequest,
 } = thunkActionCreators
+
+// Reducer
+const defaultState = {}
+export default handleActions({
+  [addEntities]: (state, { payload: { entities } }) => ({
+    ...state,
+    ...entities.users,
+  }),
+}, defaultState)

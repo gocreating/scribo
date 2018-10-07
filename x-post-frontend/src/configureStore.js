@@ -14,6 +14,7 @@ import storage from 'redux-persist/lib/storage'
 import { reducer as formReducer } from 'redux-form'
 import thunk from 'redux-thunk'
 import authReducer from './ducks/auth'
+import userReducer from './ducks/user'
 import postReducer from './ducks/post'
 
 let history = createBrowserHistory({
@@ -27,6 +28,7 @@ let persistConfig = {
 let rootReducer = combineReducers({
   form: formReducer,
   auth: authReducer,
+  users: userReducer,
   posts: postReducer,
 })
 let persistedReducer = persistReducer(persistConfig, rootReducer)
