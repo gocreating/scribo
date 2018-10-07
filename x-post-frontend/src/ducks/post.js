@@ -18,7 +18,15 @@ const thunkActionCreators = {
     try {
       let response = await postApi.list(userId, {
         params: {
-          filter: { include: 'author' },
+          filter: {
+            include: 'author',
+            fields: {
+              id: true,
+              title: true,
+              abstractBlocks: true,
+            },
+            order: 'updatedAt DESC',
+          },
         },
       })
       dispatch(postListApiSuccess(response))
