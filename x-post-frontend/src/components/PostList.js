@@ -10,12 +10,17 @@ import PostAbstract from './PostAbstract'
 
 class PostList extends Component {
   static propTypes = {
+    isAuth: PropTypes.bool,
     posts: PropTypes.array,
     postList: PropTypes.func,
   }
 
   componentDidMount() {
-    this.fetchPosts()
+    let { isAuth } = this.props
+
+    if (isAuth) {
+      this.fetchPosts()
+    }
   }
 
   fetchPosts = async () => {
@@ -45,6 +50,7 @@ class PostList extends Component {
 }
 
 export default connect(({ auth, posts }) => ({
+  isAuth: authSelector.getIsAuth(auth),
   userId: authSelector.getLoggedUserId(auth),
   posts: postSelector.getPosts(posts),
 }), {
