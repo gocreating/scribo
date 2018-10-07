@@ -20,6 +20,15 @@
       "type": [
         "object"
       ]
+    },
+    "createdAt": {
+      "type": "date",
+      "defaultFn": "now"
+    }
+  },
+  "mixins": {
+    "TimeStamp": {
+      "required": false
     }
   },
   "validations": [],
