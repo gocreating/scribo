@@ -22,8 +22,11 @@ const thunkActionCreators = {
             include: 'author',
             fields: {
               id: true,
+              authorId: true,
               title: true,
               abstractBlocks: true,
+              createdAt: true,
+              updatedAt: true,
             },
             order: 'updatedAt DESC',
           },
