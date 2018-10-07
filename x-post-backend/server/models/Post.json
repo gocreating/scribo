@@ -11,6 +11,11 @@
       "type": "string",
       "required": true
     },
+    "abstractBlocks": {
+      "type": [
+        "object"
+      ]
+    },
     "blocks": {
       "type": [
         "object"
