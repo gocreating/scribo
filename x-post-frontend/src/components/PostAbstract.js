@@ -6,7 +6,8 @@ let PostAbstract = ({ post }) => (
   <Segment>
     {post.title}
     <br />
-    <Link to={`/user/${post.authorId}/post/${post.id}`}>Read</Link>
+    <Link to={`/user/${post.authorId}/post/${post.id}`}>Read</Link> |
+    <Link to={`/post/${post.id}/edit`}>Edit</Link>
   </Segment>
 )
 

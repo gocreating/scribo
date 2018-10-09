@@ -18,6 +18,9 @@ let routes = [{
   path: '/user/:userId/post/:postId',
   component: () => import('./pages/post/ShowPage'),
 }, {
+  path: '/post/:postId/edit',
+  component: () => import('./pages/post/EditPage'),
+}, {
   path: '*',
   component: () => import('./pages/basic/NotFoundPage'),
 }]
