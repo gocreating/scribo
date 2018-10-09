@@ -5,7 +5,7 @@ import HeaderEditor from '../blocks/Header/HeaderEditor'
 import UnknownEditor from '../blocks/Unknown/UnknownEditor'
 import BlockTypes from '../../constants/BlockTypes'
 
-let blockMap = {
+let renderMap = {
   [BlockTypes.PLAIN_TEXT]: PlainTextEditor,
   [BlockTypes.HEADER]: HeaderEditor,
   [BlockTypes.UNKNOWN]: UnknownEditor,
@@ -15,7 +15,7 @@ let EditorRenderer = ({ blocks }) => (
   <div>
     {blocks.map((block, idx) => {
       let Block = (
-        blockMap[block.type] ||
+        renderMap[block.type] ||
         UnknownEditor
       )
 
