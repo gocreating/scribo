@@ -13,6 +13,8 @@ const plainActionCreators = createActions({
   POST_CREATE_API_FAILURE: (res) => ({ res }),
   POST_READ_API_SUCCESS: (res) => ({ res }),
   POST_READ_API_FAILURE: (res) => ({ res }),
+  POST_UPDATE_API_SUCCESS: (res) => ({ res }),
+  POST_UPDATE_API_FAILURE: (res) => ({ res }),
   SET_PAGE: (pageId, postIds) => ({ pageId, postIds }),
 })
 const thunkActionCreators = {
@@ -68,6 +70,16 @@ const thunkActionCreators = {
       return response.body
     }
   },
+  postUpdateApiRequest: (userId, postId, post) => async (dispatch) => {
+    try {
+      let response = await postApi.update(userId, postId, post)
+      dispatch(postUpdateApiSuccess(response))
+      return response.body
+    } catch ({ response }) {
+      dispatch(postUpdateApiFailure(response))
+      return response.body
+    }
+  },
 }
 
 export const {
@@ -77,12 +89,15 @@ export const {
   postListApiFailure,
   postReadApiSuccess,
   postReadApiFailure,
+  postUpdateApiSuccess,
+  postUpdateApiFailure,
   setPage,
 } = plainActionCreators
 export const {
   postCreateApiRequest,
   postListApiRequest,
   postReadApiRequest,
+  postUpdateApiRequest,
 } = thunkActionCreators
 
 // Reducer
