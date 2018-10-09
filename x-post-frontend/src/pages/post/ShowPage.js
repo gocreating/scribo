@@ -2,9 +2,10 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
-import { Header } from 'semantic-ui-react'
+import { Header, Segment } from 'semantic-ui-react'
 import { selectors as postSelectors } from '../../ducks/post'
 import AppLayout from '../../layouts/AppLayout'
+import DisplayRenderer from '../../editor/renderers/DisplayRenderer'
 import { postReadApiRequest } from '../../ducks/post'
 
 class ShowPage extends Component {
@@ -37,11 +38,9 @@ class ShowPage extends Component {
     return (
       <AppLayout placeholder>
         <Header size="huge">{post.title}</Header>
-        {post.blocks && (
-          <pre>
-            {JSON.stringify(post.blocks, null, 2)}
-          </pre>
-        )}
+        <Segment>
+          <DisplayRenderer blocks={post.blocks} />
+        </Segment>
       </AppLayout>
     )
   }
