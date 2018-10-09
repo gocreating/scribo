@@ -6,13 +6,31 @@ import Input from '../../fields/Input'
 import FormTypes from '../../constants/FormTypes'
 import XEditor from '../../editor/XEditor'
 
-class NewForm extends Component {
+class NewOrEditForm extends Component {
   static propTypes = {
+    onInitialize: PropTypes.func,
     onSubmit: PropTypes.func,
+    initialize: PropTypes.func,
     handleSubmit: PropTypes.func,
   }
 
   xeditor = React.createRef()
+
+  componentDidMount() {
+    let { onInitialize } = this.props
+
+    if (onInitialize) {
+      onInitialize(this.handleInitialize)
+    }
+  }
+
+  handleInitialize = (post) => {
+    let { initialize } = this.props
+    let { blocks, ...formValues } = post
+
+    initialize(formValues)
+    this.xeditor.current.setBlocks(blocks)
+  }
 
   handleSubmit = (data) => {
     let { onSubmit } = this.props
@@ -65,8 +83,8 @@ class NewForm extends Component {
 }
 
 export default reduxForm({
-  form: FormTypes.POST_NEW,
+  form: FormTypes.POST_NEW_OR_EDIT,
   initialValues: {
     title: '',
   },
-})(NewForm)
+})(NewOrEditForm)

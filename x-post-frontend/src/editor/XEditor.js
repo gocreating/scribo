@@ -35,6 +35,10 @@ class XEditor extends Component {
     return this.state.blocks
   }
 
+  setBlocks = (blocks) => {
+    this.setState({ blocks: blocks || [] })
+  }
+
   initBlock = () => {
     let block = this.createBlock(
       BlockTypes.PLAIN_TEXT, {
