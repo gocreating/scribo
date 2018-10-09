@@ -32,8 +32,7 @@ class NewOrEditForm extends Component {
     this.xeditor.current.setBlocks(blocks)
   }
 
-  handleSubmit = (data) => {
-    let { onSubmit } = this.props
+  handleSubmit = (targetConsumerFn) => (data) => {
     let blocks = this.xeditor.current
       .getBlocks()
       .map(block => ({
@@ -42,14 +41,19 @@ class NewOrEditForm extends Component {
         values: block.values,
       }))
 
-    onSubmit({
+    targetConsumerFn({
       ...data,
       blocks,
     })
   }
 
   render() {
-    let { handleSubmit } = this.props
+    let {
+      onCreate,
+      onSave,
+      onUpdate,
+      handleSubmit,
+    } = this.props
 
     return (
       <Form as="div">
@@ -67,16 +71,30 @@ class NewOrEditForm extends Component {
             <XEditor ref={this.xeditor} />
           </Form.Field>
         </Form.Group>
-        <Button onClick={() => {
-          console.log(
-            this.xeditor.current.getBlocks()
-          )
-        }}>
-          Debug
-        </Button>
-        <Button onClick={handleSubmit(this.handleSubmit)}>
-          Create
-        </Button>
+        {process.env.NODE_ENV === 'development' && (
+          <Button onClick={() => {
+            console.log(
+              this.xeditor.current.getBlocks()
+            )
+          }}>
+            Debug
+          </Button>
+        )}
+        {onCreate && (
+          <Button onClick={handleSubmit(this.handleSubmit(onCreate))}>
+            Create
+          </Button>
+        )}
+        {onSave && (
+          <Button onClick={handleSubmit(this.handleSubmit(onSave))}>
+            Save
+          </Button>
+        )}
+        {onUpdate && (
+          <Button onClick={handleSubmit(this.handleSubmit(onUpdate))}>
+            Update
+          </Button>
+        )}
       </Form>
     )
   }

@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { push } from 'connected-react-router'
 import { selectors } from '../../ducks/auth'
 import AppLayout from '../../layouts/AppLayout'
-import NewForm from '../../forms/post/NewForm'
+import NewOrEditForm from '../../forms/post/NewOrEditForm'
 import { postCreateApiRequest } from '../../ducks/post'
 
 class NewPage extends Component {
@@ -13,7 +13,7 @@ class NewPage extends Component {
     push: PropTypes.func,
   }
 
-  handleSubmit = async (data) => {
+  handleCreate = async (data) => {
     let {
       postCreate,
       userId,
@@ -30,7 +30,7 @@ class NewPage extends Component {
   render() {
     return (
       <AppLayout placeholder>
-        <NewForm onSubmit={this.handleSubmit} />
+        <NewOrEditForm onCreate={this.handleCreate} />
       </AppLayout>
     )
   }
