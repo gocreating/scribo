@@ -83,10 +83,10 @@ const thunkActionCreators = {
 }
 
 export const {
-  postCreateApiSuccess,
-  postCreateApiFailure,
   postListApiSuccess,
   postListApiFailure,
+  postCreateApiSuccess,
+  postCreateApiFailure,
   postReadApiSuccess,
   postReadApiFailure,
   postUpdateApiSuccess,
