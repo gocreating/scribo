@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import shortid from 'shortid'
 import { arrayMove } from 'react-sortable-hoc'
 import BlockTypes from '../constants/BlockTypes'
-import BlockList from './BlockList'
+import EditorRenderer from './renderers/EditorRenderer'
 import BlankBlock from '../utils/BlankBlock'
 import './XEditor.css'
 
@@ -141,7 +141,7 @@ class XEditor extends Component {
       <XEditorContext.Provider value={blockHelpers}>
         {showContent && (
           <div className="blocklist">
-            <BlockList
+            <EditorRenderer
               blocks={blocks}
               onSortEnd={this.onSortEnd}
               helperClass="dragging"

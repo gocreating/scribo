@@ -1,9 +1,9 @@
 import React from 'react'
 import { SortableContainer } from 'react-sortable-hoc'
-import PlainTextEditor from './blocks/PlainText/PlainTextEditor'
-import HeaderEditor from './blocks/Header/HeaderEditor'
-import UnknownEditor from './blocks/Unknown/UnknownEditor'
-import BlockTypes from '../constants/BlockTypes'
+import PlainTextEditor from '../blocks/PlainText/PlainTextEditor'
+import HeaderEditor from '../blocks/Header/HeaderEditor'
+import UnknownEditor from '../blocks/Unknown/UnknownEditor'
+import BlockTypes from '../../constants/BlockTypes'
 
 let blockMap = {
   [BlockTypes.PLAIN_TEXT]: PlainTextEditor,
@@ -11,7 +11,7 @@ let blockMap = {
   [BlockTypes.UNKNOWN]: UnknownEditor,
 }
 
-let BlockList = ({ blocks }) => (
+let EditorRenderer = ({ blocks }) => (
   <div>
     {blocks.map((block, idx) => {
       let Block = (
@@ -34,4 +34,4 @@ let BlockList = ({ blocks }) => (
   </div>
 )
 
-export default SortableContainer(BlockList)
+export default SortableContainer(EditorRenderer)
