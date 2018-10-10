@@ -1,0 +1,4 @@
+export default {
+  SOLARIZED_LIGHT: 'SOLARIZED_LIGHT',
+  OKAIDIA: 'OKAIDIA',
+}

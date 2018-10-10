@@ -5,6 +5,7 @@ import { faEye, faEyeSlash, faAngleUp, faAngleDown, faTrash } from '@fortawesome
 import { faPlusSquare } from '@fortawesome/free-regular-svg-icons'
 import BlockHandle from './BlockHandle'
 import BlockTypes from '../constants/BlockTypes'
+import CodeHighlightThemes from './blocks/CodeHighlight/Themes'
 
 const AvailableBlocks = [{
   type: BlockTypes.PLAIN_TEXT,
@@ -18,6 +19,13 @@ const AvailableBlocks = [{
   insertValues: {
     text: '',
     level: 1,
+  },
+}, {
+  type: BlockTypes.CODE_HIGHLIGHT,
+  label: 'Code Highlight',
+  insertValues: {
+    code: '',
+    theme: CodeHighlightThemes.SOLARIZED_LIGHT,
   },
 }]
 

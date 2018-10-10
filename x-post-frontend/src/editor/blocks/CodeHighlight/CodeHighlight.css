@@ -1,0 +1,12 @@
+textarea.code-highlight.editor,
+textarea.code-highlight.editor:focus {
+  border: 0px;
+}
+textarea.code-highlight.editor,
+textarea.code-highlight.editor:focus {
+  min-height: 1em;
+  padding: 20px !important;
+  margin: 10px 0;
+  font-family: Consolas !important;
+  background-color: #efefef;
+}

@@ -1,12 +1,14 @@
 import React from 'react'
 import PlainText from '../blocks/PlainText/PlainText'
 import Header from '../blocks/Header/Header'
+import CodeHighlight from '../blocks/CodeHighlight/CodeHighlight'
 import Unknown from '../blocks/Unknown/Unknown'
 import BlockTypes from '../../constants/BlockTypes'
 
 let renderMap = {
   [BlockTypes.PLAIN_TEXT]: PlainText,
   [BlockTypes.HEADER]: Header,
+  [BlockTypes.CODE_HIGHLIGHT]: CodeHighlight,
   [BlockTypes.UNKNOWN]: Unknown,
 }
 
