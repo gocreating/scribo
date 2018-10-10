@@ -39,19 +39,19 @@ let propsToolbar = (config) => (WrappedComponent) => {
             className="props-toolbar"
           >
             {!block.preview && (
-            <div className="props-toolbar-container">
-              <Menu inverted icon borderless fluid compact size="mini">
-                {items.map((item, idx) => (
-                  <Menu.Item
-                    key={item.label}
-                    link
-                    name={item.label}
-                    onClick={this.handleItemClick.bind(this, idx)}
-                  />
-                ))}
-              </Menu>
-            </div>
-          )}
+              <div className="props-toolbar-container">
+                <Menu inverted icon borderless fluid compact size="mini">
+                  {items.map((item, idx) => (
+                    <Menu.Item
+                      key={item.label}
+                      link
+                      name={item.label}
+                      onClick={this.handleItemClick.bind(this, idx)}
+                    />
+                  ))}
+                </Menu>
+              </div>
+            )}
           </Sticky>
           <WrappedComponent {...this.props} />
         </div>
