@@ -19,6 +19,7 @@ class CodeHighlight extends Component {
     switch (block.values.theme) {
       case Themes.SOLARIZED_LIGHT: return await import('prismjs/themes/prism-solarizedlight.css')
       case Themes.OKAIDIA: return await import('prismjs/themes/prism-okaidia.css')
+      default: break
     }
   }
 

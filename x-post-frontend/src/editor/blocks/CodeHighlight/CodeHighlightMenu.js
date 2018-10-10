@@ -48,7 +48,7 @@ class CodeHighlightMenu extends Component {
   }
 
   render() {
-    let { config, block } = this.props
+    let { block } = this.props
 
     return (
       <Menu inverted icon borderless fluid size="mini">
