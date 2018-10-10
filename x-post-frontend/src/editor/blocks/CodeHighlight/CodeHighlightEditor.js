@@ -6,6 +6,7 @@ import xBlock from '../../hoc/xBlock'
 import propsToolbar from '../../hoc/propsToolbar'
 import BlockTypes from '../../../constants/BlockTypes'
 import CodeHighlight from './CodeHighlight'
+import CodeHighlightMenu from './CodeHighlightMenu'
 import Themes from './Themes'
 import Languages from './Languages'
 import TextArea from '../../../fields/TextArea'
@@ -58,31 +59,7 @@ let enhance = compose(
     },
   }),
   propsToolbar({
-    items: [{
-      label: 'Solarized Light',
-      propsMap: { theme: Themes.SOLARIZED_LIGHT },
-    }, {
-      label: 'Okaidia',
-      propsMap: { theme: Themes.OKAIDIA },
-    }, {
-      label: 'Markup',
-      propsMap: { language: Languages.MARKUP },
-    }, {
-      label: 'CSS',
-      propsMap: { language: Languages.CSS },
-    }, {
-      label: 'C-like',
-      propsMap: { language: Languages.C_LIKE },
-    }, {
-      label: 'Javascript',
-      propsMap: { language: Languages.JAVASCRIPT },
-    }, {
-      label: 'Json',
-      propsMap: { language: Languages.JSON },
-    }, {
-      label: 'React JSX',
-      propsMap: { language: Languages.JSX },
-    }],
+    Menu: CodeHighlightMenu,
   }),
   reduxForm()
 )

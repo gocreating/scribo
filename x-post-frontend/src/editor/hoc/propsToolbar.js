@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
-import { Sticky, Menu } from 'semantic-ui-react'
+import { Sticky, Menu as SUIMenu } from 'semantic-ui-react'
 
 let propsToolbar = (config) => (WrappedComponent) => {
-  let { items } = config
+  let { Menu, items } = config
 
   class PropsToolbar extends Component {
     state = {}
@@ -29,7 +29,7 @@ let propsToolbar = (config) => (WrappedComponent) => {
     }
 
     render() {
-      let { block } = this.props
+      let { block, updateValues } = this.props
 
       return (
         <div ref={this.setRef}>
@@ -40,16 +40,25 @@ let propsToolbar = (config) => (WrappedComponent) => {
           >
             {!block.preview && (
               <div className="props-toolbar-container">
-                <Menu inverted icon borderless fluid compact size="mini">
-                  {items.map((item, idx) => (
-                    <Menu.Item
-                      key={item.label}
-                      link
-                      name={item.label}
-                      onClick={this.handleItemClick.bind(this, idx)}
-                    />
-                  ))}
-                </Menu>
+                {Menu && (
+                  <Menu
+                    config={config}
+                    block={block}
+                    updateValues={updateValues}
+                  />
+                )}
+                {!Menu && (
+                  <SUIMenu inverted icon borderless fluid compact size="mini">
+                    {items.map((item, idx) => (
+                      <SUIMenu.Item
+                        key={item.label}
+                        link
+                        name={item.label}
+                        onClick={this.handleItemClick.bind(this, idx)}
+                      />
+                    ))}
+                  </SUIMenu>
+                )}
               </div>
             )}
           </Sticky>
