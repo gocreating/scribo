@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Menu, Dropdown } from 'semantic-ui-react'
+import { Menu, Dropdown, Input } from 'semantic-ui-react'
 import Themes from './Themes'
 import Languages from './Languages'
 
@@ -47,11 +47,17 @@ class CodeHighlightMenu extends Component {
     updateValues({ language: value })
   }
 
+  handleHighlightLinesChange = (e, { value }) => {
+    let { updateValues } = this.props
+
+    updateValues({ highlightLines: value })
+  }
+
   render() {
     let { block } = this.props
 
     return (
-      <Menu inverted icon borderless fluid size="mini">
+      <Menu inverted icon borderless size="mini">
         <Dropdown
           item
           header="Theme"
@@ -71,6 +77,14 @@ class CodeHighlightMenu extends Component {
           selection
           scrolling
         />
+        <Menu.Item>
+          <Input
+            placeholder="Highlight (ex: 1,4-5,7)"
+            value={block.values.highlightLines}
+            onChange={this.handleHighlightLinesChange}
+            style={{ minWidth: 150 }}
+          />
+        </Menu.Item>
       </Menu>
     )
   }

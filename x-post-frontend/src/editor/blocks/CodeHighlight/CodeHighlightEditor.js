@@ -57,6 +57,7 @@ let enhance = compose(
       code: '',
       theme: Themes.SOLARIZED_LIGHT,
       language: Languages.DEFAULT,
+      highlightLines: '',
     },
   }),
   propsToolbar({
