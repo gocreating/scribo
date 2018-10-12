@@ -7,7 +7,6 @@ import { selectors } from '../../ducks/auth'
 import AppLayout from '../../layouts/AppLayout'
 import NewOrEditForm from '../../forms/post/NewOrEditForm'
 import BlockTypes from '../../constants/BlockTypes'
-import CodeHighlightThemes from '../../editor/blocks/CodeHighlight/Themes'
 import { postCreateApiRequest } from '../../ducks/post'
 
 class NewPage extends Component {
