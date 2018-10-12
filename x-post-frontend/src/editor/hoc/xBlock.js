@@ -69,11 +69,18 @@ let xBlock = (config) => (WrappedComponent) => {
 
     render() {
       let { block } = this.props
+      let blockWithDefaultValues = {
+        ...block,
+        values: {
+          ...config.defaultValues,
+          ...block.values,
+        }
+      }
 
       return (
         <div className="block-container">
           <WrappedComponent
-            block={block}
+            block={blockWithDefaultValues}
             autoUpdateValues={this.autoUpdateValues}
             // injected context helpers
             updateValues={this.updateValues}
