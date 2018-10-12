@@ -1,12 +1,13 @@
 import React from 'react'
-import { Segment } from 'semantic-ui-react'
+import { Segment, Header } from 'semantic-ui-react'
 import { Link } from 'react-router-dom'
 
 let PostAbstract = ({ post, onDetele }) => (
   <Segment>
-    {post.title}
+    <Link to={`/user/${post.authorId}/post/${post.id}`}>
+      <Header size="huge">{post.title}</Header>
+    </Link>
     <br />
-    <Link to={`/user/${post.authorId}/post/${post.id}`}>Read</Link> |
     <Link to={`/post/${post.id}/edit`}>Edit</Link> |
     <Link to="#" onClick={onDetele}>Delete</Link>
   </Segment>
