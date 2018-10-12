@@ -27,6 +27,12 @@ const AvailableBlocks = [{
     code: '',
     theme: CodeHighlightThemes.SOLARIZED_LIGHT,
   },
+}, {
+  type: BlockTypes.MARKDOWN,
+  label: 'Markdown',
+  insertValues: {
+    text: '',
+  },
 }]
 
 class BlockToolbar extends Component {

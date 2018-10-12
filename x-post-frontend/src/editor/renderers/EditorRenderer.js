@@ -3,6 +3,7 @@ import { SortableContainer } from 'react-sortable-hoc'
 import PlainTextEditor from '../blocks/PlainText/PlainTextEditor'
 import HeaderEditor from '../blocks/Header/HeaderEditor'
 import CodeHighlightEditor from '../blocks/CodeHighlight/CodeHighlightEditor'
+import MarkdownEditor from '../blocks/Markdown/MarkdownEditor'
 import UnknownEditor from '../blocks/Unknown/UnknownEditor'
 import BlockTypes from '../../constants/BlockTypes'
 
@@ -10,6 +11,7 @@ let renderMap = {
   [BlockTypes.PLAIN_TEXT]: PlainTextEditor,
   [BlockTypes.HEADER]: HeaderEditor,
   [BlockTypes.CODE_HIGHLIGHT]: CodeHighlightEditor,
+  [BlockTypes.MARKDOWN]: MarkdownEditor,
   [BlockTypes.UNKNOWN]: UnknownEditor,
 }
 
