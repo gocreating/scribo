@@ -55,13 +55,17 @@ green     #859900
 	hyphens: none;
 }
 
-.theme-solarizedlight pre[class*="language-"]::-moz-selection, pre[class*="language-"] ::-moz-selection,
-.theme-solarizedlight code[class*="language-"]::-moz-selection, code[class*="language-"] ::-moz-selection {
+.theme-solarizedlight pre[class*="language-"]::-moz-selection,
+.theme-solarizedlight pre[class*="language-"] ::-moz-selection,
+.theme-solarizedlight code[class*="language-"]::-moz-selection,
+.theme-solarizedlight code[class*="language-"] ::-moz-selection {
 	background: #073642; /* base02 */
 }
 
-.theme-solarizedlight pre[class*="language-"]::selection, pre[class*="language-"] ::selection,
-.theme-solarizedlight code[class*="language-"]::selection, code[class*="language-"] ::selection {
+.theme-solarizedlight pre[class*="language-"]::selection,
+.theme-solarizedlight pre[class*="language-"] ::selection,
+.theme-solarizedlight code[class*="language-"]::selection,
+.theme-solarizedlight code[class*="language-"] ::selection {
 	background: #073642; /* base02 */
 }
 
