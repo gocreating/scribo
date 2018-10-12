@@ -16,7 +16,8 @@
  *     <style>ThemeB</style>
  *
  * Related Work
- *   Firstly, I think the imported module is cached. However, `delete require.cache[require.resolve('module/path')]` does not work!
+ *   Firstly, I think the imported module is cached. However, `delete require.cache[require.resolve('module/path')]`[1][1] does not work!
+ *   Magic comments of webpack's [code splitting][2] are not working.
  *   If you inspect the imported styles with devtool, you will find that import('xxx.css') actually injects an anonymous <style> tag inside <head>. Once the tag is injected, it will not be injected again, even when the tag is manually removed during componentWillUnmount().
  *
  * Method
@@ -27,9 +28,13 @@
  *
  * Conclusion
  *   You should load prism's css files with `helmet` instead of dynamic import() function.
+ *
+ * Reference
+ *   [1]: https://stackoverflow.com/questions/15666144/how-to-remove-module-after-require-in-node-js "How to remove module after “require” in node.js?"
+ *   [2]: https://webpack.js.org/guides/code-splitting/#dynamic-imports "Code Splitting"
  */
 import React, { Component } from 'react'
-import { Helmet } from 'react-helmet'
+import classNames from 'classnames'
 import Prism from 'prismjs'
 import Themes from './Themes'
 import Languages from './Languages'
@@ -39,9 +44,21 @@ class CodeHighlight extends Component {
   prismBlock = React.createRef()
 
   componentDidMount = async () => {
+    await this.loadTheme()
     await this.loadLanguage()
     await this.loadPlugins()
     this.hightlight()
+  }
+
+  loadTheme = async () => {
+    let { block } = this.props
+    let { theme } = block.values
+
+    switch (theme) {
+      case Themes.SOLARIZED_LIGHT: return await import('./prism-styles/themes/modified-prism-solarizedlight.css')
+      case Themes.OKAIDIA: return await import('./prism-styles/themes/modified-prism-okaidia.css')
+      default: break
+    }
   }
 
   loadLanguage = async () => {
@@ -57,61 +74,83 @@ class CodeHighlight extends Component {
 
   loadPlugins = async () => {
     let { block } = this.props
-    let { highlightLines } = block.values
+    let {
+      isShowLineNumbers,
+      highlightLines,
+    } = block.values
 
+    if (Boolean(isShowLineNumbers)) {
+      await import('./prism-styles/plugins/line-numbers/prism-line-numbers.css')
+      await import('prismjs/plugins/line-numbers/prism-line-numbers.min.js')
+    }
     if (Boolean(highlightLines)) {
-      await import('prismjs/plugins/line-highlight/prism-line-highlight.js')
+      await import('./prism-styles/plugins/line-highlight/modified-prism-line-highlight.css')
+      await import('prismjs/plugins/line-highlight/prism-line-highlight.min.js')
     }
   }
 
   hightlight() {
-    Prism.highlightElement(this.prismBlock.current)
+    setTimeout(() => {
+      // wait for .css files are ready
+      // so that .js files will work
+      Prism.highlightElement(this.prismBlock.current)
+    }, 500)
   }
 
-  renderLink(path) {
-    return (
-      <link
-        rel="stylesheet"
-        type="text/css"
-        href={`${process.env.PUBLIC_URL}${path}`}
-      />
-    )
-  }
+  renderLink = (path) =>(
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href={`${process.env.PUBLIC_URL}${path}`}
+    />
+  )
 
   render() {
     let { block } = this.props
-    let { theme, highlightLines } = block.values
-    let lang = block.values.language
-    let langClass = ''
+    let {
+      code,
+      theme,
+      language,
+      isShowLineNumbers,
+      highlightLines,
+    } = block.values
+    let cxLang = (
+      language &&
+      language !== Languages.DEFAULT
+    ) ? `language-${language.toLowerCase()}` : ''
+    let cxPre = classNames(
+      'code-highlight',
+      'content',
+      cxLang,
+      {
+        'line-numbers': isShowLineNumbers,
+      }
+    )
+    let cxCode = classNames(
+      cxLang,
+      {
+        'line-numbers': isShowLineNumbers,
+      }
+    )
+    let cxCustomized = classNames({
+      'theme-solarizedlight': theme === Themes.SOLARIZED_LIGHT,
+      'theme-okaidia': theme === Themes.OKAIDIA,
+      'x-post-line-highlight': Boolean(highlightLines),
+    })
 
-    if (lang && lang !== Languages.DEFAULT) {
-      langClass = `language-${lang.toLowerCase()}`
-    }
-
-    return [(
-      <Helmet key="helmet">
-        {theme === Themes.SOLARIZED_LIGHT && (
-          this.renderLink('/prismjs/themes/prism-solarizedlight.css')
-        )}
-        {theme === Themes.OKAIDIA && (
-          this.renderLink('/prismjs/themes/prism-okaidia.css')
-        )}
-        {Boolean(highlightLines) && (
-          this.renderLink('/prismjs/plugins/line-highlight/prism-line-highlight.css')
-        )}
-      </Helmet>
-    ), (
-      <pre
-        key="code-highlight"
-        className={`code-highlight content ${langClass}`}
-        data-line={highlightLines}
-      >
-        <code
-          ref={this.prismBlock}
-          className={langClass}
-        >{block.values.code}</code>
-      </pre>
-    )]
+    return (
+      <div className={cxCustomized}>
+        <pre
+          className={cxPre}
+          data-line={highlightLines}
+        >
+          <code
+            ref={this.prismBlock}
+            className={cxCode}
+          >{code}</code>
+        </pre>
+      </div>
+    )
   }
 }
 

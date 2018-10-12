@@ -10,3 +10,7 @@ textarea.code-highlight.editor:focus {
   font-family: Consolas !important;
   background-color: #efefef;
 }
+.ui.checkbox.white label,
+.ui.checkbox.checked.white label {
+  color: white !important;
+}

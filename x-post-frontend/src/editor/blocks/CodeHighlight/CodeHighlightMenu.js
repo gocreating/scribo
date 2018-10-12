@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Menu, Dropdown, Input } from 'semantic-ui-react'
+import { Menu, Dropdown, Checkbox, Input } from 'semantic-ui-react'
 import Themes from './Themes'
 import Languages from './Languages'
 
@@ -47,6 +47,12 @@ class CodeHighlightMenu extends Component {
     updateValues({ language: value })
   }
 
+  handleShowLineNumbersChange = (e, { checked }) => {
+    let { updateValues } = this.props
+
+    updateValues({ isShowLineNumbers: checked })
+  }
+
   handleHighlightLinesChange = (e, { value }) => {
     let { updateValues } = this.props
 
@@ -77,6 +83,14 @@ class CodeHighlightMenu extends Component {
           selection
           scrolling
         />
+        <Menu.Item>
+          <Checkbox
+            label="Show line numbers"
+            className="white"
+            checked={block.values.isShowLineNumbers}
+            onChange={this.handleShowLineNumbersChange}
+          />
+        </Menu.Item>
         <Menu.Item>
           <Input
             placeholder="Highlight (ex: 1,4-5,7)"

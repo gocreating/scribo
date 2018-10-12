@@ -1,0 +1,154 @@
+/**
+ * Modification:
+ * - each selector is prefixed with `.theme-solarizedlight`
+ */
+
+/*
+ Solarized Color Schemes originally by Ethan Schoonover
+ http://ethanschoonover.com/solarized
+
+ Ported for PrismJS by Hector Matos
+ Website: https://krakendev.io
+ Twitter Handle: https://twitter.com/allonsykraken)
+*/
+
+/*
+SOLARIZED HEX
+--------- -------
+base03    #002b36
+base02    #073642
+base01    #586e75
+base00    #657b83
+base0     #839496
+base1     #93a1a1
+base2     #eee8d5
+base3     #fdf6e3
+yellow    #b58900
+orange    #cb4b16
+red       #dc322f
+magenta   #d33682
+violet    #6c71c4
+blue      #268bd2
+cyan      #2aa198
+green     #859900
+*/
+
+.theme-solarizedlight code[class*="language-"],
+.theme-solarizedlight pre[class*="language-"] {
+	color: #657b83; /* base00 */
+	font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+	text-align: left;
+	white-space: pre;
+	word-spacing: normal;
+	word-break: normal;
+	word-wrap: normal;
+
+	line-height: 1.5;
+
+	-moz-tab-size: 4;
+	-o-tab-size: 4;
+	tab-size: 4;
+
+	-webkit-hyphens: none;
+	-moz-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+}
+
+.theme-solarizedlight pre[class*="language-"]::-moz-selection, pre[class*="language-"] ::-moz-selection,
+.theme-solarizedlight code[class*="language-"]::-moz-selection, code[class*="language-"] ::-moz-selection {
+	background: #073642; /* base02 */
+}
+
+.theme-solarizedlight pre[class*="language-"]::selection, pre[class*="language-"] ::selection,
+.theme-solarizedlight code[class*="language-"]::selection, code[class*="language-"] ::selection {
+	background: #073642; /* base02 */
+}
+
+/* Code blocks */
+.theme-solarizedlight pre[class*="language-"] {
+	padding: 1em;
+	margin: .5em 0;
+	overflow: auto;
+	border-radius: 0.3em;
+}
+
+.theme-solarizedlight :not(pre) > code[class*="language-"],
+.theme-solarizedlight pre[class*="language-"] {
+	background-color: #fdf6e3; /* base3 */
+}
+
+/* Inline code */
+.theme-solarizedlight :not(pre) > code[class*="language-"] {
+	padding: .1em;
+	border-radius: .3em;
+}
+
+.theme-solarizedlight .token.comment,
+.theme-solarizedlight .token.prolog,
+.theme-solarizedlight .token.doctype,
+.theme-solarizedlight .token.cdata {
+	color: #93a1a1; /* base1 */
+}
+
+.theme-solarizedlight .token.punctuation {
+	color: #586e75; /* base01 */
+}
+
+.theme-solarizedlight .namespace {
+	opacity: .7;
+}
+
+.theme-solarizedlight .token.property,
+.theme-solarizedlight .token.tag,
+.theme-solarizedlight .token.boolean,
+.theme-solarizedlight .token.number,
+.theme-solarizedlight .token.constant,
+.theme-solarizedlight .token.symbol,
+.theme-solarizedlight .token.deleted {
+	color: #268bd2; /* blue */
+}
+
+.theme-solarizedlight .token.selector,
+.theme-solarizedlight .token.attr-name,
+.theme-solarizedlight .token.string,
+.theme-solarizedlight .token.char,
+.theme-solarizedlight .token.builtin,
+.theme-solarizedlight .token.url,
+.theme-solarizedlight .token.inserted {
+	color: #2aa198; /* cyan */
+}
+
+.theme-solarizedlight .token.entity {
+	color: #657b83; /* base00 */
+	background: #eee8d5; /* base2 */
+}
+
+.theme-solarizedlight .token.atrule,
+.theme-solarizedlight .token.attr-value,
+.theme-solarizedlight .token.keyword {
+	color: #859900; /* green */
+}
+
+.theme-solarizedlight .token.function,
+.theme-solarizedlight .token.class-name {
+	color: #b58900; /* yellow */
+}
+
+.theme-solarizedlight .token.regex,
+.theme-solarizedlight .token.important,
+.theme-solarizedlight .token.variable {
+	color: #cb4b16; /* orange */
+}
+
+.theme-solarizedlight .token.important,
+.theme-solarizedlight .token.bold {
+	font-weight: bold;
+}
+.theme-solarizedlight .token.italic {
+	font-style: italic;
+}
+
+.theme-solarizedlight .token.entity {
+	cursor: help;
+}

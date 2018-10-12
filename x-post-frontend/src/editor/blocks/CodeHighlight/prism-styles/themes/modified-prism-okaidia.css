@@ -1,0 +1,127 @@
+/**
+ * Modification:
+ * - each selector is prefixed with `.theme-okaidia`
+ */
+
+/**
+ * okaidia theme for JavaScript, CSS and HTML
+ * Loosely based on Monokai textmate theme by http://www.monokai.nl/
+ * @author ocodia
+ */
+
+.theme-okaidia code[class*="language-"],
+.theme-okaidia pre[class*="language-"] {
+	color: #f8f8f2;
+	background: none;
+	text-shadow: 0 1px rgba(0, 0, 0, 0.3);
+	font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+	text-align: left;
+	white-space: pre;
+	word-spacing: normal;
+	word-break: normal;
+	word-wrap: normal;
+	line-height: 1.5;
+
+	-moz-tab-size: 4;
+	-o-tab-size: 4;
+	tab-size: 4;
+
+	-webkit-hyphens: none;
+	-moz-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+}
+
+/* Code blocks */
+.theme-okaidia pre[class*="language-"] {
+	padding: 1em;
+	margin: .5em 0;
+	overflow: auto;
+	border-radius: 0.3em;
+}
+
+.theme-okaidia :not(pre) > code[class*="language-"],
+.theme-okaidia pre[class*="language-"] {
+	background: #272822;
+}
+
+/* Inline code */
+.theme-okaidia :not(pre) > code[class*="language-"] {
+	padding: .1em;
+	border-radius: .3em;
+	white-space: normal;
+}
+
+.theme-okaidia .token.comment,
+.theme-okaidia .token.prolog,
+.theme-okaidia .token.doctype,
+.theme-okaidia .token.cdata {
+	color: slategray;
+}
+
+.theme-okaidia .token.punctuation {
+	color: #f8f8f2;
+}
+
+.theme-okaidia .namespace {
+	opacity: .7;
+}
+
+.theme-okaidia .token.property,
+.theme-okaidia .token.tag,
+.theme-okaidia .token.constant,
+.theme-okaidia .token.symbol,
+.theme-okaidia .token.deleted {
+	color: #f92672;
+}
+
+.theme-okaidia .token.boolean,
+.theme-okaidia .token.number {
+	color: #ae81ff;
+}
+
+.theme-okaidia .token.selector,
+.theme-okaidia .token.attr-name,
+.theme-okaidia .token.string,
+.theme-okaidia .token.char,
+.theme-okaidia .token.builtin,
+.theme-okaidia .token.inserted {
+	color: #a6e22e;
+}
+
+.theme-okaidia .token.operator,
+.theme-okaidia .token.entity,
+.theme-okaidia .token.url,
+.theme-okaidia .language-css .token.string,
+.theme-okaidia .style .token.string,
+.theme-okaidia .token.variable {
+	color: #f8f8f2;
+}
+
+.theme-okaidia .token.atrule,
+.theme-okaidia .token.attr-value,
+.theme-okaidia .token.function,
+.theme-okaidia .token.class-name {
+	color: #e6db74;
+}
+
+.theme-okaidia .token.keyword {
+	color: #66d9ef;
+}
+
+.theme-okaidia .token.regex,
+.theme-okaidia .token.important {
+	color: #fd971f;
+}
+
+.theme-okaidia .token.important,
+.theme-okaidia .token.bold {
+	font-weight: bold;
+}
+.theme-okaidia .token.italic {
+	font-style: italic;
+}
+
+.theme-okaidia .token.entity {
+	cursor: help;
+}
