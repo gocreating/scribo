@@ -17,32 +17,14 @@ class NewPage extends Component {
 
   handleInitialize = (cb) => {
     cb({
-      title: '新文章',
+      title: '',
       blocks: [
-        {
-          id: shortid.generate(),
-          type: BlockTypes.HEADER,
-          preview: false,
-          values: {
-            text: 'Header Example',
-            level: 2,
-          },
-        },
         {
           id: shortid.generate(),
           type: BlockTypes.PLAIN_TEXT,
           preview: false,
           values: {
-            text: 'lorem ipsum',
-          },
-        },
-        {
-          id: shortid.generate(),
-          type: BlockTypes.CODE_HIGHLIGHT,
-          preview: false,
-          values: {
-            theme: CodeHighlightThemes.SOLARIZED_LIGHT,
-            code: '',
+            text: '',
           },
         },
       ],
