@@ -15,6 +15,8 @@ const plainActionCreators = createActions({
   POST_READ_API_FAILURE: (res) => ({ res }),
   POST_UPDATE_API_SUCCESS: (res) => ({ res }),
   POST_UPDATE_API_FAILURE: (res) => ({ res }),
+  POST_DELETE_API_SUCCESS: (res) => ({ res }),
+  POST_DELETE_API_FAILURE: (res) => ({ res }),
   SET_PAGE: (pageId, postIds) => ({ pageId, postIds }),
 })
 const thunkActionCreators = {
@@ -80,6 +82,17 @@ const thunkActionCreators = {
       return response.body
     }
   },
+  postDeleteApiRequest: (userId, postId) => async (dispatch) => {
+    try {
+      let response = await postApi.delete(userId, postId)
+      dispatch(postDeleteApiSuccess(response))
+      dispatch(postListApiRequest(userId))
+      return response.body || {}
+    } catch ({ response }) {
+      dispatch(postDeleteApiFailure(response))
+      return response.body || {}
+    }
+  },
 }
 
 export const {
@@ -91,6 +104,8 @@ export const {
   postReadApiFailure,
   postUpdateApiSuccess,
   postUpdateApiFailure,
+  postDeleteApiSuccess,
+  postDeleteApiFailure,
   setPage,
 } = plainActionCreators
 export const {
@@ -98,6 +113,7 @@ export const {
   postListApiRequest,
   postReadApiRequest,
   postUpdateApiRequest,
+  postDeleteApiRequest,
 } = thunkActionCreators
 
 // Reducer
