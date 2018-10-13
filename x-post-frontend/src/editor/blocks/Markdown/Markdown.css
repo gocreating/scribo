@@ -11,3 +11,13 @@ p.markdown.content {
   margin: 10px 0;
   overflow-wrap: break-word;
 }
+.markdown.content li {
+  font-size: 20px;
+  line-height: 1.875em;
+}
+.markdown.content code {
+  font-size: 87.5%;
+  color: #e83e8c;
+  word-break: break-word;
+  font-family: Consolas;
+}
