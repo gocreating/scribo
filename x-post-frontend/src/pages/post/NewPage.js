@@ -42,7 +42,7 @@ class NewPage extends Component {
     if (result.error) {
       return alert(result.error.message)
     }
-    push('/')
+    push(`/user/${userId}/post/${result.id}`)
   }
 
   render() {
