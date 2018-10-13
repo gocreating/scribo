@@ -109,8 +109,8 @@ export const {
   setPage,
 } = plainActionCreators
 export const {
-  postCreateApiRequest,
   postListApiRequest,
+  postCreateApiRequest,
   postReadApiRequest,
   postUpdateApiRequest,
   postDeleteApiRequest,
