@@ -1,0 +1,20 @@
+$caption-font-size: 18px !important;
+$block-margin: 40px 0;
+
+div.image.editor figure {
+  margin: $block-margin;
+  textarea.caption {
+    text-align: center;
+    font-size: $caption-font-size;
+    border: 0px;
+  }
+}
+
+figure.image.content {
+  margin: $block-margin;
+  figcaption.caption {
+    text-align: center;
+    font-size: $caption-font-size;
+    padding: 0.8em;
+  }
+}

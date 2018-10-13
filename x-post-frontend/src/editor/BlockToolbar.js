@@ -33,6 +33,14 @@ const AvailableBlocks = [{
   insertValues: {
     text: '',
   },
+}, {
+  type: BlockTypes.IMAGE,
+  label: 'Image',
+  insertValues: {
+    src: '',
+    isShowCaption: false,
+    caption: '',
+  },
 }]
 
 class BlockToolbar extends Component {

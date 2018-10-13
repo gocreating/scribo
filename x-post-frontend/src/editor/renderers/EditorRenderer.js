@@ -4,6 +4,7 @@ import PlainTextEditor from '../blocks/PlainText/PlainTextEditor'
 import HeaderEditor from '../blocks/Header/HeaderEditor'
 import CodeHighlightEditor from '../blocks/CodeHighlight/CodeHighlightEditor'
 import MarkdownEditor from '../blocks/Markdown/MarkdownEditor'
+import ImageEditor from '../blocks/Image/ImageEditor'
 import UnknownEditor from '../blocks/Unknown/UnknownEditor'
 import BlockTypes from '../../constants/BlockTypes'
 
@@ -12,6 +13,7 @@ let renderMap = {
   [BlockTypes.HEADER]: HeaderEditor,
   [BlockTypes.CODE_HIGHLIGHT]: CodeHighlightEditor,
   [BlockTypes.MARKDOWN]: MarkdownEditor,
+  [BlockTypes.IMAGE]: ImageEditor,
   [BlockTypes.UNKNOWN]: UnknownEditor,
 }
 
