@@ -14,7 +14,9 @@ class ImageModal extends Component {
   // Modal level member functions
 
   initialize = () => this.setState({
-    src: this.props.block.values.src,
+    blockValues: {
+      ...this.props.block.values,
+    },
     activePicker: SourceTypes.MANUAL_INPUT,
     isLoading: false,
     loadingText: 'Loading',
@@ -23,7 +25,7 @@ class ImageModal extends Component {
   handleConfirm = () => {
     let { onConfirm } = this.props
 
-    onConfirm(this.state.src)
+    onConfirm(this.state.blockValues)
   }
 
   handleCancel = () => {
@@ -40,7 +42,14 @@ class ImageModal extends Component {
   // Image Picker level member functions
 
   handleManualInputChange = (e) => {
-    this.setState({ src: e.target.value })
+    this.setState({
+      blockValues: {
+        ...this.state.blockValues,
+        sourceType: SourceTypes.MANUAL_INPUT,
+        src: e.target.value,
+        meta: {},
+      },
+    })
   }
 
   handleImgurUploadStart = () => this.setState({
@@ -49,10 +58,24 @@ class ImageModal extends Component {
   })
 
   handleImgurUploadFinish = (result) => {
-    let { deletehash, link } = result.data
+    let {
+      width,
+      height,
+      deletehash,
+      link,
+    } = result.data
 
     this.setState({
-      src: link,
+      blockValues: {
+        ...this.state.blockValues,
+        src: link,
+        sourceType: SourceTypes.IMGUR_UPLOAD_PUBLIC,
+        meta: {
+          width,
+          height,
+          deletehash,
+        }
+      },
       activePicker: SourceTypes.MANUAL_INPUT,
       isLoading: false,
     })
@@ -66,7 +89,7 @@ class ImageModal extends Component {
   render() {
     let { isOpen } = this.props
     let {
-      src,
+      blockValues,
       activePicker,
       isLoading,
       loadingText,
@@ -113,7 +136,7 @@ class ImageModal extends Component {
           )}
           {activePicker === SourceTypes.MANUAL_INPUT && (
             <ManualInput
-              value={src}
+              value={blockValues.src}
               onChange={this.handleManualInputChange}
             />
           )}

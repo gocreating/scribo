@@ -11,10 +11,10 @@ class ImageMenu extends Component {
     this.setState({ isModalOpen: true })
   }
 
-  handleModalConfirm = (src) => {
+  handleModalConfirm = (values) => {
     let { updateValues } = this.props
 
-    updateValues({ src })
+    updateValues(values)
     this.setState({ isModalOpen: false })
   }
 

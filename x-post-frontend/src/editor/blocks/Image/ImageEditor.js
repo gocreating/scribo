@@ -10,6 +10,7 @@ import xBlock from '../../hoc/xBlock'
 import propsToolbar from '../../hoc/propsToolbar'
 import withImageHelpers from '../../hoc/withImageHelpers'
 import BlockTypes from '../../../constants/BlockTypes'
+import SourceTypes from './SourceTypes'
 import Image from './Image'
 import ImageMenu from './ImageMenu'
 import TextArea from '../../../fields/TextArea'
@@ -85,9 +86,11 @@ let enhance = compose(
   xBlock({
     type: BlockTypes.IMAGE,
     defaultValues: {
+      sourceType: SourceTypes.MANUAL_INPUT,
       src: '',
       isShowCaption: false,
       caption: '',
+      meta: {},
     },
   }),
   propsToolbar({
