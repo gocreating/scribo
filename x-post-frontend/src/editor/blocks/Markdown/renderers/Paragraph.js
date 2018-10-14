@@ -1,19 +1,17 @@
-import React, { Component } from 'react'
+import React from 'react'
 import PlainText from '../../PlainText/PlainText'
 
-class Paragraph extends Component {
-  render() {
-    let { children } = this.props
-    let block = {
-      values: {},
-    }
-
-    return (
-      <PlainText block={block}>
-        {children}
-      </PlainText>
-    )
+let Paragraph = (props) => {
+  let { children } = props
+  let block = {
+    values: {},
   }
+
+  return (
+    <PlainText block={block}>
+      {children}
+    </PlainText>
+  )
 }
 
 export default Paragraph
