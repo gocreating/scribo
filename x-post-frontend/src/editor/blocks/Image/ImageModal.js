@@ -17,6 +17,7 @@ class ImageModal extends Component {
     src: this.props.block.values.src,
     activePicker: SourceTypes.MANUAL_INPUT,
     isLoading: false,
+    loadingText: 'Loading',
   })
 
   handleConfirm = () => {
@@ -44,6 +45,7 @@ class ImageModal extends Component {
 
   handleImgurUploadStart = () => this.setState({
     isLoading: true,
+    loadingText: 'Your image is uploading...',
   })
 
   handleImgurUploadFinish = (result) => {
@@ -66,7 +68,8 @@ class ImageModal extends Component {
     let {
       src,
       activePicker,
-      isLoading
+      isLoading,
+      loadingText,
     } = this.state
 
     if (!isOpen) {
@@ -105,7 +108,7 @@ class ImageModal extends Component {
         <Modal.Content>
           {isLoading && (
             <Dimmer active inverted>
-              <Loader inverted>Loading</Loader>
+              <Loader inverted>{loadingText}</Loader>
             </Dimmer>
           )}
           {activePicker === SourceTypes.MANUAL_INPUT && (
