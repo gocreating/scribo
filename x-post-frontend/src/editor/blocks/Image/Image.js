@@ -11,9 +11,12 @@ let Image = (props) => {
     imageHelpers,
   } = props
   let {
-    isImageLoadError,
-    imgNotAvailable,
-  } = imageHelpers.meta
+    meta: {
+      isImageLoadError,
+      imgNotAvailable,
+    },
+    ...helpers
+  } = imageHelpers
   let { src, isShowCaption, caption } = block.values
 
   return (
@@ -28,7 +31,7 @@ let Image = (props) => {
           image={{
             src: src,
             className: 'ui centered image',
-            ...imageHelpers,
+            ...helpers,
           }}
           defaultStyles={{
             zoomContainer: {
@@ -45,6 +48,5 @@ let Image = (props) => {
     </figure>
   )
 }
-
 
 export default withImageHelpers(Image)

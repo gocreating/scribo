@@ -31,6 +31,13 @@ class ImageEditor extends Component {
       // props of withImageHelpers hoc
       imageHelpers,
     } = this.props
+    let {
+      meta: {
+        isImageLoadError,
+        imgNotAvailable,
+      },
+      ...helpers
+    } = imageHelpers
     let { src, isShowCaption } = block.values
 
     return (
@@ -39,7 +46,7 @@ class ImageEditor extends Component {
           <SUIImage
             src={src}
             centered
-            {...imageHelpers}
+            {...helpers}
           />
           {isShowCaption && (
             <Form>

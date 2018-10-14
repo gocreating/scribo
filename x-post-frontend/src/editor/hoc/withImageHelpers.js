@@ -13,6 +13,14 @@ let withImageHelpers = (WrappedComponent) => {
       isImageLoadError: true,
     })
 
+    componentDidUpdate(prevProps) {
+      if (this.props.block.values.src !== prevProps.block.values.src) {
+        this.setState({
+          isImageLoadError: false,
+        })
+      }
+    }
+
     render() {
       let { isImageLoadError } = this.state
       let imageHelpers = {
