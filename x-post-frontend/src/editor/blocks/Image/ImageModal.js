@@ -1,19 +1,21 @@
 import React, { Component } from 'react'
-import { Modal, Form, Button, Menu, Icon } from 'semantic-ui-react'
+import { Modal, Menu, Icon, Dimmer, Loader, Button } from 'semantic-ui-react'
+import ManualInput from './pickers/ManualInput'
 import SourceTypes from './SourceTypes'
 
 class ImageModal extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      src: props.block.values.src,
-      activePicker: SourceTypes.MANUAL_INPUT,
-    }
+  state = {}
+
+  componentDidMount() {
+    this.initialize()
   }
 
-  handleSrcChange = (e) => {
-    this.setState({ src: e.target.value })
-  }
+  // Modal level member functions
+
+  initialize = () => this.setState({
+    src: this.props.block.values.src,
+    activePicker: SourceTypes.MANUAL_INPUT,
+  })
 
   handleConfirm = () => {
     let { onConfirm } = this.props
@@ -22,9 +24,9 @@ class ImageModal extends Component {
   }
 
   handleCancel = () => {
-    let { block, onCancel } = this.props
+    let { onCancel } = this.props
 
-    this.setState({ src: block.values.src })
+    this.initialize()
     onCancel()
   }
 
@@ -32,9 +34,18 @@ class ImageModal extends Component {
     activePicker: name,
   })
 
+  // Image Picker level member functions
+
+  handleManualInputChange = (e) => {
+    this.setState({ src: e.target.value })
+  }
+
   render() {
     let { isOpen } = this.props
-    let { activePicker, src } = this.state
+    let {
+      src,
+      activePicker,
+    } = this.state
 
     if (!isOpen) {
       return null
@@ -64,16 +75,10 @@ class ImageModal extends Component {
         </Menu>
         <Modal.Content>
           {activePicker === SourceTypes.MANUAL_INPUT && (
-            <Form>
-              <Form.Field>
-                <label>URL Link to Image</label>
-                <input
-                  placeholder="URL"
-                  value={src}
-                  onChange={this.handleSrcChange}
-                />
-              </Form.Field>
-            </Form>
+            <ManualInput
+              value={src}
+              onChange={this.handleManualInputChange}
+            />
           )}
         </Modal.Content>
         <Modal.Actions>
