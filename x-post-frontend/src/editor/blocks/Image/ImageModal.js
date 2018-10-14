@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Modal, Menu, Icon, Dimmer, Loader, Button } from 'semantic-ui-react'
 import ManualInput from './pickers/ManualInput'
+import ImgurUploadPublic from './pickers/ImgurUploadPublic'
 import SourceTypes from './SourceTypes'
 
 class ImageModal extends Component {
@@ -15,6 +16,7 @@ class ImageModal extends Component {
   initialize = () => this.setState({
     src: this.props.block.values.src,
     activePicker: SourceTypes.MANUAL_INPUT,
+    isLoading: false,
   })
 
   handleConfirm = () => {
@@ -40,11 +42,31 @@ class ImageModal extends Component {
     this.setState({ src: e.target.value })
   }
 
+  handleImgurUploadStart = () => this.setState({
+    isLoading: true,
+  })
+
+  handleImgurUploadFinish = (result) => {
+    let { deletehash, link } = result.data
+
+    this.setState({
+      src: link,
+      activePicker: SourceTypes.MANUAL_INPUT,
+      isLoading: false,
+    })
+  }
+
+  handleImgurUploadError = (error) => {
+    this.setState({ isLoading: false })
+    alert(error.message)
+  }
+
   render() {
     let { isOpen } = this.props
     let {
       src,
       activePicker,
+      isLoading
     } = this.state
 
     if (!isOpen) {
@@ -72,12 +94,31 @@ class ImageModal extends Component {
             as="a"
             onClick={this.handlePickerSelect}
           />
+          <Menu.Item
+            content="Upload"
+            name={SourceTypes.IMGUR_UPLOAD_PUBLIC}
+            active={activePicker === SourceTypes.IMGUR_UPLOAD_PUBLIC}
+            as="a"
+            onClick={this.handlePickerSelect}
+          />
         </Menu>
         <Modal.Content>
+          {isLoading && (
+            <Dimmer active inverted>
+              <Loader inverted>Loading</Loader>
+            </Dimmer>
+          )}
           {activePicker === SourceTypes.MANUAL_INPUT && (
             <ManualInput
               value={src}
               onChange={this.handleManualInputChange}
+            />
+          )}
+          {activePicker === SourceTypes.IMGUR_UPLOAD_PUBLIC && (
+            <ImgurUploadPublic
+              onStart={this.handleImgurUploadStart}
+              onFinish={this.handleImgurUploadFinish}
+              onError={this.handleImgurUploadError}
             />
           )}
         </Modal.Content>
