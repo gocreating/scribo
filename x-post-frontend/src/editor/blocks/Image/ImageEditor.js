@@ -32,10 +32,7 @@ class ImageEditor extends Component {
       imageHelpers,
     } = this.props
     let {
-      meta: {
-        isImageLoadError,
-        imgNotAvailable,
-      },
+      meta,
       ...helpers
     } = imageHelpers
     let { src, isShowCaption } = block.values
