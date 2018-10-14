@@ -17,7 +17,7 @@ let Image = (props) => {
     },
     ...helpers
   } = imageHelpers
-  let { src, isShowCaption, caption } = block.values
+  let { src, isShowCaption, caption, alt } = block.values
 
   return (
     <figure className="image content">
@@ -31,6 +31,7 @@ let Image = (props) => {
           image={{
             src: src,
             className: 'ui centered image',
+            alt,
             ...helpers,
           }}
           defaultStyles={{
