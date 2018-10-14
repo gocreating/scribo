@@ -6,4 +6,5 @@ const envMap = {
 
 export default {
   MAIN: envMap[process.env.NODE_ENV],
+  IMGUR: 'https://api.imgur.com/3',
 }
