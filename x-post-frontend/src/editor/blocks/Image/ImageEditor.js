@@ -7,6 +7,7 @@ import {
   Form
 } from 'semantic-ui-react'
 import xBlock from '../../hoc/xBlock'
+import propsToolbar from '../../hoc/propsToolbar'
 import withImageHelpers from '../../hoc/withImageHelpers'
 import BlockTypes from '../../../constants/BlockTypes'
 import Image from './Image'
@@ -88,6 +89,9 @@ let enhance = compose(
       isShowCaption: false,
       caption: '',
     },
+  }),
+  propsToolbar({
+    Menu: ImageMenu,
   }),
   reduxForm(),
   withImageHelpers
