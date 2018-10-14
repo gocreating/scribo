@@ -1,7 +1,10 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { Segment } from 'semantic-ui-react'
 import Dropzone from 'react-dropzone'
 import { imgurImageCreateApiRequest } from '../../../../ducks/imgur'
+import config from '../../../../config'
+import './ImgurUploadPublic.scss'
 
 class ImgurUploadPublic extends Component {
   handleFileDrop = async (acceptedFiles, rejectedFiles) => {
@@ -31,9 +34,16 @@ class ImgurUploadPublic extends Component {
     return (
       <Dropzone
         onDrop={this.handleFileDrop}
+        multiple={false}
         accept="image/*"
+        maxSize={config.imgur.maxSize}
+        className="imgur-dropzone"
+        acceptClassName="accept"
+        rejectClassName="reject"
       >
-        <p>Try dropping some files here, or click to select files to upload.</p>
+        <Segment vertical textAlign="center" padded="very" size="massive">
+          Click to Upload or Drag Files Here
+        </Segment>
       </Dropzone>
     )
   }

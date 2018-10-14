@@ -13,5 +13,6 @@ let imgurClientID = {
 export default {
   imgur: {
     clientID: imgurClientID[process.env.NODE_ENV],
+    maxSize: 10 * 1024 * 1024, // 10MB
   },
 }

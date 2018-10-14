@@ -1,0 +1,10 @@
+.imgur-dropzone {
+  border: 2px dashed #aaa;
+
+  &.accept {
+    background-color: #eee;
+  }
+  &.reject {
+    background-color: red;
+  }
+}
