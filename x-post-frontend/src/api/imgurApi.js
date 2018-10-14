@@ -8,7 +8,7 @@ class ImgurApi extends ApiClient {
       files: {
         image,
       },
-      accessToken: `Client-ID ${config.IMGUR_CLIENT_ID}`,
+      accessToken: `Client-ID ${config.imgur.clientID}`,
     })
   }
 }

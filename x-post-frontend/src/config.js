@@ -11,5 +11,7 @@ let imgurClientID = {
 }
 
 export default {
-  IMGUR_CLIENT_ID: imgurClientID[process.env.NODE_ENV],
+  imgur: {
+    clientID: imgurClientID[process.env.NODE_ENV],
+  },
 }
