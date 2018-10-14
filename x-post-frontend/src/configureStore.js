@@ -8,7 +8,7 @@ import {
   connectRouter,
   routerMiddleware,
 } from 'connected-react-router'
-import { createBrowserHistory } from 'history'
+import { createHashHistory } from 'history'
 import { persistStore, persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 import { reducer as formReducer } from 'redux-form'
@@ -18,9 +18,7 @@ import authReducer from './ducks/auth'
 import userReducer from './ducks/user'
 import postReducer from './ducks/post'
 
-let history = createBrowserHistory({
-  basename: '/x-post',
-})
+let history = createHashHistory()
 let persistConfig = {
   key: 'root',
   storage,

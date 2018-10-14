@@ -9,7 +9,26 @@ npm start
 ## Deploy to gh-pages
 
 1. Update `homepage` of `package.json`
-2. If the app is not host on root path, update `basename` of `react-router`
+2. Update hashType of `react-router`
+
+  - Option 1: `slash`
+
+    If the app is not host on root path, update `basename` of `createBrowserHistory`.
+
+    ```
+    let history = createBrowserHistory({
+      basename: '/x-post',
+    })
+    ```
+
+  - Option 2: `hash` (Recommended)
+
+    Use `createHashHistory` instead of `createBrowserHistory`. You don't need to set basename if you use hash router.
+
+    ```
+    let history = createHashHistory()
+    ```
+
 3. Add `.env.production` if needed
 
   ```
