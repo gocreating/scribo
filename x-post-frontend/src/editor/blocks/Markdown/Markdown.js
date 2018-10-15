@@ -1,10 +1,13 @@
 import React from 'react'
 import ReactMarkdown from 'react-markdown'
+import math from 'remark-math'
 import Paragraph from './renderers/Paragraph'
 import Image from './renderers/Image'
 import Table from './renderers/Table'
 import Heading from './renderers/Heading'
 import Code from './renderers/Code'
+import InlineMath from './renderers/InlineMath'
+import BlockMath from './renderers/BlockMath'
 import './Markdown.css'
 
 let defaultRenderers = {
@@ -17,6 +20,9 @@ let defaultRenderers = {
   tableCell: Table.Cell,
   heading: Heading,
   code: Code,
+  // remark plugin
+  inlineMath: InlineMath,
+  math: BlockMath,
 }
 
 let Markdown = ({ block, renderers }) => (
@@ -31,6 +37,9 @@ let Markdown = ({ block, renderers }) => (
       ...defaultRenderers,
       ...renderers,
     }}
+    plugins={[
+      math,
+    ]}
   />
 )
 
