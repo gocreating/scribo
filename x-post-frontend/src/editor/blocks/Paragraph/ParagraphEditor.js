@@ -4,12 +4,12 @@ import { Field, reduxForm } from 'redux-form'
 import { Grid, Form } from 'semantic-ui-react'
 import xBlock from '../../hoc/xBlock'
 import BlockTypes from '../../../constants/BlockTypes'
-import PlainText from './PlainText'
+import Paragraph from './Paragraph'
 import TextAreaAutoSize from '../../../fields/TextAreaAutoSize'
 
-class PlainTextEditor extends Component {
+class ParagraphEditor extends Component {
   renderPreview = () => (
-    <PlainText block={this.props.block} />
+    <Paragraph block={this.props.block} />
   )
 
   renderEditor = () => {
@@ -22,7 +22,7 @@ class PlainTextEditor extends Component {
           component={TextAreaAutoSize}
           onChange={autoUpdateValues}
           placeholder="Write something..."
-          className="plaintext editor web-font"
+          className="paragraph editor web-font"
         />
       </Form>
     )
@@ -46,11 +46,11 @@ class PlainTextEditor extends Component {
 
 let enhance = compose(
   xBlock({
-    type: BlockTypes.PLAIN_TEXT,
+    type: BlockTypes.PARAGRAPH,
     defaultValues: {
       text: '',
     },
   }),
   reduxForm()
 )
-export default enhance(PlainTextEditor)
+export default enhance(ParagraphEditor)

@@ -8,8 +8,8 @@ import BlockTypes from '../constants/BlockTypes'
 import CodeHighlightThemes from './blocks/CodeHighlight/Themes'
 
 const AvailableBlocks = [{
-  type: BlockTypes.PLAIN_TEXT,
-  label: 'Plain Text',
+  type: BlockTypes.PARAGRAPH,
+  label: 'Paragraph',
   insertValues: {
     text: '',
   },

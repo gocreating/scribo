@@ -1,8 +1,9 @@
-textarea.plaintext.editor {
+textarea.paragraph.editor {
   border: 0px;
 }
-textarea.plaintext.editor,
-p.plaintext.content {
+textarea.paragraph.editor,
+span.paragraph.content {
+  display: inline-block;
   font-size: 20px;
   line-height: 1.875em;
   min-height: 1.875em;
