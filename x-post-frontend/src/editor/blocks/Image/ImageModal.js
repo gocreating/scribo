@@ -57,6 +57,13 @@ class ImageModal extends Component {
     loadingText: 'Your image is uploading...',
   })
 
+  handleImgurUploading = ({ percent }) => {
+    this.setState({
+      isLoading: true,
+      loadingText: `Your image is uploading...${parseInt(percent)}%`,
+    })
+  }
+
   handleImgurUploadFinish = (result) => {
     let {
       width,
@@ -143,6 +150,7 @@ class ImageModal extends Component {
           {activePicker === SourceTypes.IMGUR_UPLOAD_PUBLIC && (
             <ImgurUploadPublic
               onStart={this.handleImgurUploadStart}
+              onUploading={this.handleImgurUploading}
               onFinish={this.handleImgurUploadFinish}
               onError={this.handleImgurUploadError}
             />

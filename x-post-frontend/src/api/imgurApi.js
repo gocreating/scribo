@@ -3,13 +3,18 @@ import ApiBaseUrl from '../constants/ApiBaseUrl'
 import config from '../config'
 
 class ImgurApi extends ApiClient {
-  create(image) {
-    return this.post('/image', {
+  create(image, onProgress) {
+    let req = this.post('/image', {
       files: {
         image,
       },
       accessToken: `Client-ID ${config.imgur.clientID}`,
     })
+
+    if (onProgress) {
+      return req.on('progress', onProgress)
+    }
+    return req
   }
 }
 

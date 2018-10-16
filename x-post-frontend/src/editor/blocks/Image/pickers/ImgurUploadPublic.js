@@ -10,6 +10,7 @@ class ImgurUploadPublic extends Component {
   handleFileDrop = async (acceptedFiles, rejectedFiles) => {
     let {
       onStart,
+      onUploading,
       onFinish,
       onError,
       imgurImageCreate,
@@ -22,7 +23,15 @@ class ImgurUploadPublic extends Component {
     }
     onStart()
 
-    let result = await imgurImageCreate(acceptedFiles[0])
+    let result = await imgurImageCreate(acceptedFiles[0], (e) => {
+      if (e.direction === 'upload') {
+        onUploading({
+          total: e.total,
+          loaded: e.loaded,
+          percent: e.percent,
+        })
+      }
+    })
 
     if (!result.success) {
       return onError(result.data.error)

@@ -8,9 +8,9 @@ const plainActionCreators = createActions({
   IMGUR_IMAGE_CREATE_API_FAILURE: (res) => ({ res }),
 })
 const thunkActionCreators = {
-  imgurImageCreateApiRequest: (image) => async (dispatch) => {
+  imgurImageCreateApiRequest: (image, onProgress) => async (dispatch) => {
     try {
-      let response = await imgurApi.create(image)
+      let response = await imgurApi.create(image, onProgress)
       dispatch(imgurImageCreateApiSuccess(response))
       return response.body
     } catch (error) {
