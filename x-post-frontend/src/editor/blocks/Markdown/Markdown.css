@@ -11,6 +11,7 @@ textarea.markdown.editor {
 .markdown.content li {
   font-size: 20px;
   line-height: 1.875em;
+  margin: 10px 0;
 }
 .markdown.content code {
   font-size: 87.5%;
