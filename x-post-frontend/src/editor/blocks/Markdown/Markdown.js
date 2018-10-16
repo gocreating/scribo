@@ -2,6 +2,7 @@ import React from 'react'
 import ReactMarkdown from 'react-markdown'
 import math from 'remark-math'
 import Paragraph from './renderers/Paragraph'
+import Blockquote from './renderers/Blockquote'
 import Image from './renderers/Image'
 import Table from './renderers/Table'
 import Heading from './renderers/Heading'
@@ -12,6 +13,7 @@ import './Markdown.css'
 
 let defaultRenderers = {
   paragraph: Paragraph,
+  blockquote: Blockquote,
   image: Image,
   table: Table,
   tableHead: Table.Header,
