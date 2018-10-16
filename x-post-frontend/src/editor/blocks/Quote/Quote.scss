@@ -1,0 +1,93 @@
+// reference to https://dribbble.com/shots/695330-Testimonial-blockquote
+$text-font-size: 20px;
+$cite-font-size: 14px;
+$cite-color: #888;
+$bg-color: #f3f3f3;
+
+%quote-wrapper {
+  position: relative;
+  margin: 10px 0;
+  padding: 30px 60px 30px 80px;
+  background-color: $bg-color;
+}
+
+%quote-symbol {
+  display: inline-block;
+  quotes: "“" "”" "‘" "’";
+  content: open-quote;
+  font-family: Consolas;
+  position: absolute;
+  top: 20px;
+  left: -10px;
+  font-size: 60px;
+  background-color: #ccc;
+  width: 60px;
+  height: 60px;
+  line-height: 80px;
+  border-radius: 50%;
+  text-align: center;
+  color: white;
+}
+
+%quote-text {
+  overflow-wrap: break-word;
+  line-height: 1.875em;
+  min-height: 1.875em;
+  font-size: $text-font-size;
+}
+
+%quote-cite {
+  display: block;
+  margin-top: 20px;
+  line-height: 1.875em;
+  min-height: 1.875em;
+  font-size: $cite-font-size;
+  color: $cite-color;
+  font-style: normal;
+  text-align: right;
+
+  &::before {
+    content: '－';
+    text-align: left;
+    display: inline-block;
+    width: 20px;
+    font-size: $cite-font-size;
+    font-family: Consolas;
+  }
+}
+
+form.quote.editor {
+  @extend %quote-wrapper;
+  &::before {
+    @extend %quote-symbol;
+  }
+
+  textarea, textarea:focus {
+    border: 0px;
+    padding: 0px;
+    margin: 0px;
+    background-color: $bg-color;
+  }
+
+  textarea.text {
+    @extend %quote-text;
+  }
+
+  textarea.cite, textarea.cite:focus {
+    @extend %quote-cite;
+  }
+}
+
+blockquote.quote.content {
+  @extend %quote-wrapper;
+  @extend %quote-text;
+
+  &::before {
+    @extend %quote-symbol;
+  }
+
+  cite {
+    display: block;
+    @extend %quote-cite;
+  }
+}

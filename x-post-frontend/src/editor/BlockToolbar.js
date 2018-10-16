@@ -41,6 +41,14 @@ const AvailableBlocks = [{
     isShowCaption: false,
     caption: '',
   },
+}, {
+  type: BlockTypes.QUOTE,
+  label: 'Quote',
+  insertValues: {
+    text: '',
+    isShowCite: false,
+    cite: '',
+  },
 }]
 
 class BlockToolbar extends Component {
