@@ -5,7 +5,7 @@ import { Grid, Form } from 'semantic-ui-react'
 import xBlock from '../../hoc/xBlock'
 import BlockTypes from '../../../constants/BlockTypes'
 import PlainText from './PlainText'
-import TextArea from '../../../fields/TextArea'
+import TextAreaAutoSize from '../../../fields/TextAreaAutoSize'
 
 class PlainTextEditor extends Component {
   renderPreview = () => (
@@ -19,11 +19,9 @@ class PlainTextEditor extends Component {
       <Form>
         <Field
           name="text"
-          component={TextArea}
+          component={TextAreaAutoSize}
           onChange={autoUpdateValues}
           placeholder="Write something..."
-          rows={1}
-          autoHeight
           className="plaintext editor web-font"
         />
       </Form>

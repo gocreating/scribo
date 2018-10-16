@@ -5,7 +5,7 @@ import { Grid, Form } from 'semantic-ui-react'
 import xBlock from '../../hoc/xBlock'
 import BlockTypes from '../../../constants/BlockTypes'
 import Markdown from './Markdown'
-import TextArea from '../../../fields/TextArea'
+import TextAreaAutoSize from '../../../fields/TextAreaAutoSize'
 
 class MarkdownEditor extends Component {
   renderPreview = () => (
@@ -19,11 +19,9 @@ class MarkdownEditor extends Component {
       <Form>
         <Field
           name="text"
-          component={TextArea}
+          component={TextAreaAutoSize}
           onChange={autoUpdateValues}
           placeholder="Write markdown here"
-          rows={1}
-          autoHeight
           className="markdown editor web-font"
         />
       </Form>
