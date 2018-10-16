@@ -21,7 +21,7 @@ class NewPage extends Component {
       blocks: [
         {
           id: shortid.generate(),
-          type: BlockTypes.PLAIN_TEXT,
+          type: BlockTypes.PARAGRAPH,
           preview: false,
           values: {
             text: '',
