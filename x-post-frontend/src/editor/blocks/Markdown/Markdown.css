@@ -1,9 +1,6 @@
 textarea.markdown.editor {
   border: 0px;
   font-family: Consolas !important;
-}
-textarea.markdown.editor,
-p.markdown.content {
   font-size: 20px;
   line-height: 1.875em;
   min-height: 1.875em;
