@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Menu, Dropdown, Checkbox, Input } from 'semantic-ui-react'
+import { Menu, Checkbox } from 'semantic-ui-react'
 
 class QuoteMenu extends Component {
   handleShowCiteChange = (e, { checked }) => {
