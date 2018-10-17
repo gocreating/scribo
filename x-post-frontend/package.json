@@ -37,14 +37,15 @@
     "redux-persist": "^5.10.0",
     "redux-thunk": "^2.3.0",
     "remark-math": "^1.0.4",
-    "semantic-ui-css": "^2.3.3",
     "semantic-ui-react": "^0.82.3",
     "shortid": "^2.2.13",
     "superagent": "^4.0.0-beta.5"
   },
   "scripts": {
     "start": "cross-env NODE_ENV=development react-scripts start",
-    "build": "react-scripts build",
+    "build-semantic": "cd src/semantic && gulp build-css build-assets",
+    "watch-semantic": "cd src/semantic && yarn run build-semantic && gulp watch",
+    "build": "npm run build-semantic && react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
@@ -53,7 +54,8 @@
   },
   "devDependencies": {
     "eslint-plugin-class-property": "^1.1.0",
-    "eslint-plugin-react-native": "^3.3.0"
+    "eslint-plugin-react-native": "^3.3.0",
+    "semantic-ui": "^2.4.1"
   },
   "browserslist": [
     ">0.2%",

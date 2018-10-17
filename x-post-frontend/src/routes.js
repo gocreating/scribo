@@ -4,6 +4,10 @@ let routes = [{
   component: () => import('./pages/basic/HomePage'),
 }, {
   exact: true,
+  path: '/theme',
+  component: () => import('./pages/basic/ThemePage'),
+}, {
+  exact: true,
   path: '/user/signup',
   component: () => import('./pages/user/NewPage'),
 }, {

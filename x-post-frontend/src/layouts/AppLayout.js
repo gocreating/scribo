@@ -1,7 +1,7 @@
 import React from 'react'
 import { Container, Divider } from 'semantic-ui-react'
 import Navigation from './Navigation'
-import 'semantic-ui-css/semantic.min.css'
+import '../semantic/dist/semantic.min.css'
 import './AppLayout.css'
 
 let AppLayout = ({ placeholder, children }) => (
