@@ -23,7 +23,7 @@ class XEditor extends Component {
 
   initBlock = () => {
     let block = this.createBlock(
-      BlockTypes.PLAIN_TEXT, {
+      BlockTypes.PARAGRAPH, {
         text: 'Let\'s go!',
       }
     )
