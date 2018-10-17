@@ -3,7 +3,7 @@ textarea.paragraph.editor {
 }
 textarea.paragraph.editor,
 span.paragraph.content {
-  display: inline-block;
+  display: block;
   font-size: 20px;
   line-height: 1.875em;
   min-height: 1.875em;
