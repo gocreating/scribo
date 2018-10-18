@@ -72,7 +72,7 @@ class NewOrEditForm extends Component {
           </Form.Field>
         </Form.Group>
         {process.env.NODE_ENV === 'development' && (
-          <Button onClick={() => {
+          <Button basic onClick={() => {
             console.log(
               this.xeditor.current.getBlocks()
             )
@@ -81,17 +81,17 @@ class NewOrEditForm extends Component {
           </Button>
         )}
         {onCreate && (
-          <Button onClick={handleSubmit(this.handleSubmit(onCreate))}>
+          <Button basic onClick={handleSubmit(this.handleSubmit(onCreate))}>
             Create
           </Button>
         )}
         {onSave && (
-          <Button onClick={handleSubmit(this.handleSubmit(onSave))}>
+          <Button basic onClick={handleSubmit(this.handleSubmit(onSave))}>
             Save
           </Button>
         )}
         {onUpdate && (
-          <Button onClick={handleSubmit(this.handleSubmit(onUpdate))}>
+          <Button basic onClick={handleSubmit(this.handleSubmit(onUpdate))}>
             Update
           </Button>
         )}

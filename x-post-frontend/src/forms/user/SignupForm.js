@@ -22,7 +22,7 @@ let SignupForm= ({ onSubmit, handleSubmit }) => (
         type="password"
       />
     </Form.Field>
-    <Button>Signup</Button>
+    <Button basic>Signup</Button>
   </Form>
 )
 
