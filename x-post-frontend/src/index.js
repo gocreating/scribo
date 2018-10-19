@@ -2,9 +2,11 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'
-import registerServiceWorker from './registerServiceWorker'
+import { unregister } from './registerServiceWorker'
 import configureStore from './configureStore'
 import App from './App'
+
+unregister()
 
 let { store, history, persistor } = configureStore
 
@@ -15,4 +17,3 @@ ReactDOM.render((
     </PersistGate>
   </Provider>
 ), document.getElementById('root'))
-registerServiceWorker()
