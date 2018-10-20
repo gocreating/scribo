@@ -1,7 +1,10 @@
 import React, { Component } from 'react'
+import { compose } from 'recompose'
+import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
-import { Field, reduxForm } from 'redux-form'
+import { Field, reduxForm, getFormValues } from 'redux-form'
 import { Button, Form } from 'semantic-ui-react'
+import slugify from '../../utils/slugify'
 import Input from '../../fields/Input'
 import FormTypes from '../../constants/FormTypes'
 import XEditor from '../../editor/XEditor'
@@ -32,6 +35,21 @@ class NewOrEditForm extends Component {
     this.xeditor.current.setBlocks(blocks)
   }
 
+  handleTitleChange = (e) => {
+    let { values } = this.props
+    let isAutoSlugify = (values.slug === slugify(values.title))
+
+    if (!values.slug || isAutoSlugify) {
+      this.setSlug(e.target.value)
+    }
+  }
+
+  setSlug = (title) => {
+    let { values, change } = this.props
+
+    change('slug', slugify(title || values.title))
+  }
+
   handleSubmit = (targetConsumerFn) => (data) => {
     let blocks = this.xeditor.current
       .getBlocks()
@@ -53,17 +71,44 @@ class NewOrEditForm extends Component {
       onSave,
       onUpdate,
       handleSubmit,
+      values,
     } = this.props
+    let isAutoSlugigy = (values.slug === slugify(values.title))
 
     return (
       <Form as="div">
         <Form.Field>
           <Field
+            name="slug"
+            component={Input}
+            type="text"
+            placeholder="slug"
+            size="mini"
+            action={{
+              icon: 'magnet',
+              onClick: () => this.setSlug(),
+              content: 'Apply from title',
+              size: 'mini',
+              disabled: isAutoSlugigy,
+            }}
+          />
+        </Form.Field>
+        <Form.Field>
+          <Field
             name="title"
             component={Input}
+            onChange={this.handleTitleChange}
             type="text"
             placeholder="Title"
             size="massive"
+          />
+        </Form.Field>
+        <Form.Field>
+          <Field
+            name="subtitle"
+            component={Input}
+            type="text"
+            placeholder="subtitle"
           />
         </Form.Field>
         <Form.Group>
@@ -100,9 +145,16 @@ class NewOrEditForm extends Component {
   }
 }
 
-export default reduxForm({
-  form: FormTypes.POST_NEW_OR_EDIT,
-  initialValues: {
-    title: '',
-  },
-})(NewOrEditForm)
+let enhance = compose(
+  reduxForm({
+    form: FormTypes.POST_NEW_OR_EDIT,
+    initialValues: {
+      title: '',
+    },
+  }),
+  connect(state => ({
+    values: getFormValues(FormTypes.POST_NEW_OR_EDIT)(state),
+  }))
+)
+
+export default enhance(NewOrEditForm)
