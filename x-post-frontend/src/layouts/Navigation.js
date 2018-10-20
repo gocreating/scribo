@@ -2,10 +2,11 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Grid, Menu, Container, Button } from 'semantic-ui-react'
 import { Link } from 'react-router-dom'
+import { push } from 'connected-react-router'
 import { logoutApiRequest } from '../ducks/user'
 import { selectors } from '../ducks/auth'
 
-let Navigation = ({ isAuth, logout }) => (
+let Navigation = ({ isAuth, logout, push }) => (
   <Grid>
     <Grid.Row>
       <Grid.Column>
@@ -25,7 +26,12 @@ let Navigation = ({ isAuth, logout }) => (
                 <Menu.Item name="New Post" as={Link} to="/post/new" />
               )}
               {isAuth && (
-                <Menu.Item onClick={logout}>
+                <Menu.Item
+                  onClick={() => {
+                    logout()
+                    push('/user/signin')
+                  }}
+                >
                   Logout
                 </Menu.Item>
               )}
@@ -47,4 +53,5 @@ export default connect(({ auth }) => ({
   isAuth: selectors.getIsAuth(auth),
 }), {
   logout: logoutApiRequest,
+  push,
 })(Navigation)
