@@ -38,6 +38,9 @@ class ShowPage extends Component {
     return (
       <AppLayout placeholder>
         <Header size="huge">{post.title}</Header>
+        {post.subtitle && (
+          <Header sub>{post.subtitle}</Header>
+        )}
         <Segment>
           <DisplayRenderer blocks={post.blocks} />
         </Segment>

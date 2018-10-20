@@ -11,6 +11,9 @@
       "type": "string",
       "required": true
     },
+    "subtitle": {
+      "type": "string"
+    },
     "slug": {
       "type": "string"
     },

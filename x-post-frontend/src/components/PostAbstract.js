@@ -7,6 +7,9 @@ let PostAbstract = ({ post, onDetele }) => (
     <Link to={`/user/${post.authorId}/post/${post.id}`}>
       <Header size="huge">{post.title}</Header>
     </Link>
+    {post.subtitle && (
+      <Header sub>{post.subtitle}</Header>
+    )}
     <br />
     <Link to={`/post/${post.id}/edit`}>Edit</Link> |
     <Link to="#" onClick={onDetele}>Delete</Link>

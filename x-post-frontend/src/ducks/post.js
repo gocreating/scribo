@@ -29,7 +29,9 @@ const thunkActionCreators = {
             fields: {
               id: true,
               authorId: true,
+              slug: true,
               title: true,
+              subtitle: true,
               abstractBlocks: true,
               createdAt: true,
               updatedAt: true,
