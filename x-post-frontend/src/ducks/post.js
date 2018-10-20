@@ -17,6 +17,8 @@ const plainActionCreators = createActions({
   POST_UPDATE_API_FAILURE: (res) => ({ res }),
   POST_DELETE_API_SUCCESS: (res) => ({ res }),
   POST_DELETE_API_FAILURE: (res) => ({ res }),
+  POST_READ_BY_USERNAME_AND_SLUG_API_SUCCESS: (res) => ({ res }),
+  POST_READ_BY_USERNAME_AND_SLUG_API_FAILURE: (res) => ({ res }),
   SET_PAGE: (pageId, postIds) => ({ pageId, postIds }),
 })
 const thunkActionCreators = {
@@ -74,6 +76,25 @@ const thunkActionCreators = {
       return response.body
     }
   },
+  postReadByUsernameAndSlugApiRequest: (username, postSlug) => async (dispatch) => {
+    try {
+      let response = await postApi.readByUsernameAndSlug(username, postSlug, {
+        params: {
+          filter: {
+            include: 'author',
+          },
+        },
+      })
+      dispatch(postReadApiSuccess(response))
+      let { entities } = normalize(response.body, postSchema)
+      dispatch(addEntities(entities))
+      return response.body
+    } catch (error) {
+      let response = createApiError(error)
+      dispatch(postReadApiFailure(response))
+      return response.body
+    }
+  },
   postUpdateApiRequest: (userId, postId, post) => async (dispatch) => {
     try {
       let response = await postApi.update(userId, postId, post)
@@ -108,6 +129,8 @@ export const {
   postUpdateApiFailure,
   postDeleteApiSuccess,
   postDeleteApiFailure,
+  postReadByUsernameAndSlugApiSuccess,
+  postReadByUsernameAndSlugApiFailure,
   setPage,
 } = plainActionCreators
 export const {
@@ -116,6 +139,7 @@ export const {
   postReadApiRequest,
   postUpdateApiRequest,
   postDeleteApiRequest,
+  postReadByUsernameAndSlugApiRequest,
 } = thunkActionCreators
 
 // Reducer
@@ -146,5 +170,42 @@ export let selectors = {
 
     return posts
   },
+  getPostsWithAuthor(state, userEntity) {
+    let posts = this.getPosts(state)
+
+    return posts.map(post => ({
+      ...post,
+      author: userEntity[post.authorId],
+    }))
+  },
   getPost: (state, postId) => (state[postId] || {}),
+  getPostByUsernameAndSlug: (posts, users, username, postSlug) => {
+    let filteredUserIds = Object
+      .keys(users)
+      .filter(userId => users[userId].username === username)
+
+    if (filteredUserIds.length === 0) {
+      return {}
+    }
+
+    let userId = filteredUserIds[0]
+    let filteredPostIds = Object
+      .keys(posts)
+      .filter(postId => {
+        let post = posts[postId]
+
+        return (
+          post.slug === postSlug &&
+          post.authorId === userId
+        )
+      })
+
+    if (filteredPostIds.length === 0) {
+      return {}
+    }
+
+    let postId = filteredPostIds[0]
+
+    return posts[postId]
+  },
 }

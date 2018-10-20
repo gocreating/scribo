@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 
 let PostAbstract = ({ post, onDetele }) => (
   <Segment>
-    <Link to={`/user/${post.authorId}/post/${post.id}`}>
+    <Link to={`/@${post.author.username}/${post.slug}`}>
       <Header size="huge">{post.title}</Header>
     </Link>
     {post.subtitle && (

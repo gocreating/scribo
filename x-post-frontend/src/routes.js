@@ -22,6 +22,9 @@ let routes = [{
   path: '/user/:userId/post/:postId',
   component: () => import('./pages/post/ShowPage'),
 }, {
+  path: '/@:username/:postSlug',
+  component: () => import('./pages/post/ShowPage'),
+}, {
   path: '/post/:postId/edit',
   component: () => import('./pages/post/EditPage'),
 }, {

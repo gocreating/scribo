@@ -81,10 +81,10 @@ class PostList extends Component {
   }
 }
 
-export default connect(({ auth, posts }) => ({
+export default connect(({ auth, posts, users }) => ({
   isAuth: authSelector.getIsAuth(auth),
   userId: authSelector.getLoggedUserId(auth),
-  posts: postSelector.getPosts(posts),
+  posts: postSelector.getPostsWithAuthor(posts, users),
 }), {
   postList: postListApiRequest,
   postDelete: postDeleteApiRequest,

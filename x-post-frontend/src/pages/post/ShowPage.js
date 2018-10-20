@@ -6,7 +6,10 @@ import { Header, Segment } from 'semantic-ui-react'
 import { selectors as postSelectors } from '../../ducks/post'
 import AppLayout from '../../layouts/AppLayout'
 import DisplayRenderer from '../../editor/renderers/DisplayRenderer'
-import { postReadApiRequest } from '../../ducks/post'
+import {
+  postReadApiRequest,
+  postReadByUsernameAndSlugApiRequest,
+} from '../../ducks/post'
 
 class ShowPage extends Component {
   static propTypes = {
@@ -22,10 +25,20 @@ class ShowPage extends Component {
     let {
       userId,
       postId,
+      username,
+      postSlug,
+      postReadByUsernameAndSlug,
       postRead,
     } = this.props
 
-    let result = await postRead(userId, postId)
+    let result = {}
+
+    if (username) {
+      result = await postReadByUsernameAndSlug(username, postSlug)
+    }
+    if (userId) {
+      result = await postRead(userId, postId)
+    }
 
     if (result.error) {
       return alert(result.error.message)
@@ -49,15 +62,30 @@ class ShowPage extends Component {
   }
 }
 
-export default withRouter(connect(({ posts }, { match }) => {
-  let { userId, postId } = match.params
-  let post = postSelectors.getPost(posts, postId)
+export default withRouter(connect(({ posts, users }, { match }) => {
+  let {
+    username,
+    postSlug,
+    userId,
+    postId,
+  } = match.params
+  let post = {}
+
+  if (username) {
+    post = postSelectors.getPostByUsernameAndSlug(posts, users, username, postSlug)
+  }
+  if (userId) {
+    post = postSelectors.getPost(posts, postId)
+  }
 
   return {
+    username,
+    postSlug,
     userId,
     postId,
     post,
   }
 }, {
   postRead: postReadApiRequest,
+  postReadByUsernameAndSlug: postReadByUsernameAndSlugApiRequest,
 })(ShowPage))
