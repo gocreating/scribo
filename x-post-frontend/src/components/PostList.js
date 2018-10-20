@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import { push } from 'connected-react-router'
 import { selectors as authSelector } from '../ducks/auth'
 import {
   postListApiRequest,
@@ -8,6 +9,7 @@ import {
   selectors as postSelector,
 } from '../ducks/post'
 import PostAbstract from './PostAbstract'
+import BlankPostList from '../utils/BlankPostList'
 
 class PostList extends Component {
   static propTypes = {
@@ -22,6 +24,10 @@ class PostList extends Component {
     if (isAuth) {
       this.fetchPosts()
     }
+  }
+
+  gotoNewPost = () => {
+    this.props.push('/post/new')
   }
 
   fetchPosts = async () => {
@@ -55,15 +61,23 @@ class PostList extends Component {
   render() {
     let { posts } = this.props
 
-    return (
-      posts.map(post => (
-        <PostAbstract
-          key={post.id}
-          post={post}
-          onDetele={this.deletePost.bind(this, post.id)}
+    if (posts.length > 0) {
+      return (
+        posts.map(post => (
+          <PostAbstract
+            key={post.id}
+            post={post}
+            onDetele={this.deletePost.bind(this, post.id)}
+          />
+        ))
+      )
+    } else {
+      return (
+        <BlankPostList
+          onInitClick={this.gotoNewPost}
         />
-      ))
-    )
+      )
+    }
   }
 }
 
@@ -74,4 +88,5 @@ export default connect(({ auth, posts }) => ({
 }), {
   postList: postListApiRequest,
   postDelete: postDeleteApiRequest,
+  push,
 })(PostList)
