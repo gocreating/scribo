@@ -6,7 +6,7 @@ let BlankBlock = ({ onInitClick }) => (
     <Header as="h2">
       No Content
       <Header.Subheader>
-        You don't have an block now. Please add a new block.
+        {'You don\'t have an block now. Please add a new block.'}
       </Header.Subheader>
     </Header>
     <Button
