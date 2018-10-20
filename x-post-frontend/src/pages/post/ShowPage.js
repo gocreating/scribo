@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { Link } from 'react-router-dom'
-import { Header, Segment } from 'semantic-ui-react'
+import { Header, Menu, Segment } from 'semantic-ui-react'
 import { push } from 'connected-react-router'
 import { selectors as authSelectors } from '../../ducks/auth'
 import { selectors as postSelectors } from '../../ducks/post'
@@ -81,10 +81,10 @@ class ShowPage extends Component {
     return (
       <AppLayout placeholder>
         {isAuth && loggedUserId === post.authorId && (
-          <Segment>
-            <Link to={`/post/${post.id}/edit`}>Edit</Link> |
-            <Link to="#" onClick={this.handleDeletePostClick}>Delete</Link>
-          </Segment>
+          <Menu inverted compact>
+            <Menu.Item as={Link} to={`/post/${post.id}/edit`} name="Edit" />
+            <Menu.Item onClick={this.handleDeletePostClick} name="Delete" />
+          </Menu>
         )}
         <Header size="huge">{post.title}</Header>
         {post.subtitle && (
