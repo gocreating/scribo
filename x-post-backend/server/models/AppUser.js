@@ -68,4 +68,59 @@ module.exports = (AppUser) => {
       root: true,
     },
   })
+
+  AppUser.findPostByUsernameAndSlug = (username, slug, ctx, filter, next) => {
+    let { Post } = AppUser.app.models
+
+    AppUser.findOne({ where: { username } }, (err, appUser) => {
+      if (err) return next(err)
+      if (!appUser) return next(new Error('User not found'))
+
+      Post.find({
+        where: { authorId: appUser.id, slug },
+        include: filter.include,
+      }, (err, post) => {
+        if (err) return next(err)
+        if (!post) return next(new Error('Post not found'))
+
+        next(null, post[0])
+      })
+    })
+  }
+  AppUser.remoteMethod('findPostByUsernameAndSlug', {
+    isStatic: true,
+    http: {
+      verb: 'get',
+      path: '/username/:username/posts/:slug',
+      errorStatus: 404,
+    },
+    description: 'Get post with username and post slug.',
+    accepts: [
+      {
+        arg: 'username',
+        description: 'Username of post author',
+        type: 'any',
+        required: true,
+      }, {
+        arg: 'slug',
+        description: 'Post slug',
+        type: 'any',
+        required: true,
+      },
+      {
+        arg: 'ctx',
+        type: 'object',
+        http: { source: 'context' },
+      }, {
+        arg: 'filter',
+        type: 'object',
+        http: { source: 'query' },
+      },
+    ],
+    returns: {
+      arg: 'data',
+      type: 'object',
+      root: true,
+    },
+  })
 }

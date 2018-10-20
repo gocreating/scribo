@@ -34,6 +34,7 @@
     }
   },
   "hidden": [
+    "email",
     "createdAt",
     "updatedAt"
   ],
@@ -65,6 +66,7 @@
         "xlogin",
         "logout",
         "findById",
+        "findPostByUsernameAndSlug",
         "__get__posts",
         "__findById__posts"
       ]
