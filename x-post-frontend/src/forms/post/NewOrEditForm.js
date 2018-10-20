@@ -73,7 +73,7 @@ class NewOrEditForm extends Component {
       handleSubmit,
       values,
     } = this.props
-    let isAutoSlugigy = (values.slug === slugify(values.title))
+    let isAutoSlugify = (values.slug === slugify(values.title))
 
     return (
       <Form as="div">
@@ -89,7 +89,7 @@ class NewOrEditForm extends Component {
               onClick: () => this.setSlug(),
               content: 'Apply from title',
               size: 'mini',
-              disabled: isAutoSlugigy,
+              disabled: isAutoSlugify,
             }}
           />
         </Form.Field>
