@@ -5,7 +5,6 @@ import { push } from 'connected-react-router'
 import { selectors as authSelector } from '../ducks/auth'
 import {
   postListApiRequest,
-  postDeleteApiRequest,
   selectors as postSelector,
 } from '../ducks/post'
 import PostAbstract from './PostAbstract'
@@ -42,22 +41,6 @@ class PostList extends Component {
     }
   }
 
-  deletePost = async (postId) => {
-    if (!window.confirm('sure?')) {
-      return
-    }
-
-    let {
-      postDelete,
-      userId,
-    } = this.props
-    let result = await postDelete(userId, postId)
-
-    if (result.error) {
-      return alert(result.error.message)
-    }
-  }
-
   render() {
     let { posts } = this.props
 
@@ -67,7 +50,6 @@ class PostList extends Component {
           <PostAbstract
             key={post.id}
             post={post}
-            onDetele={this.deletePost.bind(this, post.id)}
           />
         ))
       )
@@ -87,6 +69,5 @@ export default connect(({ auth, posts, users }) => ({
   posts: postSelector.getPostsWithAuthor(posts, users),
 }), {
   postList: postListApiRequest,
-  postDelete: postDeleteApiRequest,
   push,
 })(PostList)

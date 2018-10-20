@@ -2,13 +2,17 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { Header, Segment } from 'semantic-ui-react'
+import { push } from 'connected-react-router'
+import { selectors as authSelectors } from '../../ducks/auth'
 import { selectors as postSelectors } from '../../ducks/post'
 import AppLayout from '../../layouts/AppLayout'
 import DisplayRenderer from '../../editor/renderers/DisplayRenderer'
 import {
   postReadApiRequest,
   postReadByUsernameAndSlugApiRequest,
+  postDeleteApiRequest,
 } from '../../ducks/post'
 
 class ShowPage extends Component {
@@ -19,6 +23,10 @@ class ShowPage extends Component {
 
   componentDidMount() {
     this.fetchPost()
+  }
+
+  handleDeletePostClick = () => {
+    this.deletePost()
   }
 
   fetchPost = async () => {
@@ -45,11 +53,39 @@ class ShowPage extends Component {
     }
   }
 
+  deletePost = async () => {
+    if (!window.confirm('sure?')) {
+      return
+    }
+
+    let {
+      postDelete,
+      post,
+      push,
+    } = this.props
+    let result = await postDelete(post.authorId, post.id)
+
+    if (result.error) {
+      return alert(result.error.message)
+    }
+    push('/')
+  }
+
   render() {
-    let { post } = this.props
+    let {
+      post,
+      isAuth,
+      loggedUserId,
+    } = this.props
 
     return (
       <AppLayout placeholder>
+        {isAuth && loggedUserId === post.authorId && (
+          <Segment>
+            <Link to={`/post/${post.id}/edit`}>Edit</Link> |
+            <Link to="#" onClick={this.handleDeletePostClick}>Delete</Link>
+          </Segment>
+        )}
         <Header size="huge">{post.title}</Header>
         {post.subtitle && (
           <Header sub>{post.subtitle}</Header>
@@ -62,7 +98,7 @@ class ShowPage extends Component {
   }
 }
 
-export default withRouter(connect(({ posts, users }, { match }) => {
+export default withRouter(connect(({ posts, users, auth }, { match }) => {
   let {
     username,
     postSlug,
@@ -84,8 +120,12 @@ export default withRouter(connect(({ posts, users }, { match }) => {
     userId,
     postId,
     post,
+    isAuth: authSelectors.getIsAuth(auth),
+    loggedUserId: authSelectors.getLoggedUserId(auth),
   }
 }, {
   postRead: postReadApiRequest,
   postReadByUsernameAndSlug: postReadByUsernameAndSlugApiRequest,
+  postDelete: postDeleteApiRequest,
+  push,
 })(ShowPage))
