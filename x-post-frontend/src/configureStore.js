@@ -35,13 +35,21 @@ let logger = createLogger({
   diff: true,
   collapsed: true,
 })
-let middlewares = [
-  thunk,
-  routerMiddleware(history),
-]
+let middlewares = []
+
 if (process.env.NODE_ENV === 'development') {
-  middlewares.unshift(logger)
+  middlewares = [
+    thunk,
+    logger,
+    routerMiddleware(history),
+  ]
+} else {
+  middlewares = [
+    thunk,
+    routerMiddleware(history),
+  ]
 }
+
 let store = createStore(
   connectRouter(history)(persistedReducer),
   {},
