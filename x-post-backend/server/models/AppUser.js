@@ -39,11 +39,14 @@ module.exports = (AppUser) => {
   AppUser.xlogin = (credentials, next) => {
     AppUser.login(credentials, (err, data) => {
       if (err) return next(err)
-      return next(null, {
-        userId: data.userId,
-        ttl: data.ttl,
-        accessToken: data.id,
-        tokenCreatedAt: data.created,
+
+      AppUser.findById(data.userId, (err, user) => {
+        return next(null, {
+          ttl: data.ttl,
+          accessToken: data.id,
+          tokenCreatedAt: data.created,
+          user,
+        })
       })
     })
   }

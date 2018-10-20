@@ -3,15 +3,15 @@ import { createActions, handleActions } from 'redux-actions'
 // Action Creators
 const plainActionCreators = createActions({
   SET_AUTH: (
-    userId,
-    accessToken,
-    ttl,
-    tokenCreatedAt
-  ) => ({
-    userId,
     accessToken,
     ttl,
     tokenCreatedAt,
+    user
+  ) => ({
+    accessToken,
+    ttl,
+    tokenCreatedAt,
+    user,
   }),
   CLEAR_AUTH: () => ({}),
 })
@@ -30,11 +30,12 @@ const defaultState = {
 export default handleActions({
   [setAuth]: (state, { payload }) => {
     let {
-      userId,
       accessToken,
       ttl,
       tokenCreatedAt,
+      user,
     } = payload
+    let userId = user.id
     let tokenExpiredAt = new Date((
       new Date(tokenCreatedAt)
     ).getTime() + ttl * 1000)
@@ -44,11 +45,11 @@ export default handleActions({
       users: {
         ...state.users,
         [userId]: {
-          id: userId,
           accessToken,
           ttl,
           tokenCreatedAt,
           tokenExpiredAt,
+          ...user,
         }
       }
     }

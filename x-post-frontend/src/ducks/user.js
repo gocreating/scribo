@@ -25,21 +25,21 @@ const thunkActionCreators = {
       return response.body
     }
   },
-  signinApiRequest: (user) => async (dispatch) => {
+  signinApiRequest: (credentials) => async (dispatch) => {
     try {
-      let response = await userApi.signin(user)
+      let response = await userApi.signin(credentials)
       let {
-        userId,
         accessToken,
         ttl,
         tokenCreatedAt,
+        user,
       } = response.body
 
       dispatch(setAuth(
-        userId,
         accessToken,
         ttl,
-        tokenCreatedAt
+        tokenCreatedAt,
+        user
       ))
       dispatch(signinApiSuccess(response))
       return response.body
