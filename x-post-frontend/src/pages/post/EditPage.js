@@ -21,11 +21,11 @@ class EditPage extends Component {
 
   fetchPost = async () => {
     let {
-      userId,
+      loggedUser,
       postId,
       postRead,
     } = this.props
-    let result = await postRead(userId, postId)
+    let result = await postRead(loggedUser.id, postId)
 
     if (result.error) {
       return alert(result.error.message)
@@ -34,8 +34,8 @@ class EditPage extends Component {
   }
 
   updatePost = async (post) => {
-    let { userId, postId, postUpdate } = this.props
-    let result = await postUpdate(userId, postId, post)
+    let { loggedUser, postId, postUpdate } = this.props
+    let result = await postUpdate(loggedUser.id, postId, post)
 
     if (result.error) {
       return alert(result.error.message)
@@ -52,11 +52,11 @@ class EditPage extends Component {
   }
 
   handleUpdate = async (data) => {
-    let { userId, postId, push } = this.props
+    let { loggedUser, push } = this.props
     let result = await this.updatePost(data)
 
     if (result) {
-      push(`/user/${userId}/post/${postId}`)
+      push(`/@${loggedUser.username}/${result.slug}`)
     }
   }
 
@@ -78,12 +78,12 @@ class EditPage extends Component {
 }
 
 export default withRouter(connect(({ auth, posts }, { match }) => {
-  let userId = authSelectors.getLoggedUserId(auth)
+  let loggedUser = authSelectors.getLoggedUser(auth)
   let { postId } = match.params
   let post = postSelectors.getPost(posts, postId)
 
   return {
-    userId,
+    loggedUser,
     postId,
     post,
   }

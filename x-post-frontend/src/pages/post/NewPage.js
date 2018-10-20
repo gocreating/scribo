@@ -34,15 +34,15 @@ class NewPage extends Component {
   handleCreate = async (data) => {
     let {
       postCreate,
-      userId,
+      loggedUser,
       push,
     } = this.props
-    let result = await postCreate(userId, data)
+    let result = await postCreate(loggedUser.id, data)
 
     if (result.error) {
       return alert(result.error.message)
     }
-    push(`/user/${userId}/post/${result.id}`)
+    push(`/@${loggedUser.username}/${result.slug}`)
   }
 
   render() {
@@ -58,7 +58,7 @@ class NewPage extends Component {
 }
 
 export default connect(({ auth }) => ({
-  userId: selectors.getLoggedUserId(auth),
+  loggedUser: selectors.getLoggedUser(auth),
 }), {
   postCreate: postCreateApiRequest,
   push,
