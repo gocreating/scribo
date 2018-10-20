@@ -14,12 +14,25 @@ class NewPage extends Component {
   }
 
   handleSubmit = async (data) => {
-    let result = await this.props.signin(data)
+    let { signin, push } = this.props
+    let result
+
+    if (data.emailOrUsername.indexOf('@') >= 0) {
+      result = await signin({
+        email: data.emailOrUsername,
+        password: data.password,
+      })
+    } else {
+      result = await signin({
+        username: data.emailOrUsername,
+        password: data.password,
+      })
+    }
 
     if (result.error) {
       return alert(result.error.message)
     }
-    this.props.push('/')
+    push('/')
   }
 
   render() {

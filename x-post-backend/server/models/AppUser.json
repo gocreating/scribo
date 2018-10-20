@@ -10,13 +10,17 @@
     "realm": false,
     "credentials": false,
     "challenges": false,
-    "username": false,
     "emailVerified": false,
     "status": false,
     "created": false,
     "lastUpdated": false,
     "id": {
       "type": "string",
+      "id": true
+    },
+    "username": {
+      "type": "string",
+      "required": true,
       "id": true
     },
     "email": {

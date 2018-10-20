@@ -7,9 +7,9 @@ import FormTypes from '../../constants/FormTypes'
 let SignupForm= ({ onSubmit, handleSubmit }) => (
   <Form onSubmit={handleSubmit(onSubmit)}>
     <Form.Field>
-      <label>Email</label>
+      <label>Email / Username</label>
       <Field
-        name="email"
+        name="emailOrUsername"
         component={Input}
         type="text"
       />
@@ -29,7 +29,7 @@ let SignupForm= ({ onSubmit, handleSubmit }) => (
 export default reduxForm({
   form: FormTypes.USER_SIGNIN,
   initialValues: {
-    email: '',
+    emailOrUsername: '',
     password: '',
   },
 })(SignupForm)

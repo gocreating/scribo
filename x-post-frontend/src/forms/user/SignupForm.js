@@ -7,6 +7,14 @@ import FormTypes from '../../constants/FormTypes'
 let SignupForm= ({ onSubmit, handleSubmit }) => (
   <Form onSubmit={handleSubmit(onSubmit)}>
     <Form.Field>
+      <label>Username</label>
+      <Field
+        name="username"
+        component={Input}
+        type="text"
+      />
+    </Form.Field>
+    <Form.Field>
       <label>Email</label>
       <Field
         name="email"
@@ -29,6 +37,7 @@ let SignupForm= ({ onSubmit, handleSubmit }) => (
 export default reduxForm({
   form: FormTypes.USER_SIGNUP,
   initialValues: {
+    username: '',
     email: '',
     password: '',
   },
