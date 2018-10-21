@@ -6,6 +6,10 @@
   font-family: 'Open Sans', 'cwTeXMing', serif !important;
 }
 
-body {
+.app-content {
   background-color: #efefef;
+}
+
+body {
+  background-color: #A1B5C2;
 }

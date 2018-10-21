@@ -5,9 +5,10 @@ import { Link } from 'react-router-dom'
 import { push } from 'connected-react-router'
 import { logoutApiRequest } from '../ducks/user'
 import { selectors } from '../ducks/auth'
+import './Navigation.css'
 
 let Navigation = ({ isAuth, logout, push }) => (
-  <Grid>
+  <Grid className="navigation">
     <Grid.Row>
       <Grid.Column>
         <Menu borderless stackable attached="top" color="orange">
