@@ -26,7 +26,6 @@ let EditorRenderer = ({ blocks }) => (
         ref={provided.innerRef}
         {...provided.droppableProps}
       >
-        {provided.placeholder}
         {blocks.map((block, idx) => {
           let Block = (
             renderMap[block.type] ||
@@ -45,6 +44,7 @@ let EditorRenderer = ({ blocks }) => (
             />
           )
         })}
+        {provided.placeholder}
       </div>
     )}
   </Droppable>
