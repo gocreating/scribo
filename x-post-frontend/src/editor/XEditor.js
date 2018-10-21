@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
 import shortid from 'shortid'
-import { arrayMove } from 'react-sortable-hoc'
+import { DragDropContext } from 'react-beautiful-dnd'
 import BlockTypes from '../constants/BlockTypes'
 import EditorRenderer from './renderers/EditorRenderer'
 import BlankBlock from '../utils/BlankBlock'
+import reorder from './utils/reorder'
 import './XEditor.css'
 
 export let XEditorContext = React.createContext()
@@ -99,13 +100,22 @@ class XEditor extends Component {
     })
   }
 
-  onSortEnd = ({ oldIndex, newIndex }) => {
-    let { blocks } = this.state
-
+  onDragEnd = (result) => {
+    // dropped outside the list
+    if (!result.destination) {
+      return
+    }
+    if (result.destination.index === result.source.index) {
+      return
+    }
     this.setState({
-      blocks: arrayMove(blocks, oldIndex, newIndex),
+      blocks: reorder(
+        this.state.blocks,
+        result.source.index,
+        result.destination.index,
+      ),
     })
-  }
+  };
 
   render() {
     let { blocks } = this.state
@@ -121,21 +131,19 @@ class XEditor extends Component {
 
     return (
       <XEditorContext.Provider value={blockHelpers}>
-        {showContent && (
-          <div className="blocklist">
-            <EditorRenderer
-              blocks={blocks}
-              onSortEnd={this.onSortEnd}
-              helperClass="dragging"
-              lockAxis="y"
-              useDragHandle
-              lockToContainerEdges
-            />
-          </div>
-        )}
-        {!showContent && (
-          <BlankBlock onInitClick={this.initBlock} />
-        )}
+        <DragDropContext onDragEnd={this.onDragEnd}>
+          {showContent && (
+            <div className="blocklist">
+              <EditorRenderer
+                blocks={blocks}
+                onSortEnd={this.onSortEnd}
+              />
+            </div>
+          )}
+          {!showContent && (
+            <BlankBlock onInitClick={this.initBlock} />
+          )}
+        </DragDropContext>
       </XEditorContext.Provider>
     )
   }

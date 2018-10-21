@@ -1,5 +1,5 @@
 import React from 'react'
-import { SortableContainer } from 'react-sortable-hoc'
+import { Droppable } from 'react-beautiful-dnd'
 import ParagraphEditor from '../blocks/Paragraph/ParagraphEditor'
 import HeaderEditor from '../blocks/Header/HeaderEditor'
 import CodeHighlightEditor from '../blocks/CodeHighlight/CodeHighlightEditor'
@@ -20,26 +20,34 @@ let renderMap = {
 }
 
 let EditorRenderer = ({ blocks }) => (
-  <div>
-    {blocks.map((block, idx) => {
-      let Block = (
-        renderMap[block.type] ||
-        UnknownEditor
-      )
+  <Droppable droppableId="droppable-block-sort">
+    {(provided, snapshot) => (
+      <div
+        ref={provided.innerRef}
+        {...provided.droppableProps}
+      >
+        {provided.placeholder}
+        {blocks.map((block, idx) => {
+          let Block = (
+            renderMap[block.type] ||
+            UnknownEditor
+          )
 
-      return (
-        <Block
-          key={block.id}
-          block={block}
-          // react-sortable-hoc props
-          index={idx}
-          // xBlock hoc props
-          idx={idx}
-          type={block.type}
-        />
-      )
-    })}
-  </div>
+          return (
+            <Block
+              key={block.id}
+              block={block}
+              // react-sortable-hoc props
+              index={idx}
+              // xBlock hoc props
+              idx={idx}
+              type={block.type}
+            />
+          )
+        })}
+      </div>
+    )}
+  </Droppable>
 )
 
-export default SortableContainer(EditorRenderer)
+export default EditorRenderer
