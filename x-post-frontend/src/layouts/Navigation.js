@@ -38,9 +38,11 @@ let Navigation = ({ isAuth, logout, push }) => (
               {!isAuth && (
                 <Menu.Item as={Link} to="/user/signin">Signin</Menu.Item>
               )}
-              <Menu.Item>
-                <Button primary as={Link} to="/user/signup">Sign Up</Button>
-              </Menu.Item>
+              {!isAuth && (
+                <Menu.Item>
+                  <Button primary as={Link} to="/user/signup">Sign Up</Button>
+                </Menu.Item>
+              )}
             </Menu.Menu>
           </Container>
         </Menu>
