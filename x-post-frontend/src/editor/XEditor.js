@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import shortid from 'shortid'
-import { DragDropContext } from 'react-beautiful-dnd'
 import BlockTypes from '../constants/BlockTypes'
 import EditorRenderer from './renderers/EditorRenderer'
 import BlankBlock from '../utils/BlankBlock'
@@ -20,6 +19,16 @@ class XEditor extends Component {
 
   setBlocks = (blocks) => {
     this.setState({ blocks: blocks || [] })
+  }
+
+  reorderBlocks = (sourceIndex, destinationIndex) => {
+    this.setState({
+      blocks: reorder(
+        this.state.blocks,
+        sourceIndex,
+        destinationIndex,
+      ),
+    })
   }
 
   initBlock = () => {
@@ -100,23 +109,6 @@ class XEditor extends Component {
     })
   }
 
-  onDragEnd = (result) => {
-    // dropped outside the list
-    if (!result.destination) {
-      return
-    }
-    if (result.destination.index === result.source.index) {
-      return
-    }
-    this.setState({
-      blocks: reorder(
-        this.state.blocks,
-        result.source.index,
-        result.destination.index,
-      ),
-    })
-  };
-
   render() {
     let { blocks } = this.state
     let showContent = blocks.length > 0
@@ -131,19 +123,17 @@ class XEditor extends Component {
 
     return (
       <XEditorContext.Provider value={blockHelpers}>
-        <DragDropContext onDragEnd={this.onDragEnd}>
-          {showContent && (
-            <div className="blocklist">
-              <EditorRenderer
-                blocks={blocks}
-                onSortEnd={this.onSortEnd}
-              />
-            </div>
-          )}
-          {!showContent && (
-            <BlankBlock onInitClick={this.initBlock} />
-          )}
-        </DragDropContext>
+        {showContent && (
+          <div className="blocklist">
+            <EditorRenderer
+              blocks={blocks}
+              onSortEnd={this.onSortEnd}
+            />
+          </div>
+        )}
+        {!showContent && (
+          <BlankBlock onInitClick={this.initBlock} />
+        )}
       </XEditorContext.Provider>
     )
   }
