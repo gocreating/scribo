@@ -33,7 +33,7 @@
   display: block;
 }
 .block-container .toolbar .handle {
-  cursor: move;
+  cursor: move !important;
 }
 
 /* props toolbar */
