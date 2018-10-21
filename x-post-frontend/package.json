@@ -19,6 +19,7 @@
     "prop-types": "^15.6.2",
     "react": "^16.5.0",
     "react-autosize-textarea": "^5.0.0",
+    "react-beautiful-dnd": "^9.0.2",
     "react-dom": "^16.5.0",
     "react-dropzone": "^6.2.2",
     "react-katex": "^2.0.2",
