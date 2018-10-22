@@ -1,0 +1,3 @@
+.hide-sibling+div {
+  display: none!important;
+}
