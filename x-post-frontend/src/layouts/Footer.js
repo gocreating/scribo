@@ -1,5 +1,5 @@
 import React from 'react'
-import { Container, Grid, List, Header, Icon } from 'semantic-ui-react'
+import { Container, Grid, Segment, List, Header, Icon } from 'semantic-ui-react'
 import './Footer.scss'
 
 let Footer = () => (
@@ -13,7 +13,7 @@ let Footer = () => (
     >
       <Grid.Row>
         <Grid.Column>
-          <Container text>
+          <Segment basic compact>
             <List horizontal size="big">
               <List.Item><Icon name="facebook" /></List.Item>
               <List.Item><Icon name="instagram" /></List.Item>
@@ -21,10 +21,10 @@ let Footer = () => (
               <List.Item><Icon name="youtube" /></List.Item>
               <List.Item><Icon name="pinterest square" /></List.Item>
             </List>
-          </Container>
+          </Segment>
         </Grid.Column>
         <Grid.Column>
-          <Container text>
+          <Segment basic compact>
             <List horizontal size="big">
               <List.Item><Icon name="html5" /></List.Item>
               <List.Item><Icon name="css3" /></List.Item>
@@ -34,13 +34,13 @@ let Footer = () => (
               <List.Item><Icon name="sass" /></List.Item>
               <List.Item><Icon name="github" /></List.Item>
             </List>
-          </Container>
+          </Segment>
         </Grid.Column>
       </Grid.Row>
 
       <Grid.Row>
         <Grid.Column>
-          <Container text>
+          <Segment basic compact>
             <Header as="h3">
               Comprehensive
             </Header>
@@ -50,10 +50,10 @@ let Footer = () => (
               <List.Item>Resume</List.Item>
               <List.Item>Content Sharing</List.Item>
             </List>
-          </Container>
+          </Segment>
         </Grid.Column>
         <Grid.Column>
-          <Container text>
+          <Segment basic compact>
             <Header as="h3">
               Professional
             </Header>
@@ -63,7 +63,7 @@ let Footer = () => (
               <List.Item>Code Block</List.Item>
               <List.Item>Math Support</List.Item>
             </List>
-          </Container>
+          </Segment>
         </Grid.Column>
       </Grid.Row>
     </Grid>
