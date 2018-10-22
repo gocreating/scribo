@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Menu } from 'semantic-ui-react'
+import { Menu, Icon } from 'semantic-ui-react'
 import { Droppable, Draggable } from 'react-beautiful-dnd'
 import AvailableBlocks from '../constants/AvailableBlocks'
 import './BlockBucket.css'
@@ -13,7 +13,7 @@ class BlockBucket extends Component {
             ref={provided.innerRef}
             {...provided.droppableProps}
           >
-            <Menu borderless fluid vertical compact size="mini">
+            <Menu borderless fluid vertical compact size="mini" icon='labeled'>
               {AvailableBlocks.map((block, idx) => (
                 <Draggable
                   key={block.type}
@@ -28,11 +28,17 @@ class BlockBucket extends Component {
                         {...provided.dragHandleProps}
                       >
                         <Menu.Item link>
+                          {block.icon && (
+                            <Icon name={block.icon} />
+                          )}
                           {block.label}
                         </Menu.Item>
                       </div>
                       {snapshot.isDragging && (
                         <Menu.Item link className="hide-sibling">
+                          {block.icon && (
+                            <Icon name={block.icon} />
+                          )}
                           {block.label}
                         </Menu.Item>
                       )}
