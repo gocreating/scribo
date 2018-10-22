@@ -1,29 +1,25 @@
 import React from 'react'
-import { Grid, Container, Divider } from 'semantic-ui-react'
+import { Segment, Container, Divider } from 'semantic-ui-react'
 import Navigation from './Navigation'
 import Footer from './Footer'
 import '../semantic/dist/semantic.min.css'
 import './AppLayout.css'
 
 let AppLayout = ({ placeholder, children }) => (
-  <div>
-    <Navigation />
-    <Grid className="app-content">
-      <Grid.Row>
-        <Grid.Column>
-          {placeholder === true && (
-            <Divider hidden />
-          )}
-          {placeholder !== true && placeholder}
-          <Container>
-            {children}
-          </Container>
-        </Grid.Column>
-      </Grid.Row>
+  <Segment basic style={{ padding: 0 }}>
+    <div className="app-content">
+      <Navigation />
+      {placeholder === true && (
+        <Divider hidden />
+      )}
+      {placeholder !== true && placeholder}
+      <Container>
+        {children}
+      </Container>
       <Divider hidden section />
-    </Grid>
+    </div>
     <Footer />
-  </div>
+  </Segment>
 )
 
 export default AppLayout
