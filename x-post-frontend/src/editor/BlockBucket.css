@@ -1,3 +1,7 @@
 .hide-sibling+div {
   display: none!important;
 }
+
+.block-bucket .item {
+  cursor: all-scroll !important;
+}

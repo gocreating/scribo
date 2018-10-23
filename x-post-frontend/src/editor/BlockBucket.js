@@ -13,7 +13,15 @@ class BlockBucket extends Component {
             ref={provided.innerRef}
             {...provided.droppableProps}
           >
-            <Menu borderless fluid vertical compact size="mini" icon='labeled'>
+            <Menu
+              borderless
+              fluid
+              vertical
+              compact
+              size="mini"
+              icon="labeled"
+              className="block-bucket"
+            >
               {AvailableBlocks.map((block, idx) => (
                 <Draggable
                   key={block.type}
