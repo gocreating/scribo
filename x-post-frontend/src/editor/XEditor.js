@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import shortid from 'shortid'
-import { arrayMove } from 'react-sortable-hoc'
 import BlockTypes from '../constants/BlockTypes'
 import EditorRenderer from './renderers/EditorRenderer'
 import BlankBlock from '../utils/BlankBlock'
+import reorder from './utils/reorder'
 import './XEditor.css'
 
 export let XEditorContext = React.createContext()
@@ -19,6 +19,16 @@ class XEditor extends Component {
 
   setBlocks = (blocks) => {
     this.setState({ blocks: blocks || [] })
+  }
+
+  reorderBlocks = (sourceIndex, destinationIndex) => {
+    this.setState({
+      blocks: reorder(
+        this.state.blocks,
+        sourceIndex,
+        destinationIndex,
+      ),
+    })
   }
 
   initBlock = () => {
@@ -99,14 +109,6 @@ class XEditor extends Component {
     })
   }
 
-  onSortEnd = ({ oldIndex, newIndex }) => {
-    let { blocks } = this.state
-
-    this.setState({
-      blocks: arrayMove(blocks, oldIndex, newIndex),
-    })
-  }
-
   render() {
     let { blocks } = this.state
     let showContent = blocks.length > 0
@@ -126,10 +128,6 @@ class XEditor extends Component {
             <EditorRenderer
               blocks={blocks}
               onSortEnd={this.onSortEnd}
-              helperClass="dragging"
-              lockAxis="y"
-              useDragHandle
-              lockToContainerEdges
             />
           </div>
         )}

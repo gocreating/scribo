@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { SortableElement } from 'react-sortable-hoc'
+import { Draggable } from 'react-beautiful-dnd'
 import BlockToolbar from '../BlockToolbar'
 import { XEditorContext } from '../XEditor'
 
@@ -68,7 +68,7 @@ let xBlock = (config) => (WrappedComponent) => {
     }
 
     render() {
-      let { block } = this.props
+      let { block, dragHandleProps } = this.props
       let blockWithDefaultValues = {
         ...block,
         values: {
@@ -90,6 +90,7 @@ let xBlock = (config) => (WrappedComponent) => {
             enableReinitialize
           />
           <BlockToolbar
+            dragHandleProps={dragHandleProps}
             preview={block.preview}
             onPreviewClick={this.handlePreviewClick}
             onPrependClick={this.handlePrependClick}
@@ -103,11 +104,29 @@ let xBlock = (config) => (WrappedComponent) => {
 
   let BlockContainerWithCtx = (props) => (
     <XEditorContext.Consumer>
-      {(ctx) => (<BlockContainer {...ctx} {...props} />)}
+      {(ctx) => (
+        <Draggable
+          draggableId={props.block.id}
+          index={props.idx}
+        >
+          {(provided, snapshot) => (
+            <div
+              ref={provided.innerRef}
+              {...provided.draggableProps}
+            >
+              <BlockContainer
+                dragHandleProps={provided.dragHandleProps}
+                {...ctx}
+                {...props}
+              />
+            </div>
+          )}
+        </Draggable>
+      )}
     </XEditorContext.Consumer>
   )
 
-  return SortableElement(BlockContainerWithCtx)
+  return BlockContainerWithCtx
 }
 
 export default xBlock

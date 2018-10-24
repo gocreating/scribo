@@ -1,9 +1,15 @@
 import React, { Component } from 'react'
 import { Menu, Dropdown } from 'semantic-ui-react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEye, faEyeSlash, faAngleUp, faAngleDown, faTrash } from '@fortawesome/free-solid-svg-icons'
+import {
+  faArrowsAlt,
+  faEye,
+  faEyeSlash,
+  faAngleUp,
+  faAngleDown,
+  faTrash,
+} from '@fortawesome/free-solid-svg-icons'
 import { faPlusSquare } from '@fortawesome/free-regular-svg-icons'
-import BlockHandle from './BlockHandle'
 import BlockTypes from '../constants/BlockTypes'
 import CodeHighlightThemes from './blocks/CodeHighlight/Themes'
 
@@ -54,6 +60,7 @@ const AvailableBlocks = [{
 class BlockToolbar extends Component {
   render() {
     let {
+      dragHandleProps,
       preview,
       onPreviewClick,
       onPrependClick,
@@ -64,7 +71,9 @@ class BlockToolbar extends Component {
     return (
       <div className="toolbar">
         <Menu icon borderless fluid vertical compact size="mini">
-          <BlockHandle />
+          <Menu.Item link className="handle" {...dragHandleProps}>
+            <FontAwesomeIcon icon={faArrowsAlt} />
+          </Menu.Item>
           <Menu.Item
             link
             onClick={onPreviewClick}
