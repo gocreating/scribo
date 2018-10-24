@@ -1,0 +1,27 @@
+.post.form {
+  input[name="slug"],
+  input[name="slug"]:focus {
+    background-color: inherit;
+    font-family: 'Open Sans', 'cwTeXMing', serif !important;
+  }
+
+  input[name="title"],
+  input[name="title"]:focus {
+    background-color: inherit;
+    padding: 0px;
+    border: 0px;
+    margin-top: 25px;
+    font-size: 1.75em;
+    font-family: 'Open Sans', 'cwTeXMing', serif !important;
+  }
+
+  input[name="subtitle"],
+  input[name="subtitle"]:focus {
+    background-color: inherit;
+    padding: 0px;
+    margin-bottom: 25px;
+    border: 0px;
+    font-size: 1.55em;
+    font-family: 'Open Sans', 'cwTeXMing', serif !important;
+  }
+}
