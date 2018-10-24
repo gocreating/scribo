@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { Menu, Dropdown } from 'semantic-ui-react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
-  faArrowsAlt,
   faEye,
   faEyeSlash,
   faAngleUp,
@@ -60,7 +59,6 @@ const AvailableBlocks = [{
 class BlockToolbar extends Component {
   render() {
     let {
-      dragHandleProps,
       preview,
       onPreviewClick,
       onPrependClick,
@@ -71,9 +69,6 @@ class BlockToolbar extends Component {
     return (
       <div className="toolbar">
         <Menu icon borderless fluid vertical compact size="mini">
-          <Menu.Item link className="handle" {...dragHandleProps}>
-            <FontAwesomeIcon icon={faArrowsAlt} />
-          </Menu.Item>
           <Menu.Item
             link
             onClick={onPreviewClick}

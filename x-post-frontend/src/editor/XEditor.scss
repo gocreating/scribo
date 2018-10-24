@@ -38,6 +38,19 @@
       display: block;
     }
 
+    /* block handle */
+    .handle {
+      position: absolute;
+      top: 0px;
+      left: 100%;
+      height: 100%;
+      display:flex;
+      align-items: center;
+      padding: 0 10px 0 5px;
+      color: #ccc;
+      cursor: all-scroll;
+    }
+
     /* props toolbar */
     .props-toolbar {
       visibility: hidden;

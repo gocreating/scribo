@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Draggable } from 'react-beautiful-dnd'
+import BlockHandle from '../BlockHandle'
 import BlockToolbar from '../BlockToolbar'
 import { XEditorContext } from '../XEditor'
 
@@ -90,13 +91,13 @@ let xBlock = (config) => (WrappedComponent) => {
             enableReinitialize
           />
           <BlockToolbar
-            dragHandleProps={dragHandleProps}
             preview={block.preview}
             onPreviewClick={this.handlePreviewClick}
             onPrependClick={this.handlePrependClick}
             onAppendClick={this.handleAppendClick}
             onRemoveClick={this.handleRemoveClick}
           />
+          <BlockHandle dragHandleProps={dragHandleProps} />
         </div>
       )
     }
