@@ -4,7 +4,7 @@ import BlockTypes from '../constants/BlockTypes'
 import EditorRenderer from './renderers/EditorRenderer'
 import BlankBlock from '../utils/BlankBlock'
 import reorder from './utils/reorder'
-import './XEditor.css'
+import './XEditor.scss'
 
 export let XEditorContext = React.createContext()
 
