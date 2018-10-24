@@ -11,6 +11,8 @@ import FormTypes from '../../constants/FormTypes'
 import XEditor from '../../editor/XEditor'
 import BlockBucket from '../../editor/BlockBucket'
 import AvailableBlocks from '../../constants/AvailableBlocks'
+import { selectors } from '../../ducks/auth'
+import './NewOrEditForm.scss'
 
 class NewOrEditForm extends Component {
   static propTypes = {
@@ -113,6 +115,7 @@ class NewOrEditForm extends Component {
       onUpdate,
       handleSubmit,
       values,
+      loggedUser,
     } = this.props
     let isAutoSlugify = (values.slug === slugify(values.title))
 
@@ -120,12 +123,16 @@ class NewOrEditForm extends Component {
       <DragDropContext onDragEnd={this.onDragEnd}>
         <Grid>
           <Grid.Column width={14}>
-            <Form as="div">
+            <Form as="div" className="post form">
               <Form.Field>
                 <Field
                   name="slug"
                   component={Input}
                   type="text"
+                  label={{
+                    content: `https://gocreating.github.io/x-post/#/@${loggedUser.username}/`,
+                    color: 'grey',
+                  }}
                   placeholder="slug"
                   size="mini"
                   action={{
@@ -133,6 +140,7 @@ class NewOrEditForm extends Component {
                     onClick: () => this.setSlug(),
                     content: 'Apply from title',
                     size: 'mini',
+                    color: 'grey',
                     disabled: isAutoSlugify,
                   }}
                 />
@@ -206,6 +214,7 @@ let enhance = compose(
   }),
   connect(state => ({
     values: getFormValues(FormTypes.POST_NEW_OR_EDIT)(state),
+    loggedUser: selectors.getLoggedUser(state.auth),
   }))
 )
 
