@@ -163,7 +163,7 @@ class NewOrEditForm extends Component {
                     name="subtitle"
                     component={Input}
                     type="text"
-                    placeholder="subtitle"
+                    placeholder="Subtitle"
                   />
                 </Form.Field>
               </Grid.Column>
