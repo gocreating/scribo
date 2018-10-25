@@ -50,7 +50,7 @@ class NewOrEditForm extends Component {
   }
 
   setSlug = (title = '') => {
-    let { values, change } = this.props
+    let { change } = this.props
 
     change('slug', slugify(title))
   }
