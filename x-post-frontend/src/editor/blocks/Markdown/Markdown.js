@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactMarkdown from 'react-markdown'
 import math from 'remark-math'
+import Text from './renderers/Text'
 import Paragraph from './renderers/Paragraph'
 import Blockquote from './renderers/Blockquote'
 import Image from './renderers/Image'
@@ -12,6 +13,7 @@ import BlockMath from './renderers/BlockMath'
 import './Markdown.css'
 
 let defaultRenderers = {
+  text: Text,
   paragraph: Paragraph,
   blockquote: Blockquote,
   image: Image,

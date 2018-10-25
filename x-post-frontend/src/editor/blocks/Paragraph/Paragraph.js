@@ -1,5 +1,6 @@
 import React from 'react'
 import './Paragraph.css'
+import pangu from 'pangu'
 
 let Paragraph = ({ block, children }) => (
   children ? (
@@ -11,7 +12,7 @@ let Paragraph = ({ block, children }) => (
     .split('\n')
     .map((line, idx) => (
       <span className="paragraph content web-font" key={`${idx}-${line}`}>
-        {line}
+        {pangu.spacing(line)}
         <br/>
       </span>)
     )
