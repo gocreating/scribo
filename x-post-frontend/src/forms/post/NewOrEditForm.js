@@ -49,10 +49,10 @@ class NewOrEditForm extends Component {
     }
   }
 
-  setSlug = (title) => {
+  setSlug = (title = '') => {
     let { values, change } = this.props
 
-    change('slug', slugify(title || values.title))
+    change('slug', slugify(title))
   }
 
   onDragEnd = (result) => {
@@ -137,7 +137,7 @@ class NewOrEditForm extends Component {
                   size="mini"
                   action={{
                     icon: 'magnet',
-                    onClick: () => this.setSlug(),
+                    onClick: () => this.setSlug(values.title),
                     content: 'Apply from title',
                     size: 'mini',
                     color: 'grey',
