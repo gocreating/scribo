@@ -132,11 +132,14 @@ class CodeHighlight extends Component {
         'line-numbers': isShowLineNumbers,
       }
     )
-    let cxCustomized = classNames({
-      'theme-solarizedlight': theme === Themes.SOLARIZED_LIGHT,
-      'theme-okaidia': theme === Themes.OKAIDIA,
-      'x-post-line-highlight': Boolean(highlightLines),
-    })
+    let cxCustomized = classNames(
+      'code-highlight content',
+      {
+        'theme-solarizedlight': theme === Themes.SOLARIZED_LIGHT,
+        'theme-okaidia': theme === Themes.OKAIDIA,
+        'x-post-line-highlight': Boolean(highlightLines),
+      }
+    )
 
     return (
       <div className={cxCustomized}>
