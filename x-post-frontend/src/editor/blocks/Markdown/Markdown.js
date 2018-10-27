@@ -1,5 +1,6 @@
 import React from 'react'
 import ReactMarkdown from 'react-markdown'
+import breaks from 'remark-breaks'
 import math from 'remark-math'
 import Text from './renderers/Text'
 import Paragraph from './renderers/Paragraph'
@@ -43,6 +44,7 @@ let Markdown = ({ block, renderers }) => (
       ...renderers,
     }}
     plugins={[
+      breaks,
       math,
     ]}
   />
