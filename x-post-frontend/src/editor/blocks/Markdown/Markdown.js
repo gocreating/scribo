@@ -13,7 +13,8 @@ import BlockMath from './renderers/BlockMath'
 import './Markdown.css'
 
 let defaultRenderers = {
-  text: Text,
+  // disable applying pangu onto markdown paragraph
+  // text: Text,
   paragraph: Paragraph,
   blockquote: Blockquote,
   image: Image,
