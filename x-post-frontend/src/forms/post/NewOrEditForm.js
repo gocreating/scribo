@@ -5,6 +5,8 @@ import PropTypes from 'prop-types'
 import { DragDropContext } from 'react-beautiful-dnd'
 import { Field, reduxForm, getFormValues } from 'redux-form'
 import { Grid, Button, Form, Sticky } from 'semantic-ui-react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faMagnet } from '@fortawesome/free-solid-svg-icons'
 import slugify from '../../utils/slugify'
 import Input from '../../fields/Input'
 import FormTypes from '../../constants/FormTypes'
@@ -139,7 +141,12 @@ class NewOrEditForm extends Component {
                     placeholder="slug"
                     size="mini"
                     action={{
-                      icon: 'magnet',
+                      icon: (
+                        <>
+                          <FontAwesomeIcon icon={faMagnet} />
+                          {'　'}
+                        </>
+                      ),
                       onClick: () => this.setSlug(values.title),
                       content: 'Apply from title',
                       size: 'mini',
