@@ -9,10 +9,10 @@ class Paragraph extends Component {
   paragraphRef = React.createRef()
 
   componentDidMount() {
-    let { block, children } = this.props
+    let { block } = this.props
     let { typesetting } = block.values
 
-    if (typesetting === Typesettings.HAN || children) {
+    if (typesetting === Typesettings.HAN) {
       Han(this.paragraphRef.current).render()
     }
   }
@@ -71,7 +71,7 @@ class Paragraph extends Component {
 
       default: {
         return (
-          <span className="paragraph content web-font" ref={this.paragraphRef}>
+          <span className="paragraph content web-font">
             {children}
           </span>
         )
