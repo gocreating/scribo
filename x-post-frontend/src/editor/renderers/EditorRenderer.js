@@ -20,7 +20,7 @@ let renderMap = {
 }
 
 let EditorRenderer = ({ blocks }) => (
-  <Droppable droppableId="droppable-block-sort">
+  <Droppable droppableId="droppable-block-sort" ignoreContainerClipping>
     {(provided, snapshot) => (
       <div
         ref={provided.innerRef}
