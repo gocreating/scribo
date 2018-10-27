@@ -4,9 +4,9 @@ textarea.paragraph.editor {
 textarea.paragraph.editor,
 span.paragraph.content {
   display: block;
-  font-size: 20px;
-  line-height: 1.875em;
-  min-height: 1.875em;
+  font-size: 1.3em;
+  line-height: 1.6em;
+  min-height: 1.6em;
   padding: 0px;
   margin: 10px 0;
   overflow-wrap: break-word;

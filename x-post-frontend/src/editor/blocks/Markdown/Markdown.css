@@ -1,9 +1,9 @@
 textarea.markdown.editor {
   border: 0px;
   font-family: Consolas !important;
-  font-size: 20px;
-  line-height: 1.875em;
-  min-height: 1.875em;
+  font-size: 1.215em;
+  line-height: 1.75em;
+  min-height: 1.75em;
   padding: 0px;
   margin: 10px 0;
   overflow-wrap: break-word;
