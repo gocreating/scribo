@@ -5,7 +5,7 @@ import Footer from './Footer'
 import '../semantic/dist/semantic.min.css'
 import './AppLayout.css'
 
-let AppLayout = ({ placeholder, children }) => (
+let AppLayout = ({ placeholder, container, children }) => (
   <Segment basic style={{ padding: 0 }}>
     <div className="app-content">
       <Navigation />
@@ -13,13 +13,21 @@ let AppLayout = ({ placeholder, children }) => (
         <Divider hidden />
       )}
       {placeholder !== true && placeholder}
-      <Container>
-        {children}
-      </Container>
+      {container ? (
+        <Container>
+          {children}
+        </Container>
+      ) : (
+        children
+      )}
       <Divider hidden section />
     </div>
     <Footer />
   </Segment>
 )
+
+AppLayout.defaultProps = {
+  container: true,
+}
 
 export default AppLayout
