@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import { Menu, Dropdown } from 'semantic-ui-react'
+import { Menu } from 'semantic-ui-react'
+import Dropdown from '../../utils/Dropdown'
 import Typesettings from './Typesettings'
 
 let typesettingOptions = [{
