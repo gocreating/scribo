@@ -8,6 +8,7 @@ import Paragraph from './renderers/Paragraph'
 import Blockquote from './renderers/Blockquote'
 import Image from './renderers/Image'
 import Table from './renderers/Table'
+import ListItem from './renderers/ListItem'
 import Heading from './renderers/Heading'
 import Code from './renderers/Code'
 import InlineMath from './renderers/InlineMath'
@@ -25,6 +26,7 @@ let defaultRenderers = {
   tableBody: Table.Body,
   tableRow: Table.Row,
   tableCell: Table.Cell,
+  listItem: ListItem,
   heading: Heading,
   code: Code,
   // remark plugin
