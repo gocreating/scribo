@@ -3,8 +3,11 @@ import { compose } from 'recompose'
 import { Field, reduxForm } from 'redux-form'
 import { Grid, Form } from 'semantic-ui-react'
 import xBlock from '../../hoc/xBlock'
+import propsToolbar from '../../hoc/propsToolbar'
 import BlockTypes from '../../../constants/BlockTypes'
 import Paragraph from './Paragraph'
+import ParagraphMenu from './ParagraphMenu'
+import Typesettings from './Typesettings'
 import TextAreaAutoSize from '../../../fields/TextAreaAutoSize'
 
 class ParagraphEditor extends Component {
@@ -49,7 +52,11 @@ let enhance = compose(
     type: BlockTypes.PARAGRAPH,
     defaultValues: {
       text: '',
+      typesetting: Typesettings.RAW,
     },
+  }),
+  propsToolbar({
+    Menu: ParagraphMenu,
   }),
   reduxForm()
 )
