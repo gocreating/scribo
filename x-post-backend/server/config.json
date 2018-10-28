@@ -2,6 +2,11 @@
   "restApiRoot": "/api",
   "host": "0.0.0.0",
   "port": 4000,
+  "ecpay": {
+    "serverCallback": "https://ecpay-dev.ngrok.io/donation/ecpay/callback",
+    "serverRedirect": "https://ecpay-dev.ngrok.io/donation/ecpay/redirect"
+  },
+  "clientHost": "http://localhost:3000/#",
   "remoting": {
     "context": false,
     "rest": {
