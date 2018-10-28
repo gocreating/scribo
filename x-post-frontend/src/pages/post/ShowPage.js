@@ -11,16 +11,17 @@ import {
   List,
   Image,
   Segment,
-  Label,
+  // Label,
 } from 'semantic-ui-react'
 import { push } from 'connected-react-router'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTags, faFolder } from '@fortawesome/free-solid-svg-icons'
+// import { faTags, faFolder } from '@fortawesome/free-solid-svg-icons'
 import { faCalendarAlt } from '@fortawesome/free-regular-svg-icons'
 import { selectors as authSelectors } from '../../ducks/auth'
 import { selectors as postSelectors } from '../../ducks/post'
 import AppLayout from '../../layouts/AppLayout'
 import DisplayRenderer from '../../editor/renderers/DisplayRenderer'
+import DonationForm from '../../forms/post/DonationForm'
 import {
   postReadApiRequest,
   postReadByUsernameAndSlugApiRequest,
@@ -196,7 +197,8 @@ class ShowPage extends Component {
                       </List.Description>
                     </List.Content>
                   </List.Item> */}
-
+                  <Divider section />
+                  <DonationForm />
                   {/* Share Links */}
                   {/* Vote up / vote down */}
                 </List>
