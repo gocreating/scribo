@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Form, Radio, Button, Popup } from 'semantic-ui-react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faInfoCircle, faDonate } from '@fortawesome/free-solid-svg-icons'
+import config from '../../config'
 
 class DonationForm extends Component {
   state = {
@@ -42,7 +43,7 @@ class DonationForm extends Component {
 
         <Button
           as="a"
-          href={`https://ecpay-dev.ngrok.io/donation/ecpay?amount=${donateAmount}`}
+          href={`${config.donationHost}/donation/ecpay?amount=${donateAmount}`}
           target="_blank"
           primary
           size="large"
