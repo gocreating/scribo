@@ -4,6 +4,7 @@ let UIDGenerator = require('uid-generator')
 let moment = require('moment')
 let ECPay = require('../vendor/ECPAY_Payment_node_js')
 let ECPayAPIHelper = require('../vendor/ECPAY_Payment_node_js/lib/ecpay_payment/helper')
+let DonateOptions = require('../../../x-post-frontend/src/constants/DonateOptions')
 
 module.exports = function(server) {
   let tradeIdGen = new UIDGenerator(null, UIDGenerator.BASE58, 20)
@@ -17,12 +18,22 @@ module.exports = function(server) {
         return next(err)
       }
 
+      let { amount } = req.query
+
+      if (!DonateOptions.includes(parseInt(amount))) {
+        let err = new Error('Donation amount is invalid')
+
+        err.status = 400
+        err.name = 'InvalidDonationAmount'
+        return next(err)
+      }
+
       let tradeTime = moment(new Date()).format('YYYY/MM/DD hh:mm:ss')
       let urls = server.get('ecpay')
       let baseParams = {
         MerchantTradeNo: tradeId,
         MerchantTradeDate: tradeTime,
-        TotalAmount: '1',
+        TotalAmount: amount.toString(),
         TradeDesc: '測試交易描述',
         ItemName: '捐款給作者',
         ReturnURL: urls.serverCallback,

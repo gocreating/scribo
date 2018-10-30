@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Form, Radio, Button, Popup } from 'semantic-ui-react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faInfoCircle, faDonate } from '@fortawesome/free-solid-svg-icons'
+import DonateOptions from '../../constants/DonateOptions'
 import config from '../../config'
 
 class DonationForm extends Component {
@@ -28,7 +29,7 @@ class DonationForm extends Component {
             position="top center"
             content="Part of the donation will be used for hosting x-post service."
           />
-          {[50, 100, 250, 500, 1000].map(amount => (
+          {DonateOptions.map(amount => (
             <Form.Field key={amount}>
               <Radio
                 name="donateOption"
