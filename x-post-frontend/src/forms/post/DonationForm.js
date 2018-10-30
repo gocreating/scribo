@@ -15,6 +15,7 @@ class DonationForm extends Component {
   }
 
   render() {
+    let { recipient, postId } = this.props
     let { donateAmount } = this.state
 
     return (
@@ -44,7 +45,12 @@ class DonationForm extends Component {
 
         <Button
           as="a"
-          href={`${config.donationHost}/donation/ecpay?amount=${donateAmount}`}
+          href={(
+            `${config.donationHost}/api/payments/ecpay/donation?` +
+            `amount=${donateAmount}&` +
+            `recipient=${recipient}&` +
+            `postId=${postId}`
+          )}
           target="_blank"
           primary
           size="large"

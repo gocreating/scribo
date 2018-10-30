@@ -198,7 +198,10 @@ class ShowPage extends Component {
                     </List.Content>
                   </List.Item> */}
                   <Divider section />
-                  <DonationForm />
+                  <DonationForm
+                    recipient={username}
+                    postId={post.id}
+                  />
                   {/* Share Links */}
                   {/* Vote up / vote down */}
                 </List>

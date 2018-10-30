@@ -1,0 +1,56 @@
+{
+  "name": "Payment",
+  "plural": "payments",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "type": {
+      "type": "string"
+    },
+    "vendorType": {
+      "type": "string"
+    },
+    "order": {
+      "type": "object",
+      "required": true
+    },
+    "amount": {
+      "type": "number",
+      "required": true
+    },
+    "isSuccess": {
+      "type": "boolean",
+      "required": true
+    },
+    "meta": {
+      "type": "object"
+    },
+    "createdAt": {
+      "type": "date",
+      "defaultFn": "now"
+    }
+  },
+  "mixins": {
+    "TimeStamp": {
+      "required": false
+    }
+  },
+  "validations": [],
+  "relations": {
+    "recipient": {
+      "type": "hasOne",
+      "model": "AppUser",
+      "foreignKey": "recipientId"
+    },
+    "payer": {
+      "type": "hasOne",
+      "model": "AppUser",
+      "foreignKey": "payerId"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}
