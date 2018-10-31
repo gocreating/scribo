@@ -91,6 +91,7 @@ class ShowPage extends Component {
       post,
       isAuth,
       loggedUserId,
+      accessToken,
     } = this.props
 
     return (
@@ -201,6 +202,7 @@ class ShowPage extends Component {
                   <DonationForm
                     recipient={username}
                     postId={post.id}
+                    accessToken={accessToken}
                   />
                   {/* Share Links */}
                   {/* Vote up / vote down */}
@@ -238,6 +240,7 @@ export default withRouter(connect(({ posts, users, auth }, { match }) => {
     post,
     isAuth: authSelectors.getIsAuth(auth),
     loggedUserId: authSelectors.getLoggedUserId(auth),
+    accessToken: authSelectors.getAccessToken(auth),
   }
 }, {
   postRead: postReadApiRequest,

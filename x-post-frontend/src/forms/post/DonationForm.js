@@ -15,7 +15,7 @@ class DonationForm extends Component {
   }
 
   render() {
-    let { recipient, postId } = this.props
+    let { recipient, postId, accessToken } = this.props
     let { donateAmount } = this.state
 
     return (
@@ -49,7 +49,8 @@ class DonationForm extends Component {
             `${config.donationHost}/api/payments/ecpay/donation?` +
             `amount=${donateAmount}&` +
             `recipient=${recipient}&` +
-            `postId=${postId}`
+            `postId=${postId}&` +
+            `access_token=${accessToken}`
           )}
           target="_blank"
           primary
