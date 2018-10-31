@@ -50,7 +50,7 @@ module.exports = function(Payment) {
         CustomField1: (payerId || '').toString(),
         CustomField2: `${recipient.id},${recipient.username}`,
         CustomField3: amount.toString(),
-        CustomField4: postId.toString(),
+        CustomField4: (postId || '').toString(),
       }
       let html = ecpay
         .payment_client
