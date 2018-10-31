@@ -20,6 +20,7 @@ let Navigation = ({ isAuth, logout, push }) => (
             />
           </Link>
         </Menu.Item>
+        <Menu.Item name="Donate to Us" as={Link} to="/donation" />
         <Menu.Menu position="right">
           {isAuth && (
             <Menu.Item name="New Post" as={Link} to="/post/new" />
