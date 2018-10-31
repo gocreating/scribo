@@ -19,9 +19,7 @@ module.exports = function(Payment) {
   let ecpay = new ECPay()
   let ecpayAPIHelper = new ECPayAPIHelper()
 
-  whitelistMethods(Payment, [
-    'ecpayDonationCreateOrder',
-  ])
+  whitelistMethods(Payment, [])
 
   Payment.validatesInclusionOf('type', {
     in: Object.keys(PaymentTypes).map(k => PaymentTypes[k]),

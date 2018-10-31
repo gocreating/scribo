@@ -51,6 +51,22 @@
       "foreignKey": "payerId"
     }
   },
-  "acls": [],
+  "acls": [
+    {
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "DENY"
+    },
+    {
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW",
+      "property": [
+        "ecpayDonationCreateOrder",
+        "ecpayDonationServerCallback",
+        "ecpayDonationServerRedirect"
+      ]
+    }
+  ],
   "methods": {}
 }
