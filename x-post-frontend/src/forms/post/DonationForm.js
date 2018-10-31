@@ -15,21 +15,33 @@ class DonationForm extends Component {
   }
 
   render() {
-    let { recipient, postId, accessToken } = this.props
+    let {
+      getHint,
+      getRemindInfo,
+      getLinkPath,
+      buttonText,
+    } = this.props
     let { donateAmount } = this.state
+    let hint = getHint(donateAmount)
+    let remindInfo = getRemindInfo(donateAmount)
+    let linkPath = getLinkPath(donateAmount)
 
     return (
       <Form>
         <Form.Group grouped>
-          <label>Donate NT$ {donateAmount} to Author</label>
+          {hint && (
+            <label>{hint}</label>
+          )}
           {' '}
-          <Popup
-            inverted
-            hideOnScroll
-            trigger={<FontAwesomeIcon icon={faInfoCircle} />}
-            position="top center"
-            content="Part of the donation will be used for hosting x-post service."
-          />
+          {remindInfo && (
+            <Popup
+              inverted
+              hideOnScroll
+              trigger={<FontAwesomeIcon icon={faInfoCircle} />}
+              position="top center"
+              content={remindInfo}
+            />
+          )}
           {DonateOptions.map(amount => (
             <Form.Field key={amount}>
               <Radio
@@ -45,19 +57,13 @@ class DonationForm extends Component {
 
         <Button
           as="a"
-          href={(
-            `${config.donationHost}/api/payments/ecpay/donation?` +
-            `amount=${donateAmount}&` +
-            `recipient=${recipient}&` +
-            `postId=${postId}&` +
-            `access_token=${accessToken}`
-          )}
+          href={`${config.donationHost}${linkPath}`}
           target="_blank"
           primary
           size="large"
         >
           <FontAwesomeIcon icon={faDonate} />
-          {`　Donate Now`}
+          {'　'}{buttonText || 'Donate Now'}
         </Button>
       </Form>
     )

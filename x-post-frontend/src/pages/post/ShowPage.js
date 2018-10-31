@@ -200,9 +200,22 @@ class ShowPage extends Component {
                   </List.Item> */}
                   <Divider section />
                   <DonationForm
-                    recipient={username}
-                    postId={post.id}
-                    accessToken={accessToken}
+                    getHint={(amount) => (
+                      `Donate NT$ ${amount} to Author`
+                    )}
+                    getRemindInfo={(amount) => (
+                      'Part of the donation will be used ' +
+                      'for hosting x-post service. ' +
+                      'If you have any problem, ' +
+                      'please contact: gocreating@gmail.com'
+                    )}
+                    getLinkPath={(amount) => (
+                      `/api/payments/ecpay/donation?` +
+                      `amount=${amount}&` +
+                      `recipient=${username}&` +
+                      `postId=${post.id}&` +
+                      `access_token=${accessToken}`
+                    )}
                   />
                   {/* Share Links */}
                   {/* Vote up / vote down */}
