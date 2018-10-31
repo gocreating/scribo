@@ -1,26 +1,58 @@
-import React from 'react'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Grid } from 'semantic-ui-react'
+import qs from 'query-string'
 import { selectors as authSelectors } from '../../ducks/auth'
 import AppLayout from '../../layouts/AppLayout'
 import DisplayRenderer from '../../editor/renderers/DisplayRenderer'
 import BlockTypes from '../../constants/BlockTypes'
 import DonationForm from '../../forms/post/DonationForm'
+import DonationMessage from '../../utils/DonationMessage'
 
-let DonationPage = ({ accessToken }) => (
-  <AppLayout>
-    <Grid
-      columns={2}
-      stackable
-      padded="horizontally"
-    >
-      <Grid.Row>
-        <Grid.Column width={10}>
-          <DisplayRenderer blocks={[{
-            id: '1',
-            type: BlockTypes.MARKDOWN,
-            values: {
-              text: `# 誌謝
+class DonationPage extends Component {
+  state = {
+    isMessageVisible: false,
+  }
+
+  componentDidMount() {
+    let { query } = this.props
+    let { donationSuccessCode, donationErrorCode } = query
+
+    if (donationErrorCode || donationSuccessCode) {
+      this.setState({ isMessageVisible: true })
+    }
+  }
+  
+  handleMessageDismiss = () => {
+    this.setState({ isMessageVisible: false })
+  }
+
+  render() {
+    let { query, accessToken } = this.props
+    let { isMessageVisible } = this.state
+    let { donationSuccessCode, donationErrorCode } = query
+
+    return (
+      <AppLayout placeholder={isMessageVisible}>
+        <DonationMessage
+          visible={isMessageVisible}
+          successCode={donationSuccessCode}
+          successText="我們將收到您的款項，再次誠心感謝您的支持"
+          errorCode={donationErrorCode}
+          onDismiss={this.handleMessageDismiss}
+        />
+        <Grid
+          columns={2}
+          stackable
+          padded="horizontally"
+        >
+          <Grid.Row>
+            <Grid.Column width={10}>
+              <DisplayRenderer blocks={[{
+                id: '1',
+                type: BlockTypes.MARKDOWN,
+                values: {
+                  text: `# 誌謝
 X-Post站方誠摯感謝您的支持，我們的服務將因您的鼓勵而變得更好。
 
 ## 給贊助者們的話
@@ -33,33 +65,36 @@ X-Post試圖補足坊間寫作平台的不足，致力於提供優良、舒適�
 
 ## 聯絡我們
 贊助功能將使用[綠界科技ECPAY](https://www.ecpay.com.tw/)所提供之第三方支付金流服務，如付款過程遭遇問題，請洽詢綠界科技，如有其它任何疑問，亦歡迎聯繫站長：<gocreating@gmail.com>。`,
-            },
-          }]} />
-        </Grid.Column>
-        <Grid.Column width={6} textAlign="center">
-          <DisplayRenderer blocks={[{
-            id: '1',
-            type: BlockTypes.MARKDOWN,
-            values: {
-              text: `# 贊助方案`,
-            },
-          }]} />
-          <DonationForm
-            getHint={(amount) => ''}
-            getRemindInfo={(amount) => ''}
-            getLinkPath={(amount) => (
-              `/api/payments/ecpay/donation?` +
-              `amount=${amount}&` +
-              `access_token=${accessToken}`
-            )}
-            buttonText="立即贊助"
-          />
-        </Grid.Column>
-      </Grid.Row>
-    </Grid>
-  </AppLayout>
-)
+                },
+              }]} />
+            </Grid.Column>
+            <Grid.Column width={6} textAlign="center">
+              <DisplayRenderer blocks={[{
+                id: '1',
+                type: BlockTypes.MARKDOWN,
+                values: {
+                  text: `# 贊助方案`,
+                },
+              }]} />
+              <DonationForm
+                getHint={(amount) => ''}
+                getRemindInfo={(amount) => ''}
+                getLinkPath={(amount) => (
+                  `/api/payments/ecpay/donation?` +
+                  `amount=${amount}&` +
+                  `access_token=${accessToken}`
+                )}
+                buttonText="立即贊助"
+              />
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
+      </AppLayout>
+    )
+  }
+}
 
-export default connect(({ auth }) => ({
+export default connect(({ auth }, { location }) => ({
   accessToken: authSelectors.getAccessToken(auth),
+  query: qs.parse(location.search),
 }))(DonationPage)

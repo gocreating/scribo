@@ -11,8 +11,8 @@ import {
   List,
   Image,
   Segment,
-  // Label,
 } from 'semantic-ui-react'
+import qs from 'query-string'
 import { push } from 'connected-react-router'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 // import { faTags, faFolder } from '@fortawesome/free-solid-svg-icons'
@@ -22,6 +22,7 @@ import { selectors as postSelectors } from '../../ducks/post'
 import AppLayout from '../../layouts/AppLayout'
 import DisplayRenderer from '../../editor/renderers/DisplayRenderer'
 import DonationForm from '../../forms/post/DonationForm'
+import DonationMessage from '../../utils/DonationMessage'
 import {
   postReadApiRequest,
   postReadByUsernameAndSlugApiRequest,
@@ -35,8 +36,22 @@ class ShowPage extends Component {
     postRead: PropTypes.func,
   }
 
+  state = {
+    isMessageVisible: false,
+  }
+
   componentDidMount() {
+    let { query } = this.props
+    let { donationSuccessCode, donationErrorCode } = query
+
+    if (donationErrorCode || donationSuccessCode) {
+      this.setState({ isMessageVisible: true })
+    }
     this.fetchPost()
+  }
+
+  handleMessageDismiss = () => {
+    this.setState({ isMessageVisible: false })
   }
 
   handleDeletePostClick = () => {
@@ -87,12 +102,15 @@ class ShowPage extends Component {
 
   render() {
     let {
+      query,
       username,
       post,
       isAuth,
       loggedUserId,
       accessToken,
     } = this.props
+    let { isMessageVisible } = this.state
+    let { donationSuccessCode, donationErrorCode } = query
 
     return (
       <AppLayout placeholder={false} container={false}>
@@ -104,6 +122,12 @@ class ShowPage extends Component {
           /> */}
           <Divider hidden />
           <Container>
+            <DonationMessage
+              visible={isMessageVisible}
+              successCode={donationSuccessCode}
+              errorCode={donationErrorCode}
+              onDismiss={this.handleMessageDismiss}
+            />
             <Header size="huge" className="post-header web-font">
               {post.title}
               {post.subtitle && (
@@ -229,7 +253,8 @@ class ShowPage extends Component {
   }
 }
 
-export default withRouter(connect(({ posts, users, auth }, { match }) => {
+export default withRouter(connect(({ posts, users, auth }, { match, location }) => {
+  let query = qs.parse(location.search)
   let {
     username,
     postSlug,
@@ -246,6 +271,7 @@ export default withRouter(connect(({ posts, users, auth }, { match }) => {
   }
 
   return {
+    query,
     username,
     postSlug,
     userId,

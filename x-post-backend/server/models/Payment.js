@@ -28,6 +28,30 @@ module.exports = function(Payment) {
     in: Object.keys(PaymentVendorTypes).map(k => PaymentVendorTypes[k]),
   })
 
+  let createECPayDonationOrder = (app, amount, rest, cb) => {
+    tradeIdGen.generate((err, tradeId) => {
+      if (err) {
+        return cb(err)
+      }
+
+      let tradeTime = moment(new Date()).format('YYYY/MM/DD hh:mm:ss')
+      let urls = app.get('payment').ecpay.donation
+      let baseParams = {
+        MerchantTradeNo: tradeId,
+        MerchantTradeDate: tradeTime,
+        TotalAmount: amount.toString(),
+        ReturnURL: urls.serverCallback,
+        OrderResultURL: urls.serverRedirect,
+        NeedExtraPaidInfo: 'Y',
+        ...rest,
+      }
+      let html = ecpay
+        .payment_client
+        .aio_check_out_all(baseParams)
+
+      cb(null, html)
+    })
+  }
   let createECPayOrder = (app, payerId, recipient, amount, postId, cb) => {
     tradeIdGen.generate((err, tradeId) => {
       if (err) {
@@ -73,16 +97,34 @@ module.exports = function(Payment) {
         'Donation amount is invalid'
       ))
     }
-    AppUser.findOne({
-      where: { username: recipientUsername },
-    }, (err, recipient) => {
-      let sendResponse = (err, html) => {
-        if (err) {
-          return next(err)
-        }
-        res.send(html)
-      }
+    if (req.accessToken) {
+      payerId = req.accessToken.userId
+    }
 
+    let sendResponse = (err, html) => {
+      if (err) {
+        return next(err)
+      }
+      res.send(html)
+    }
+
+    if (!recipientUsername) {
+      // donation to service
+      return createECPayDonationOrder(app, amount, {
+        TradeDesc: (
+          `post donation from ${payerId || 'guest'} to service`
+        ),
+        ItemName: `贊助X-Post站方`,
+        CustomField1: (payerId || '').toString(),
+        CustomField2: '',
+        CustomField3: amount.toString(),
+        CustomField4: '',
+      }, sendResponse)
+    }
+    // donation to post author
+    AppUser.findOne({
+      where: { username: recipientUsername || '' },
+    }, (err, recipient) => {
       if (err) {
         return next(err)
       }
@@ -92,10 +134,16 @@ module.exports = function(Payment) {
           'The recipient user is not found'
         ))
       }
-      if (req.accessToken) {
-        payerId = req.accessToken.userId
-      }
-      createECPayOrder(app, payerId, recipient, amount, postId, sendResponse)
+      createECPayDonationOrder(app, amount, {
+        TradeDesc: (
+          `post donation from ${payerId || 'guest'} to ${recipient.id}`
+        ),
+        ItemName: `贊助文章作者:${recipient.username}`,
+        CustomField1: (payerId || '').toString(),
+        CustomField2: `${recipient.id},${recipient.username}`,
+        CustomField3: amount.toString(),
+        CustomField4: (postId || '').toString(),
+      }, sendResponse)
     })
   }
   Payment.remoteMethod('ecpayDonationCreateOrder', {
@@ -135,17 +183,37 @@ module.exports = function(Payment) {
       ))
     }
 
-    let paymentType
+    let paymentType, meta
     let payerId = req.body.CustomField1
     let recipientId = req.body.CustomField2.split(',')[0]
     let amount = req.body.CustomField3
     let postId = req.body.CustomField4
 
-    if (!payerId && recipientId) {
+    if (!payerId && !recipientId) {
+      paymentType = PaymentTypes.DONATION_FROM_GUEST_TO_SERVICE
+    } else if (payerId && !recipientId) {
+      paymentType = PaymentTypes.DONATION_FROM_USER_TO_SERVICE
+    } else if (!payerId && recipientId) {
       paymentType = PaymentTypes.DONATION_FROM_GUEST_TO_POST_AUTHOR
     } else if (payerId && recipientId) {
       paymentType = PaymentTypes.DONATION_FROM_USER_TO_POST_AUTHOR
     }
+
+    switch(paymentType) {
+      case PaymentTypes.DONATION_FROM_GUEST_TO_SERVICE:
+      case PaymentTypes.DONATION_FROM_USER_TO_SERVICE: {
+        meta = {}
+        break
+      }
+      case PaymentTypes.DONATION_FROM_GUEST_TO_POST_AUTHOR:
+      case PaymentTypes.DONATION_FROM_USER_TO_POST_AUTHOR: {
+        meta = {
+          postId,
+        }
+        break
+      }
+    }
+
     Payment.create({
       type: paymentType,
       vendorType: PaymentVendorTypes.EC_PAY,
@@ -153,9 +221,7 @@ module.exports = function(Payment) {
       payerId,
       recipientId,
       amount,
-      meta: {
-        postId,
-      },
+      meta,
       isSuccess: req.body.RtnCode === '1',
     }, (err, payment) => {
       if (err) {
@@ -181,7 +247,22 @@ module.exports = function(Payment) {
     let { app } = Payment
     let { Post } = app.models
     let clientHost = app.get('clientHost')
-    let recipientUsername = req.body.CustomField2.split(',')[1]
+    let recipient = req.body.CustomField2
+
+    // donation to service
+    if (!recipient) {
+      let redirectUrl = `${clientHost}/donation`
+
+      if (req.body.RtnCode === '1') {
+        redirectUrl = `${redirectUrl}?donationSuccessCode=${req.body.RtnCode}`
+      } else {
+        redirectUrl = `${redirectUrl}?donationErrorCode=${req.body.RtnCode}`
+      }
+      return res.redirect(redirectUrl)
+    }
+
+    // donation to post author
+    let recipientUsername = recipient.split(',')[1]
     let postId = req.body.CustomField4
 
     return Post.findById(postId, (err, post) => {
@@ -191,10 +272,10 @@ module.exports = function(Payment) {
 
       let redirectUrl = `${clientHost}/@${recipientUsername}/${post.slug}`
 
-      if (req.body.RtnCode !== '1') {
-        return res.redirect(
-          `${redirectUrl}?donationErrorCode=${req.body.RtnCode}`
-        )
+      if (req.body.RtnCode === '1') {
+        redirectUrl = `${redirectUrl}?donationSuccessCode=${req.body.RtnCode}`
+      } else {
+        redirectUrl = `${redirectUrl}?donationErrorCode=${req.body.RtnCode}`
       }
       res.redirect(redirectUrl)
     })
