@@ -8,6 +8,10 @@ let routes = [{
   component: () => import('./pages/basic/ThemePage'),
 }, {
   exact: true,
+  path: '/donation',
+  component: () => import('./pages/basic/DonationPage'),
+}, {
+  exact: true,
   path: '/user/signup',
   component: () => import('./pages/user/NewPage'),
 }, {

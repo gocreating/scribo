@@ -9,7 +9,7 @@
 *.swo
 *.swp
 *.tgz
-*.xml
+**/*.xml
 .DS_Store
 .idea
 .project
@@ -23,3 +23,11 @@ datasources.test.json
 datasources.production.json
 .env
 .env.private.js
+
+# ECPAY
+server/vendor/ECPAY_Payment_node_js/example/**/*
+!server/vendor/ECPAY_Payment_node_js/conf/payment_conf.example.xml
+!server/vendor/ECPAY_Payment_node_js/node_modules
+!server/vendor/ECPAY_Payment_node_js/node_modules/xmldoc/**/*
+!server/vendor/ECPAY_Payment_node_js/node_modules/**/*.xml
+!server/vendor/ECPAY_Payment_node_js/lib/ecpay_payment/ECpayPayment.xml
