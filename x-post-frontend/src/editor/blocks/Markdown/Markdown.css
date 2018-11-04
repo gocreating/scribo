@@ -12,6 +12,7 @@ textarea.markdown.editor {
   font-size: 1.3em;
   line-height: 1.6em;
   min-height: 1.6em;
+  margin: 10px 0;
 }
 .markdown.content li li {
   font-size: inherit;
