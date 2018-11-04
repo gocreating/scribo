@@ -182,9 +182,9 @@ class NewOrEditForm extends Component {
               centered
               src={headerImage.src || headerImagePlaceholder}
             />
-            <Container>
-              <div className="overlay top">
-                <Divider hidden />
+            <div className="overlay top">
+              <Divider hidden />
+              <Container>
                 <Form.Field>
                   <Field
                     name="slug"
@@ -211,8 +211,10 @@ class NewOrEditForm extends Component {
                     }}
                   />
                 </Form.Field>
-              </div>
-              <div className="overlay bottom">
+              </Container>
+            </div>
+            <div className="overlay bottom">
+              <Container>
                 <Button.Group>
                   <Button
                     color="grey"
@@ -229,15 +231,14 @@ class NewOrEditForm extends Component {
                   </Button>
                 </Button.Group>
                 <Divider hidden />
-              </div>
-            </Container>
+              </Container>
+            </div>
           </div>
           <Divider hidden />
           <Container>
             <Grid>
               <Grid.Row>
                 <Grid.Column>
-
                   <Form.Field>
                     <Field
                       name="title"
