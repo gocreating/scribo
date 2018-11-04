@@ -1,16 +1,11 @@
-import React, { Component } from 'react'
-import { Menu, Dropdown } from 'semantic-ui-react'
+import React from 'react'
+import { Menu } from 'semantic-ui-react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faEye,
   faEyeSlash,
-  faAngleUp,
-  faAngleDown,
   faTrash,
 } from '@fortawesome/free-solid-svg-icons'
-import { faPlusSquare } from '@fortawesome/free-regular-svg-icons'
-import BlockTypes from '../constants/BlockTypes'
-import CodeHighlightThemes from './blocks/CodeHighlight/Themes'
 
 let BlockToolbar = ({
   preview,

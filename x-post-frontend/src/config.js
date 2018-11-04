@@ -9,10 +9,15 @@ let imgurClientID = {
   development: '3c24d2539de09eb',
   production: '95ac0b1d9572d86',
 }
+let donationHostMap = {
+  development: 'http://localhost:4000',
+  production: 'https://x-post.herokuapp.com',
+}
 
 export default {
   imgur: {
     clientID: imgurClientID[process.env.NODE_ENV],
     maxSize: 10 * 1024 * 1024, // 10MB
   },
+  donationHost: donationHostMap[process.env.NODE_ENV],
 }

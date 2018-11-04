@@ -1,6 +1,6 @@
 {
   "name": "x-post-backend",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "main": "server/server.js",
   "engines": {
     "node": ">=4"
@@ -28,8 +28,11 @@
     "loopback-connector-mongodb": "1.13.0",
     "loopback-datasource-juggler": "2.39.0",
     "loopback-ds-timestamp-mixin": "^3.4.1",
+    "moment": "^2.22.2",
+    "query-string": "^6.2.0",
     "serve-favicon": "^2.0.1",
-    "strong-error-handler": "^2.0.0"
+    "strong-error-handler": "^2.0.0",
+    "uid-generator": "^1.0.0"
   },
   "devDependencies": {
     "eslint": "^3.17.1",

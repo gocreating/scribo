@@ -41,6 +41,10 @@
     "dataSource": "db",
     "public": true
   },
+  "Payment": {
+    "dataSource": "db",
+    "public": true
+  },
   "Post": {
     "dataSource": "db",
     "public": true

@@ -1,6 +1,6 @@
 {
   "name": "x-post-client",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "homepage": "https://gocreating.github.io/x-post/",
   "dependencies": {
@@ -12,9 +12,11 @@
     "classnames": "^2.2.6",
     "connected-react-router": "^4.4.1",
     "gh-pages": "^2.0.1",
+    "han-css": "^3.3.0",
     "history": "^4.7.2",
     "node-sass": "^4.9.3",
     "normalizr": "^3.2.4",
+    "pangu": "^3.3.0",
     "prismjs": "^1.15.0",
     "prop-types": "^15.6.2",
     "react": "^16.5.0",
@@ -36,6 +38,7 @@
     "redux-logger": "^3.0.6",
     "redux-persist": "^5.10.0",
     "redux-thunk": "^2.3.0",
+    "remark-breaks": "^1.0.1",
     "remark-math": "^1.0.4",
     "semantic-ui-react": "^0.82.3",
     "shortid": "^2.2.13",

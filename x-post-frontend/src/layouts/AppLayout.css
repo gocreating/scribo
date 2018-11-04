@@ -1,9 +1,17 @@
 @import url(//fonts.googleapis.com/earlyaccess/cwtexming.css);
-@import url(//fonts.googleapis.com/earlyaccess/cwtexyen.css);
-@import url(//fonts.googleapis.com/css?family=Open+Sans);
+
+@font-face {
+  font-family: xpost;
+  src:
+    local(Georgia),
+    local(Times),
+    local("Times New Roman"),
+    local("Hiragino Kaku Gothic Pro"),
+    local("Meiryo");
+}
 
 .web-font {
-  font-family: 'Open Sans', 'cwTeXMing', serif !important;
+  font-family: xpost, serif, 'cwTeXMing' !important;
 }
 
 .app-content {

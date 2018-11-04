@@ -1,5 +1,14 @@
 {
   "port": 4001,
+  "payment": {
+    "ecpay": {
+      "donation": {
+        "serverCallback": "https://x-post.herokuapp.com/api/payments/ecpay/donation/callback",
+        "serverRedirect": "https://x-post.herokuapp.com/api/payments/ecpay/donation/redirect"
+      }
+    }
+  },
+  "clientHost": "https://gocreating.github.io/x-post/#",
   "remoting": {
     "rest": {
       "handleErrors": true

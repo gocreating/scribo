@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
-import { Menu, Icon } from 'semantic-ui-react'
+import { Menu } from 'semantic-ui-react'
 import { Droppable, Draggable } from 'react-beautiful-dnd'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import AvailableBlocks from '../constants/AvailableBlocks'
 import './BlockBucket.css'
 
@@ -37,7 +38,10 @@ class BlockBucket extends Component {
                       >
                         <Menu.Item link>
                           {block.icon && (
-                            <Icon name={block.icon} />
+                            <>
+                              <FontAwesomeIcon icon={block.icon} />
+                              <br />
+                            </>
                           )}
                           {block.label}
                         </Menu.Item>
@@ -45,7 +49,7 @@ class BlockBucket extends Component {
                       {snapshot.isDragging && (
                         <Menu.Item link className="hide-sibling">
                           {block.icon && (
-                            <Icon name={block.icon} />
+                            <FontAwesomeIcon icon={block.icon} />
                           )}
                           {block.label}
                         </Menu.Item>

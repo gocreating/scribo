@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import { Menu, Dropdown, Checkbox, Input } from 'semantic-ui-react'
+import { Menu, Checkbox, Input } from 'semantic-ui-react'
+import Dropdown from '../../utils/Dropdown'
 import Themes from './Themes'
 import Languages from './Languages'
 
