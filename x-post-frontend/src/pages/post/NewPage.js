@@ -7,6 +7,7 @@ import { selectors } from '../../ducks/auth'
 import AppLayout from '../../layouts/AppLayout'
 import NewOrEditForm from '../../forms/post/NewOrEditForm'
 import BlockTypes from '../../constants/BlockTypes'
+import Typesettings from '../../editor/blocks/Paragraph/Typesettings'
 import { postCreateApiRequest } from '../../ducks/post'
 
 class NewPage extends Component {
@@ -25,6 +26,7 @@ class NewPage extends Component {
           preview: false,
           values: {
             text: '',
+            typesetting: Typesettings.RAW,
           },
         },
       ],
