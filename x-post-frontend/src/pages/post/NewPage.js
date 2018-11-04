@@ -47,7 +47,7 @@ class NewPage extends Component {
 
   render() {
     return (
-      <AppLayout placeholder>
+      <AppLayout placeholder={false} container={false}>
         <NewOrEditForm
           onCreate={this.handleCreate}
           onInitialize={this.handleInitialize}

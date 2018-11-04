@@ -66,7 +66,7 @@ class EditPage extends Component {
 
   render() {
     return (
-      <AppLayout placeholder>
+      <AppLayout placeholder={false} container={false}>
         <NewOrEditForm
           onInitialize={this.handleInitialize}
           onSave={this.handleSave}
