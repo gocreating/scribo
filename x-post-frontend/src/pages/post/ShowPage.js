@@ -111,15 +111,18 @@ class ShowPage extends Component {
     } = this.props
     let { isMessageVisible } = this.state
     let { donationSuccessCode, donationErrorCode } = query
+    let headerImage = post.headerImage || {}
 
     return (
       <AppLayout placeholder={false} container={false}>
         <div className="post-header-container">
-          {/* header image */}
-          {/* <Image
-            fluid
-            src="https://neurotechx.github.io/studentclubs/images/unsplash_brooklyn-bridge_header.jpg"
-          /> */}
+          {headerImage.src && (
+            <Image
+              fluid
+              centered
+              src={headerImage.src}
+            />
+          )}
           <Divider hidden />
           <Container>
             <DonationMessage
