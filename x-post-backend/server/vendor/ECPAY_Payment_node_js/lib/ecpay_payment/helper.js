@@ -12,25 +12,13 @@ const https = require('https');
 // const EventEmitter = require('events').EventEmitter;
 
 class APIHelper {
-    constructor(){
-        this.cont = fs.readFileSync(__dirname + '/../../conf/payment_conf.xml').toString();
-        this.cont_xml = et.parse(this.cont);
-        this.active_merc_info = this.cont_xml.findtext('./MercProfile');
-        this.op_mode = this.cont_xml.findtext('./OperatingMode');
-        this.contractor_stat = this.cont_xml.findtext('./IsProjectContractor');
-        this.merc_info = this.cont_xml.findall(`./MerchantInfo/MInfo/[@name="${this.active_merc_info}"]`);
-        this.ignore_payment = [];
-        this.ignore_info = this.cont_xml.findall('./IgnorePayment//Method');
-        for(let t = 0, l = this.ignore_info.length; t < l; t++) {
-            this.ignore_payment.push(this.ignore_info[t].text);
-        }
-        if (this.merc_info !== []) {
-            this.merc_id = this.merc_info[0].findtext('./MerchantID');
-            this.hkey = this.merc_info[0].findtext('./HashKey');
-            this.hiv = this.merc_info[0].findtext('./HashIV');
-        } else {
-            throw new Error(`Specified merchant setting name (${this.active_merc_info}) not found.`);
-        }
+    constructor(options){
+        this.op_mode = options.OperationMode;
+        this.contractor_stat = options.IsProjectContractor;
+        this.ignore_payment = options.IgnorePayment;
+        this.merc_id = options.MercProfile.MerchantID;
+        this.hkey = options.MercProfile.HashKey;
+        this.hiv = options.MercProfile.HashIV;
         this.date = new Date();
     }
     get_mercid(){
