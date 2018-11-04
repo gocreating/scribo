@@ -30,3 +30,4 @@ server/vendor/ECPAY_Payment_node_js/example/**/*
 !server/vendor/ECPAY_Payment_node_js/node_modules
 !server/vendor/ECPAY_Payment_node_js/node_modules/xmldoc/**/*
 !server/vendor/ECPAY_Payment_node_js/node_modules/**/*.xml
+!server/vendor/ECPAY_Payment_node_js/lib/ecpay_payment/ECpayPayment.xml
