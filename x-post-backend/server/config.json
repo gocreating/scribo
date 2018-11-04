@@ -4,6 +4,24 @@
   "port": 4000,
   "payment": {
     "ecpay": {
+      "payment_conf": {
+        "OperationMode": "Test",
+        "MercProfile": {
+          "MerchantID": "2000132",
+          "HashKey": "5294y06JbISpM5x9",
+          "HashIV": "v77hoKGq4kWxNNIS"
+        },
+        "// IgnorePayment Options": [
+          "Credit",
+          "WebATM",
+          "ATM",
+          "CVS",
+          "BARCODE",
+          "AndroidPay"
+        ],
+        "IgnorePayment": [],
+        "IsProjectContractor": "N"
+      },
       "donation": {
         "serverCallback": "https://ecpay-dev.ngrok.io/api/payments/ecpay/donation/callback",
         "serverRedirect": "https://ecpay-dev.ngrok.io/api/payments/ecpay/donation/redirect"

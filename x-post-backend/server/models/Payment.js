@@ -2,6 +2,7 @@
 
 let UIDGenerator = require('uid-generator')
 let moment = require('moment')
+let app = require('../server')
 let ECPay = require('../vendor/ECPAY_Payment_node_js')
 let ECPayAPIHelper = require(
   '../vendor/ECPAY_Payment_node_js/lib/ecpay_payment/helper'
@@ -16,8 +17,9 @@ let PaymentVendorTypes = require('../constants/PaymentVendorTypes')
 
 module.exports = function(Payment) {
   let tradeIdGen = new UIDGenerator(null, UIDGenerator.BASE58, 20)
-  let ecpay = new ECPay()
-  let ecpayAPIHelper = new ECPayAPIHelper()
+  let ecpayOptions = app.get('payment').ecpay.payment_conf;
+  let ecpay = new ECPay(ecpayOptions)
+  let ecpayAPIHelper = new ECPayAPIHelper(ecpayOptions)
 
   whitelistMethods(Payment, [])
 
@@ -244,7 +246,6 @@ module.exports = function(Payment) {
   })
 
   Payment.ecpayDonationServerRedirect = (req, res, next) => {
-    let { app } = Payment
     let { Post } = app.models
     let clientHost = app.get('clientHost')
     let recipient = req.body.CustomField2
