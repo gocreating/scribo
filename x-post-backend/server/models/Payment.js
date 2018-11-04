@@ -8,7 +8,7 @@ let ECPayAPIHelper = require(
   '../vendor/ECPAY_Payment_node_js/lib/ecpay_payment/helper'
 )
 let DonateOptions = require(
-  '../../../x-post-frontend/src/constants/DonateOptions'
+  '../constants/DonateOptions'
 )
 let createError = require('../toolbox/createError')
 let whitelistMethods = require('../toolbox/whitelistMethods')
