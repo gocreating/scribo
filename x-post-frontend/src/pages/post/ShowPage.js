@@ -21,7 +21,7 @@ import { selectors as authSelectors } from '../../ducks/auth'
 import { selectors as postSelectors } from '../../ducks/post'
 import AppLayout from '../../layouts/AppLayout'
 import DisplayRenderer from '../../editor/renderers/DisplayRenderer'
-import DonationForm from '../../forms/post/DonationForm'
+// import DonationForm from '../../forms/post/DonationForm'
 import DonationMessage from '../../utils/DonationMessage'
 import {
   postReadApiRequest,
@@ -107,7 +107,7 @@ class ShowPage extends Component {
       post,
       isAuth,
       loggedUserId,
-      accessToken,
+      // accessToken,
     } = this.props
     let { isMessageVisible } = this.state
     let { donationSuccessCode, donationErrorCode } = query
@@ -222,7 +222,8 @@ class ShowPage extends Component {
                       </List.Description>
                     </List.Content>
                   </List.Item> */}
-                  <Divider section />
+
+                  {/* <Divider section />
                   <DonationForm
                     getHint={(amount) => (
                       `Donate NT$ ${amount} to Author`
@@ -240,7 +241,8 @@ class ShowPage extends Component {
                       `postId=${post.id}&` +
                       `access_token=${accessToken}`
                     )}
-                  />
+                  /> */}
+
                   {/* Share Links */}
                   {/* Vote up / vote down */}
                 </List>
@@ -279,7 +281,7 @@ export default withRouter(connect(({ posts, users, auth }, { match, location }) 
     post,
     isAuth: authSelectors.getIsAuth(auth),
     loggedUserId: authSelectors.getLoggedUserId(auth),
-    accessToken: authSelectors.getAccessToken(auth),
+    // accessToken: authSelectors.getAccessToken(auth),
   }
 }, {
   postRead: postReadApiRequest,
