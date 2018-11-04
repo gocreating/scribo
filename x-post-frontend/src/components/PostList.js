@@ -1,13 +1,14 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import { Link } from 'react-router-dom'
 import { push } from 'connected-react-router'
+import { Card, Image, Header, Divider } from 'semantic-ui-react'
 import { selectors as authSelector } from '../ducks/auth'
 import {
   postListApiRequest,
   selectors as postSelector,
 } from '../ducks/post'
-import PostAbstract from './PostAbstract'
 import BlankPostList from '../utils/BlankPostList'
 
 class PostList extends Component {
@@ -46,12 +47,35 @@ class PostList extends Component {
 
     if (posts.length > 0) {
       return (
-        posts.map(post => (
-          <PostAbstract
-            key={post.id}
-            post={post}
-          />
-        ))
+        <Card.Group doubling stackable itemsPerRow={3}>
+          {posts.map(post => (
+            <Card key={post.id}>
+              {post.headerImage && post.headerImage.src && (
+                <Image
+                  as={Link}
+                  to={`/@${post.author.username}/${post.slug}`}
+                  src={post.headerImage.src}
+                />
+              )}
+              <Card.Content>
+                <Header
+                  size="huge"
+                  className="post-header web-font"
+                  as={Link}
+                  to={`/@${post.author.username}/${post.slug}`}
+                >
+                  {post.title}
+                  {post.subtitle && (
+                    <Header.Subheader className="web-font">
+                      <Divider hidden />
+                      {post.subtitle}
+                    </Header.Subheader>
+                  )}
+                </Header>
+              </Card.Content>
+            </Card>
+          ))}
+        </Card.Group>
       )
     } else {
       return (

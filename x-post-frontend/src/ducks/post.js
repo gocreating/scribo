@@ -32,6 +32,7 @@ const thunkActionCreators = {
               id: true,
               authorId: true,
               slug: true,
+              headerImage: true,
               title: true,
               subtitle: true,
               abstractBlocks: true,
