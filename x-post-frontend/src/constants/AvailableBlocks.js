@@ -1,5 +1,6 @@
 import BlockTypes from './BlockTypes'
 import CodeHighlightThemes from '../editor/blocks/CodeHighlight/Themes'
+import Typesettings from '../editor/blocks/Paragraph/Typesettings'
 import {
   faParagraph,
   faHeading,
@@ -19,6 +20,7 @@ export default [{
   icon: faParagraph,
   insertValues: {
     text: '',
+    typesetting: Typesettings.RAW,
   },
 }, {
   type: BlockTypes.HEADER,
