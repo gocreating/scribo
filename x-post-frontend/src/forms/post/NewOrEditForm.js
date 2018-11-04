@@ -4,9 +4,19 @@ import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import { DragDropContext } from 'react-beautiful-dnd'
 import { Field, reduxForm, getFormValues } from 'redux-form'
-import { Grid, Button, Form, Sticky } from 'semantic-ui-react'
+import {
+  Grid,
+  Button,
+  Form,
+  Sticky,
+  Container,
+  Image,
+  Divider,
+} from 'semantic-ui-react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMagnet } from '@fortawesome/free-solid-svg-icons'
+import ImageModal from '../../editor/blocks/Image/ImageModal'
+import headerImagePlaceholder from '../../editor/blocks/Image/header-image-placeholder.png'
 import slugify from '../../utils/slugify'
 import Input from '../../fields/Input'
 import FormTypes from '../../constants/FormTypes'
@@ -24,8 +34,11 @@ class NewOrEditForm extends Component {
     handleSubmit: PropTypes.func,
   }
 
-  state = {}
+  state = {
+    isHeaderImageModalOpen: false,
+  }
   xeditor = React.createRef()
+
   setBlockBucketRef = blockBucketRef => this.setState({ blockBucketRef })
 
   componentDidMount() {
@@ -42,6 +55,27 @@ class NewOrEditForm extends Component {
 
     initialize(formValues)
     this.xeditor.current.setBlocks(blocks)
+  }
+
+  handleChangeHeaderImageClick = () => {
+    this.setState({ isHeaderImageModalOpen: true })
+  }
+
+  handleRemoveHeaderImageClick = () => {
+    let { change } = this.props
+
+    change('headerImage', {})
+  }
+
+  handleHeaderImageModalConfirm = (values) => {
+    let { change } = this.props
+
+    change('headerImage', values)
+    this.setState({ isHeaderImageModalOpen: false })
+  }
+
+  handleHeaderImageModalCancel = () => {
+    this.setState({ isHeaderImageModalOpen: false })
   }
 
   handleTitleChange = (e) => {
@@ -121,14 +155,36 @@ class NewOrEditForm extends Component {
       values,
       loggedUser,
     } = this.props
+    let { isHeaderImageModalOpen } = this.state
+    let headerImage = values.headerImage || {}
     let isAutoSlugify = (values.slug === slugify(values.title))
 
     return (
       <DragDropContext onDragEnd={this.onDragEnd}>
         <Form as="div" className="post form">
-          <Grid>
-            <Grid.Row>
-              <Grid.Column>
+          <div className="header-wrapper">
+            {isHeaderImageModalOpen && (
+              <ImageModal
+                isOpen={isHeaderImageModalOpen}
+                onConfirm={this.handleHeaderImageModalConfirm}
+                onCancel={this.handleHeaderImageModalCancel}
+                block={{
+                  values: {
+                    sourceType: headerImage.sourceType,
+                    src: headerImage.src,
+                    meta: headerImage.meta,
+                  },
+                }}
+              />
+            )}
+            <Image
+              fluid
+              centered
+              src={headerImage.src || headerImagePlaceholder}
+            />
+            <Container>
+              <div className="overlay top">
+                <Divider hidden />
                 <Form.Field>
                   <Field
                     name="slug"
@@ -155,74 +211,102 @@ class NewOrEditForm extends Component {
                     }}
                   />
                 </Form.Field>
-                <Form.Field>
-                  <Field
-                    name="title"
-                    component={Input}
-                    onChange={this.handleTitleChange}
-                    type="text"
-                    placeholder="Title"
-                    size="massive"
-                  />
-                </Form.Field>
-                <Form.Field>
-                  <Field
-                    name="subtitle"
-                    component={Input}
-                    type="text"
-                    placeholder="Subtitle"
-                  />
-                </Form.Field>
-              </Grid.Column>
-            </Grid.Row>
+              </div>
+              <div className="overlay bottom">
+                <Button.Group>
+                  <Button
+                    color="grey"
+                    onClick={this.handleChangeHeaderImageClick}
+                  >
+                    Change Header Image
+                  </Button>
+                  <Button
+                    color="grey"
+                    disabled={!headerImage.src}
+                    onClick={this.handleRemoveHeaderImageClick}
+                  >
+                    Remove
+                  </Button>
+                </Button.Group>
+                <Divider hidden />
+              </div>
+            </Container>
+          </div>
+          <Divider hidden />
+          <Container>
+            <Grid>
+              <Grid.Row>
+                <Grid.Column>
 
-            <Grid.Row>
-              <Grid.Column width={14}>
-                <Form.Field width={16}>
-                  <div ref={this.setBlockBucketRef}>
-                    <XEditor ref={this.xeditor} />
-                  </div>
-                </Form.Field>
-              </Grid.Column>
-              <Grid.Column width={2}>
-                <Sticky
-                  offset={20}
-                  context={this.state.blockBucketRef}
-                >
-                  <BlockBucket />
-                </Sticky>
-              </Grid.Column>
-            </Grid.Row>
+                  <Form.Field>
+                    <Field
+                      name="title"
+                      component={Input}
+                      onChange={this.handleTitleChange}
+                      type="text"
+                      placeholder="Title"
+                      size="massive"
+                    />
+                  </Form.Field>
+                  <Form.Field>
+                    <Field
+                      name="subtitle"
+                      component={Input}
+                      type="text"
+                      placeholder="Subtitle"
+                    />
+                  </Form.Field>
+                </Grid.Column>
+              </Grid.Row>
 
-            <Grid.Row>
-              <Grid.Column>
-                {process.env.NODE_ENV === 'development' && (
-                  <Button basic onClick={() => {
-                    console.log(
-                      this.xeditor.current.getBlocks()
-                    )
-                  }}>
-                    Debug
-                  </Button>
-                )}
-                {onCreate && (
-                  <Button basic onClick={handleSubmit(this.handleSubmit(onCreate))}>
-                    Create
-                  </Button>
-                )}
-                {onSave && (
-                  <Button basic onClick={handleSubmit(this.handleSubmit(onSave))}>
-                    Save
-                  </Button>
-                )}
-                {onUpdate && (
-                  <Button basic onClick={handleSubmit(this.handleSubmit(onUpdate))}>
-                    Update
-                  </Button>
-                )}
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
+              <Grid.Row>
+                <Grid.Column width={14}>
+                  <Form.Field width={16}>
+                    <div ref={this.setBlockBucketRef}>
+                      <XEditor ref={this.xeditor} />
+                    </div>
+                  </Form.Field>
+                </Grid.Column>
+                <Grid.Column width={2}>
+                  <Sticky
+                    offset={20}
+                    context={this.state.blockBucketRef}
+                  >
+                    <BlockBucket />
+                  </Sticky>
+                </Grid.Column>
+              </Grid.Row>
+
+              <Grid.Row>
+                <Grid.Column>
+                  {process.env.NODE_ENV === 'development' && (
+                    <Button basic onClick={() => {
+                      console.log(
+                        this.xeditor.current.getBlocks()
+                      )
+                    }}>
+                      Debug
+                    </Button>
+                  )}
+                  {onCreate && (
+                    <Button basic onClick={handleSubmit(this.handleSubmit(onCreate))}>
+                      Create
+                    </Button>
+                  )}
+                  {onSave && (
+                    <Button basic onClick={handleSubmit(this.handleSubmit(onSave))}>
+                      Save
+                    </Button>
+                  )}
+                  {onUpdate && (
+                    <Button basic onClick={handleSubmit(this.handleSubmit(onUpdate))}>
+                      Update
+                    </Button>
+                  )}
+                </Grid.Column>
+              </Grid.Row>
+            </Grid>
+          </Container>
         </Form>
       </DragDropContext>
     )

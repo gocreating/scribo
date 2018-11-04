@@ -7,6 +7,9 @@
     "validateUpsert": true
   },
   "properties": {
+    "headerImage": {
+      "type": "object"
+    },
     "title": {
       "type": "string",
       "required": true
