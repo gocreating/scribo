@@ -1,7 +1,6 @@
 .post.form {
   input[name="slug"],
   input[name="slug"]:focus {
-    background-color: inherit;
     font-family: xpost, serif, 'cwTeXMing' !important;
   }
 
@@ -23,5 +22,26 @@
     border: 0px;
     font-size: 1.55em;
     font-family: xpost, serif, 'cwTeXMing' !important;
+  }
+
+  .header-wrapper {
+    position: relative;
+    min-height: 150px;
+
+    .image {
+      max-width: 1440px;
+    }
+
+    .overlay {
+      position: absolute;
+
+      &.top {
+        top: 0px;
+      }
+
+      &.bottom {
+        bottom: 0px;
+      }
+    }
   }
 }
