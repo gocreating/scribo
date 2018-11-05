@@ -17,6 +17,8 @@ const plainActionCreators = createActions({
   POST_UPDATE_API_FAILURE: (res) => ({ res }),
   POST_DELETE_API_SUCCESS: (res) => ({ res }),
   POST_DELETE_API_FAILURE: (res) => ({ res }),
+  POST_LIST_BY_USERNAME_API_SUCCESS: (res) => ({ res }),
+  POST_LIST_BY_USERNAME_API_FAILURE: (res) => ({ res }),
   POST_READ_BY_USERNAME_AND_SLUG_API_SUCCESS: (res) => ({ res }),
   POST_READ_BY_USERNAME_AND_SLUG_API_FAILURE: (res) => ({ res }),
   SET_PAGE: (pageId, postIds) => ({ pageId, postIds }),
@@ -54,6 +56,20 @@ const thunkActionCreators = {
       return response.body
     }
   },
+  postListByUsernameApiRequest: (username) => async (dispatch) => {
+    try {
+      let response = await postApi.listByUsername(username)
+      dispatch(postListByUsernameApiSuccess(response))
+      let { result, entities } = normalize(response.body, [postSchema])
+      dispatch(addEntities(entities))
+      dispatch(setPage(1, result))
+      return response.body
+    } catch (error) {
+      let response = createApiError(error)
+      dispatch(postListByUsernameApiFailure(response))
+      return response.body
+    }
+  },
   postCreateApiRequest: (userId, post) => async (dispatch) => {
     try {
       let response = await postApi.create(userId, post)
@@ -86,13 +102,13 @@ const thunkActionCreators = {
           },
         },
       })
-      dispatch(postReadApiSuccess(response))
+      dispatch(postReadByUsernameAndSlugApiSuccess(response))
       let { entities } = normalize(response.body, postSchema)
       dispatch(addEntities(entities))
       return response.body
     } catch (error) {
       let response = createApiError(error)
-      dispatch(postReadApiFailure(response))
+      dispatch(postReadByUsernameAndSlugApiFailure(response))
       return response.body
     }
   },
@@ -130,6 +146,8 @@ export const {
   postUpdateApiFailure,
   postDeleteApiSuccess,
   postDeleteApiFailure,
+  postListByUsernameApiSuccess,
+  postListByUsernameApiFailure,
   postReadByUsernameAndSlugApiSuccess,
   postReadByUsernameAndSlugApiFailure,
   setPage,
@@ -140,6 +158,7 @@ export const {
   postReadApiRequest,
   postUpdateApiRequest,
   postDeleteApiRequest,
+  postListByUsernameApiRequest,
   postReadByUsernameAndSlugApiRequest,
 } = thunkActionCreators
 
