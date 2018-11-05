@@ -17,6 +17,8 @@ const plainActionCreators = createActions({
   POST_UPDATE_API_FAILURE: (res) => ({ res }),
   POST_DELETE_API_SUCCESS: (res) => ({ res }),
   POST_DELETE_API_FAILURE: (res) => ({ res }),
+  POST_LIST_MIXED_API_SUCCESS: (res) => ({ res }),
+  POST_LIST_MIXED_API_FAILURE: (res) => ({ res }),
   POST_LIST_BY_USERNAME_API_SUCCESS: (res) => ({ res }),
   POST_LIST_BY_USERNAME_API_FAILURE: (res) => ({ res }),
   POST_READ_BY_USERNAME_AND_SLUG_API_SUCCESS: (res) => ({ res }),
@@ -58,6 +60,20 @@ const thunkActionCreators = {
     } catch (error) {
       let response = createApiError(error)
       dispatch(postListApiFailure(response))
+      return response.body
+    }
+  },
+  postListMixedApiRequest: (username) => async (dispatch) => {
+    try {
+      let response = await postApi.listMixed()
+      dispatch(postListMixedApiSuccess(response))
+      let { result, entities } = normalize(response.body, [postSchema])
+      dispatch(addEntities(entities))
+      dispatch(setMixedPage(1, result))
+      return response.body
+    } catch (error) {
+      let response = createApiError(error)
+      dispatch(postListMixedApiFailure(response))
       return response.body
     }
   },
@@ -151,6 +167,8 @@ export const {
   postUpdateApiFailure,
   postDeleteApiSuccess,
   postDeleteApiFailure,
+  postListMixedApiSuccess,
+  postListMixedApiFailure,
   postListByUsernameApiSuccess,
   postListByUsernameApiFailure,
   postReadByUsernameAndSlugApiSuccess,
@@ -164,6 +182,7 @@ export const {
   postReadApiRequest,
   postUpdateApiRequest,
   postDeleteApiRequest,
+  postListMixedApiRequest,
   postListByUsernameApiRequest,
   postReadByUsernameAndSlugApiRequest,
 } = thunkActionCreators

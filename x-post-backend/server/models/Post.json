@@ -60,6 +60,7 @@
       "principalId": "$everyone",
       "permission": "ALLOW",
       "property": [
+        "findMixed",
         "findById"
       ]
     }

@@ -16,6 +16,9 @@ class PostApi extends ApiClient {
   delete(userId, postId) {
     return this.del(`/app-users/${userId}/posts/${postId}`)
   }
+  listMixed(...rest) {
+    return this.get('/posts/mixed', ...rest)
+  }
   listByUsername(username, ...rest) {
     return this.get(`/app-users/username/${username}/posts`, ...rest)
   }
