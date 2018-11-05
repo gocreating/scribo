@@ -60,11 +60,15 @@ class ListPage extends Component {
   }
 }
 
-export default withRouter(connect(({ auth, posts, users }, { match }) => ({
-  isAuth: authSelector.getIsAuth(auth),
-  username: match.params.username,
-  posts: postSelector.getPostsWithAuthor(posts, users),
-}), {
+export default withRouter(connect(({ auth, posts, users }, { match }) => {
+  let { username } = match.params
+
+  return {
+    isAuth: authSelector.getIsAuth(auth),
+    username,
+    posts: postSelector.getUserPostsWithAuthor(posts, users, username),
+  }
+}, {
   postListByUsername: postListByUsernameApiRequest,
   push,
 })(ListPage))

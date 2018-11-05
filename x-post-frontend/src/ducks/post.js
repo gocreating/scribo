@@ -21,7 +21,12 @@ const plainActionCreators = createActions({
   POST_LIST_BY_USERNAME_API_FAILURE: (res) => ({ res }),
   POST_READ_BY_USERNAME_AND_SLUG_API_SUCCESS: (res) => ({ res }),
   POST_READ_BY_USERNAME_AND_SLUG_API_FAILURE: (res) => ({ res }),
-  SET_PAGE: (pageId, postIds) => ({ pageId, postIds }),
+  SET_MIXED_PAGE: (pageId, postIds) => ({ pageId, postIds }),
+  SET_USER_PAGE: (username, pageId, postIds) => ({
+    username,
+    pageId,
+    postIds,
+  }),
 })
 const thunkActionCreators = {
   postListApiRequest: (userId) => async (dispatch) => {
@@ -48,7 +53,7 @@ const thunkActionCreators = {
       dispatch(postListApiSuccess(response))
       let { result, entities } = normalize(response.body, [postSchema])
       dispatch(addEntities(entities))
-      dispatch(setPage(1, result))
+      dispatch(setMixedPage(1, result))
       return response.body
     } catch (error) {
       let response = createApiError(error)
@@ -62,7 +67,7 @@ const thunkActionCreators = {
       dispatch(postListByUsernameApiSuccess(response))
       let { result, entities } = normalize(response.body, [postSchema])
       dispatch(addEntities(entities))
-      dispatch(setPage(1, result))
+      dispatch(setUserPage(username, 1, result))
       return response.body
     } catch (error) {
       let response = createApiError(error)
@@ -150,7 +155,8 @@ export const {
   postListByUsernameApiFailure,
   postReadByUsernameAndSlugApiSuccess,
   postReadByUsernameAndSlugApiFailure,
-  setPage,
+  setMixedPage,
+  setUserPage,
 } = plainActionCreators
 export const {
   postListApiRequest,
@@ -164,34 +170,63 @@ export const {
 
 // Reducer
 const defaultState = {
-  pages: {},
+  mixedPages: {},
+  userPages: {},
 }
 export default handleActions({
   [addEntities]: (state, { payload: { entities } }) => ({
     ...state,
     ...entities.posts,
   }),
-  [setPage]: (state, { payload: { pageId, postIds } }) => ({
+  [setMixedPage]: (state, { payload: { pageId, postIds } }) => ({
     ...state,
-    pages: {
-      ...state.pages,
+    mixedPages: {
+      ...state.mixedPages,
       [pageId]: {
         elements: postIds,
+      },
+    },
+  }),
+  [setUserPage]: (state, { payload: { username, pageId, postIds } }) => ({
+    ...state,
+    userPages: {
+      ...state.userPages,
+      [username]: {
+        ...state.userPages[username],
+        [pageId]: {
+          elements: postIds,
+        },
       },
     },
   }),
 }, defaultState)
 
 export let selectors = {
-  getPosts: (state) => {
-    let page = state.pages['1'] || {}
+  getMixedPosts: (state) => {
+    let page = state.mixedPages['1'] || {}
     let elements = page.elements || []
     let posts = elements.map(postId => state[postId])
 
     return posts
   },
-  getPostsWithAuthor(state, userEntity) {
-    let posts = this.getPosts(state)
+  getUserPosts: (state, username) => {
+    let userPages = state.userPages[username] || {}
+    let page = userPages['1'] || {}
+    let elements = page.elements || []
+    let posts = elements.map(postId => state[postId])
+
+    return posts
+  },
+  getMixedPostsWithAuthor(state, userEntity) {
+    let posts = this.getMixedPosts(state)
+
+    return posts.map(post => ({
+      ...post,
+      author: userEntity[post.authorId],
+    }))
+  },
+  getUserPostsWithAuthor(state, userEntity, username) {
+    let posts = this.getUserPosts(state, username)
 
     return posts.map(post => ({
       ...post,
