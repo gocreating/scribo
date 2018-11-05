@@ -32,7 +32,7 @@ class NewPage extends Component {
     if (result.error) {
       return alert(result.error.message)
     }
-    push('/')
+    push(`/@${result.user.username}`)
   }
 
   render() {

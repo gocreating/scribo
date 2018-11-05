@@ -26,6 +26,10 @@ let routes = [{
   path: '/user/:userId/post/:postId',
   component: () => import('./pages/post/ShowPage'),
 }, {
+  exact: true,
+  path: '/@:username',
+  component: () => import('./pages/post/ListPage'),
+}, {
   path: '/@:username/:postSlug',
   component: () => import('./pages/post/ShowPage'),
 }, {
