@@ -21,6 +21,12 @@ let Navigation = ({ isAuth, logout, push }) => (
           </Link>
         </Menu.Item>
         <Menu.Item name="Donate to Us" as={Link} to="/donation" />
+        <Menu.Item
+          name="Issue Report"
+          as="a"
+          target="_blank"
+          href="https://github.com/gocreating/x-post/issues"
+        />
         <Menu.Menu position="right">
           {isAuth && (
             <Menu.Item name="New Post" as={Link} to="/post/new" />
