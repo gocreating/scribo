@@ -13,12 +13,6 @@ import {
 } from '../../ducks/post'
 
 class ListPage extends Component {
-  static propTypes = {
-    isAuth: PropTypes.bool,
-    posts: PropTypes.array,
-    postListByUsername: PropTypes.func,
-  }
-
   componentDidMount() {
     this.fetchPosts()
   }

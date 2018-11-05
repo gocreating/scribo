@@ -1,21 +1,33 @@
 import React from 'react'
 import { Container, Header, Button } from 'semantic-ui-react'
 
-let BlankBlock = ({ onInitClick }) => (
+let BlankPostList = ({ header, subHeader, buttonText, onInitClick }) => (
   <Container textAlign="center">
-    <Header as="h2">
-      No Post
-      <Header.Subheader>
-        {'You don\'t have any post now.'}
-      </Header.Subheader>
-    </Header>
-    <Button
-      color="yellow"
-      onClick={onInitClick}
-    >
-      Create your first post now
-    </Button>
+    {header && (
+      <Header as="h2">
+        {header}
+        {subHeader && (
+          <Header.Subheader>
+            {subHeader}
+          </Header.Subheader>
+        )}
+      </Header>
+    )}
+    {onInitClick && buttonText && (
+      <Button
+        color="yellow"
+        onClick={onInitClick}
+      >
+        {buttonText}
+      </Button>
+    )}
   </Container>
 )
 
-export default BlankBlock
+BlankPostList.defaultProps = {
+  header: 'No Post',
+  subHeader: 'You don\'t have any post now.',
+  buttonText: 'Create your first post now',
+}
+
+export default BlankPostList
