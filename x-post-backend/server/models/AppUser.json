@@ -66,6 +66,7 @@
         "xlogin",
         "logout",
         "findById",
+        "findPostsByUsername",
         "findPostByUsernameAndSlug",
         "__get__posts",
         "__findById__posts"

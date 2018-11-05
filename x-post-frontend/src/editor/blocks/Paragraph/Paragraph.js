@@ -21,6 +21,16 @@ class Paragraph extends Component {
     let { block, children } = this.props
     let { typesetting } = block.values
 
+    // render markdown's paragraph
+    if (!block.values.text) {
+      return (
+        <span className="paragraph content web-font">
+          {children}
+        </span>
+      )
+    }
+
+    // render paragraph block
     switch(typesetting) {
       case Typesettings.RAW: {
         return (
@@ -82,7 +92,9 @@ class Paragraph extends Component {
 
 Paragraph.defaultProps = {
   block: {
-    values: {},
+    values: {
+      typesetting: Typesettings.RAW,
+    },
   }
 }
 

@@ -17,9 +17,18 @@ const plainActionCreators = createActions({
   POST_UPDATE_API_FAILURE: (res) => ({ res }),
   POST_DELETE_API_SUCCESS: (res) => ({ res }),
   POST_DELETE_API_FAILURE: (res) => ({ res }),
+  POST_LIST_MIXED_API_SUCCESS: (res) => ({ res }),
+  POST_LIST_MIXED_API_FAILURE: (res) => ({ res }),
+  POST_LIST_BY_USERNAME_API_SUCCESS: (res) => ({ res }),
+  POST_LIST_BY_USERNAME_API_FAILURE: (res) => ({ res }),
   POST_READ_BY_USERNAME_AND_SLUG_API_SUCCESS: (res) => ({ res }),
   POST_READ_BY_USERNAME_AND_SLUG_API_FAILURE: (res) => ({ res }),
-  SET_PAGE: (pageId, postIds) => ({ pageId, postIds }),
+  SET_MIXED_PAGE: (pageId, postIds) => ({ pageId, postIds }),
+  SET_USER_PAGE: (username, pageId, postIds) => ({
+    username,
+    pageId,
+    postIds,
+  }),
 })
 const thunkActionCreators = {
   postListApiRequest: (userId) => async (dispatch) => {
@@ -32,6 +41,7 @@ const thunkActionCreators = {
               id: true,
               authorId: true,
               slug: true,
+              headerImage: true,
               title: true,
               subtitle: true,
               abstractBlocks: true,
@@ -45,11 +55,39 @@ const thunkActionCreators = {
       dispatch(postListApiSuccess(response))
       let { result, entities } = normalize(response.body, [postSchema])
       dispatch(addEntities(entities))
-      dispatch(setPage(1, result))
+      dispatch(setMixedPage(1, result))
       return response.body
     } catch (error) {
       let response = createApiError(error)
       dispatch(postListApiFailure(response))
+      return response.body
+    }
+  },
+  postListMixedApiRequest: (username) => async (dispatch) => {
+    try {
+      let response = await postApi.listMixed()
+      dispatch(postListMixedApiSuccess(response))
+      let { result, entities } = normalize(response.body, [postSchema])
+      dispatch(addEntities(entities))
+      dispatch(setMixedPage(1, result))
+      return response.body
+    } catch (error) {
+      let response = createApiError(error)
+      dispatch(postListMixedApiFailure(response))
+      return response.body
+    }
+  },
+  postListByUsernameApiRequest: (username) => async (dispatch) => {
+    try {
+      let response = await postApi.listByUsername(username)
+      dispatch(postListByUsernameApiSuccess(response))
+      let { result, entities } = normalize(response.body, [postSchema])
+      dispatch(addEntities(entities))
+      dispatch(setUserPage(username, 1, result))
+      return response.body
+    } catch (error) {
+      let response = createApiError(error)
+      dispatch(postListByUsernameApiFailure(response))
       return response.body
     }
   },
@@ -85,13 +123,13 @@ const thunkActionCreators = {
           },
         },
       })
-      dispatch(postReadApiSuccess(response))
+      dispatch(postReadByUsernameAndSlugApiSuccess(response))
       let { entities } = normalize(response.body, postSchema)
       dispatch(addEntities(entities))
       return response.body
     } catch (error) {
       let response = createApiError(error)
-      dispatch(postReadApiFailure(response))
+      dispatch(postReadByUsernameAndSlugApiFailure(response))
       return response.body
     }
   },
@@ -129,9 +167,14 @@ export const {
   postUpdateApiFailure,
   postDeleteApiSuccess,
   postDeleteApiFailure,
+  postListMixedApiSuccess,
+  postListMixedApiFailure,
+  postListByUsernameApiSuccess,
+  postListByUsernameApiFailure,
   postReadByUsernameAndSlugApiSuccess,
   postReadByUsernameAndSlugApiFailure,
-  setPage,
+  setMixedPage,
+  setUserPage,
 } = plainActionCreators
 export const {
   postListApiRequest,
@@ -139,39 +182,70 @@ export const {
   postReadApiRequest,
   postUpdateApiRequest,
   postDeleteApiRequest,
+  postListMixedApiRequest,
+  postListByUsernameApiRequest,
   postReadByUsernameAndSlugApiRequest,
 } = thunkActionCreators
 
 // Reducer
 const defaultState = {
-  pages: {},
+  mixedPages: {},
+  userPages: {},
 }
 export default handleActions({
   [addEntities]: (state, { payload: { entities } }) => ({
     ...state,
     ...entities.posts,
   }),
-  [setPage]: (state, { payload: { pageId, postIds } }) => ({
+  [setMixedPage]: (state, { payload: { pageId, postIds } }) => ({
     ...state,
-    pages: {
-      ...state.pages,
+    mixedPages: {
+      ...state.mixedPages,
       [pageId]: {
         elements: postIds,
+      },
+    },
+  }),
+  [setUserPage]: (state, { payload: { username, pageId, postIds } }) => ({
+    ...state,
+    userPages: {
+      ...state.userPages,
+      [username]: {
+        ...state.userPages[username],
+        [pageId]: {
+          elements: postIds,
+        },
       },
     },
   }),
 }, defaultState)
 
 export let selectors = {
-  getPosts: (state) => {
-    let page = state.pages['1'] || {}
+  getMixedPosts: (state) => {
+    let page = state.mixedPages['1'] || {}
     let elements = page.elements || []
     let posts = elements.map(postId => state[postId])
 
     return posts
   },
-  getPostsWithAuthor(state, userEntity) {
-    let posts = this.getPosts(state)
+  getUserPosts: (state, username) => {
+    let userPages = state.userPages[username] || {}
+    let page = userPages['1'] || {}
+    let elements = page.elements || []
+    let posts = elements.map(postId => state[postId])
+
+    return posts
+  },
+  getMixedPostsWithAuthor(state, userEntity) {
+    let posts = this.getMixedPosts(state)
+
+    return posts.map(post => ({
+      ...post,
+      author: userEntity[post.authorId],
+    }))
+  },
+  getUserPostsWithAuthor(state, userEntity, username) {
+    let posts = this.getUserPosts(state, username)
 
     return posts.map(post => ({
       ...post,

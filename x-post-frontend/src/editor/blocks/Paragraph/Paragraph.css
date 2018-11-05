@@ -11,3 +11,6 @@ span.paragraph.content {
   margin: 10px 0;
   overflow-wrap: break-word;
 }
+li span.paragraph.content {
+  font-size: inherit;
+}

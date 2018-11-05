@@ -7,6 +7,9 @@
     "validateUpsert": true
   },
   "properties": {
+    "headerImage": {
+      "type": "object"
+    },
     "title": {
       "type": "string",
       "required": true
@@ -57,6 +60,7 @@
       "principalId": "$everyone",
       "permission": "ALLOW",
       "property": [
+        "findMixed",
         "findById"
       ]
     }
