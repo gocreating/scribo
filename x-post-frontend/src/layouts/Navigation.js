@@ -7,7 +7,7 @@ import { logoutApiRequest } from '../ducks/user'
 import { selectors } from '../ducks/auth'
 import './Navigation.scss'
 
-let Navigation = ({ isAuth, logout, push }) => (
+let Navigation = ({ isAuth, loggedUsername, logout, push }) => (
   <div className="navigation">
     <Container>
       <Menu borderless stackable attached="top" color="orange">
@@ -20,6 +20,9 @@ let Navigation = ({ isAuth, logout, push }) => (
             />
           </Link>
         </Menu.Item>
+        {isAuth && (
+          <Menu.Item name="My Blog" as={Link} to={`/@${loggedUsername}`} />
+        )}
         <Menu.Item name="Donate to Us" as={Link} to="/donation" />
         <Menu.Menu position="right">
           {isAuth && (
@@ -51,6 +54,7 @@ let Navigation = ({ isAuth, logout, push }) => (
 
 export default connect(({ auth }) => ({
   isAuth: selectors.getIsAuth(auth),
+  loggedUsername: selectors.getLoggedUser(auth).username,
 }), {
   logout: logoutApiRequest,
   push,
