@@ -137,14 +137,14 @@ module.exports = (AppUser) => {
       if (err) return next(err)
       if (!appUser) return next(new Error('User not found'))
 
-      Post.find({
+      Post.findOne({
         where: { authorId: appUser.id, slug },
         include: filter.include,
       }, (err, post) => {
         if (err) return next(err)
         if (!post) return next(new Error('Post not found'))
 
-        next(null, post[0])
+        next(null, post)
       })
     })
   }
