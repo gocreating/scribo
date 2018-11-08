@@ -91,13 +91,14 @@ class ShowPage extends Component {
       postDelete,
       post,
       push,
+      username,
     } = this.props
     let result = await postDelete(post.authorId, post.id)
 
     if (result.error) {
       return alert(result.error.message)
     }
-    push('/')
+    push(`/@${username}`)
   }
 
   render() {
