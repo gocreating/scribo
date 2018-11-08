@@ -1,6 +1,6 @@
 {
   "name": "x-post-client",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "private": true,
   "homepage": "https://gocreating.github.io/x-post/",
   "dependencies": {
