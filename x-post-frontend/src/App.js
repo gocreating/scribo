@@ -2,7 +2,7 @@ import React from 'react'
 import { Switch, Route } from 'react-router-dom'
 import { ConnectedRouter } from 'connected-react-router'
 import Loadable from 'react-loadable'
-import PageLoading from './utils/PageLoading'
+import PageLoading from './components/PageLoading'
 import routes from './routes'
 
 let asyncRoutes = routes.map(({ path, component, ...rest }, idx) => (

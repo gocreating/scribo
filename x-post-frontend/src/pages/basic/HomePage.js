@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import AppLayout from '../../layouts/AppLayout'
 import PostList from '../../components/PostList'
-import BlankPostList from '../../utils/BlankPostList'
+import BlankPostList from '../../components/BlankPostList'
 import {
   postListMixedApiRequest,
   selectors as postSelector,

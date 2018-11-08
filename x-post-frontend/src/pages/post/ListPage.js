@@ -5,7 +5,7 @@ import { withRouter } from 'react-router-dom'
 import { push } from 'connected-react-router'
 import AppLayout from '../../layouts/AppLayout'
 import PostList from '../../components/PostList'
-import BlankPostList from '../../utils/BlankPostList'
+import BlankPostList from '../../components/BlankPostList'
 import { selectors as authSelector } from '../../ducks/auth'
 import {
   postListByUsernameApiRequest,

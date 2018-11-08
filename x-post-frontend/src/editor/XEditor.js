@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import shortid from 'shortid'
 import BlockTypes from '../constants/BlockTypes'
 import EditorRenderer from './renderers/EditorRenderer'
-import BlankBlock from '../utils/BlankBlock'
+import BlankBlock from '../components/BlankBlock'
 import reorder from './utils/reorder'
 import './XEditor.scss'
 

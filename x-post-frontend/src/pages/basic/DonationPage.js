@@ -7,7 +7,7 @@ import AppLayout from '../../layouts/AppLayout'
 import DisplayRenderer from '../../editor/renderers/DisplayRenderer'
 import BlockTypes from '../../constants/BlockTypes'
 import DonationForm from '../../forms/post/DonationForm'
-import DonationMessage from '../../utils/DonationMessage'
+import DonationMessage from '../../components/DonationMessage'
 
 class DonationPage extends Component {
   state = {

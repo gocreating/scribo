@@ -22,7 +22,7 @@ import { selectors as postSelectors } from '../../ducks/post'
 import AppLayout from '../../layouts/AppLayout'
 import DisplayRenderer from '../../editor/renderers/DisplayRenderer'
 // import DonationForm from '../../forms/post/DonationForm'
-import DonationMessage from '../../utils/DonationMessage'
+import DonationMessage from '../../components/DonationMessage'
 import {
   postReadApiRequest,
   postReadByUsernameAndSlugApiRequest,
