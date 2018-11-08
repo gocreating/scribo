@@ -3,6 +3,7 @@
 let env = require('../env')
 
 module.exports = {
+  port: 4001,
   payment: {
     ecpay: {
       'payment_conf': {
@@ -21,6 +22,16 @@ module.exports = {
           // 'AndroidPay',
         ],
       },
+      donation: {
+        serverCallback: 'https://x-post.herokuapp.com/api/payments/ecpay/donation/callback',
+        serverRedirect: 'https://x-post.herokuapp.com/api/payments/ecpay/donation/redirect',
+      },
+    },
+  },
+  clientHost: 'https://gocreating.github.io/x-post/#',
+  remoting: {
+    rest: {
+      handleErrors: true,
     },
   },
 }
