@@ -51,8 +51,10 @@ const thunkActionCreators = {
   },
   logoutApiRequest: () => async (dispatch) => {
     try {
-      let response = await userApi.logout()
       dispatch(clearAuth())
+
+      let response = await userApi.logout()
+
       dispatch(logoutApiSuccess(response))
       return response.body
     } catch (error) {
