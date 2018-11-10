@@ -165,8 +165,8 @@ const thunkActionCreators = {
   postDeleteApiRequest: (userId, postId) => async (dispatch) => {
     try {
       let response = await postApi.delete(userId, postId)
+
       dispatch(postDeleteApiSuccess(response))
-      dispatch(postListApiRequest(userId))
       return response.body || {}
     } catch ({ response }) {
       dispatch(postDeleteApiFailure(response))
