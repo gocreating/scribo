@@ -187,7 +187,9 @@ class ShowPage extends Component {
                   <List.Item>
                     <Image avatar src={`${process.env.PUBLIC_URL}/img/default-avatar.png`} />
                     <List.Content>
-                      <List.Header>{username}</List.Header>
+                      <List.Header>
+                        <Link to={`/@${username}`}>{username}</Link>
+                      </List.Header>
                     </List.Content>
                   </List.Item>
                 </List>
