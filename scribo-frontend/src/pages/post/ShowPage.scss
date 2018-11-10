@@ -1,0 +1,16 @@
+.post-header-container {
+  background-color: #fff;
+  border-top: 1px solid #ddd;
+
+  .image {
+    max-width: 1127px;
+  }
+
+  .post-header {
+    font-size: 2.25em !important;
+
+    .sub {
+      font-size: 0.65em !important;
+    }
+  }
+}
