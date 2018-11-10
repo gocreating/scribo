@@ -73,7 +73,8 @@ X-Post試圖補足坊間寫作平台的不足，致力於提供優良、舒適�
                 id: '1',
                 type: BlockTypes.MARKDOWN,
                 values: {
-                  text: `# 贊助方案`,
+                  text: `# 贊助方式
+## 第三方支付`,
                 },
               }]} />
               <DonationForm
@@ -86,6 +87,25 @@ X-Post試圖補足坊間寫作平台的不足，致力於提供優良、舒適�
                 )}
                 buttonText="立即贊助"
               />
+              <DisplayRenderer blocks={[{
+                id: '1',
+                type: BlockTypes.MARKDOWN,
+                values: {
+                  text: `## 數位貨幣
+### BTC
+\`14FST6mAkwhKLQEynLPHLpaLGPuNBzW6Cx\`
+![](https://i.imgur.com/c1c14U5.png)
+
+### ETH
+\`0x0c0010b6ae984afc5cf8c12ee9383fc7354cc195\`
+![](https://i.imgur.com/pyGTInW.png)
+
+### USDT
+\`178LaWvBPjkCNVSer96Uha6vfGKVLF9uFP\`
+![](https://i.imgur.com/hFbt2Kr.png)
+`,
+                },
+              }]} />
             </Grid.Column>
           </Grid.Row>
         </Grid>
