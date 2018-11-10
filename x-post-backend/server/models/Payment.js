@@ -116,7 +116,7 @@ module.exports = function(Payment) {
         TradeDesc: (
           `post donation from ${payerId || 'guest'} to service`
         ),
-        ItemName: `贊助X-Post站方`,
+        ItemName: `贊助Scribo站方`,
         CustomField1: (payerId || '').toString(),
         CustomField2: '',
         CustomField3: amount.toString(),

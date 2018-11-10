@@ -135,7 +135,7 @@ class CodeHighlight extends Component {
     let cxCustomized = classNames({
       'theme-solarizedlight': theme === Themes.SOLARIZED_LIGHT,
       'theme-okaidia': theme === Themes.OKAIDIA,
-      'x-post-line-highlight': Boolean(highlightLines),
+      'scribo-line-highlight': Boolean(highlightLines),
     })
 
     return (

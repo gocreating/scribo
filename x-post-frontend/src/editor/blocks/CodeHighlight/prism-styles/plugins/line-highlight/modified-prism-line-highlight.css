@@ -1,14 +1,14 @@
 /**
  * Modification:
- * - each selector is prefixed with `.x-post-line-highlight`
+ * - each selector is prefixed with `.scribo-line-highlight`
  * - pre[data-line] { padding } is forced with `!important`
  */
-.x-post-line-highlight pre[data-line] {
+.scribo-line-highlight pre[data-line] {
 	position: relative;
 	padding: 1em 0 1em 3em !important;
 }
 
-.x-post-line-highlight .line-highlight {
+.scribo-line-highlight .line-highlight {
 	position: absolute;
 	left: 0;
 	right: 0;
@@ -24,8 +24,8 @@
 	white-space: pre;
 }
 
-.x-post-line-highlight .line-highlight:before,
-.x-post-line-highlight .line-highlight[data-end]:after {
+.scribo-line-highlight .line-highlight:before,
+.scribo-line-highlight .line-highlight[data-end]:after {
 	content: attr(data-start);
 	position: absolute;
 	top: .4em;
@@ -42,13 +42,13 @@
 	box-shadow: 0 1px white;
 }
 
-.x-post-line-highlight .line-highlight[data-end]:after {
+.scribo-line-highlight .line-highlight[data-end]:after {
 	content: attr(data-end);
 	top: auto;
 	bottom: .4em;
 }
 
-.x-post-line-highlight .line-numbers .line-highlight:before,
-.x-post-line-highlight .line-numbers .line-highlight:after {
+.scribo-line-highlight .line-numbers .line-highlight:before,
+.scribo-line-highlight .line-numbers .line-highlight:after {
 	content: none;
 }

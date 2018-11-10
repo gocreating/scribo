@@ -1,8 +1,8 @@
 {
-  "name": "x-post-client",
+  "name": "scribo-client",
   "version": "0.3.2",
   "private": true,
-  "homepage": "https://gocreating.github.io/x-post/",
+  "homepage": "https://gocreating.github.io/scribo/",
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.4",
     "@fortawesome/free-brands-svg-icons": "^5.3.1",

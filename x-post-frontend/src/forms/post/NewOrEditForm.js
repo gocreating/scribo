@@ -195,7 +195,7 @@ class NewOrEditForm extends Component {
                     component={Input}
                     type="text"
                     label={{
-                      content: `https://gocreating.github.io/x-post/#/@${loggedUser.username}/`,
+                      content: `https://gocreating.github.io/scribo/#/@${loggedUser.username}/`,
                       color: 'grey',
                     }}
                     placeholder="slug"

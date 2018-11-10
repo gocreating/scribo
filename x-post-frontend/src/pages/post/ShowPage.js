@@ -249,7 +249,7 @@ class ShowPage extends Component {
                     )}
                     getRemindInfo={(amount) => (
                       'Part of the donation will be used ' +
-                      'for hosting x-post service. ' +
+                      'for hosting scribo service. ' +
                       'If you have any problem, ' +
                       'please contact: gocreating@gmail.com'
                     )}

@@ -1,5 +1,5 @@
 {
-  "name": "x-post-backend",
+  "name": "scribo-backend",
   "version": "0.3.2",
   "main": "server/server.js",
   "engines": {
@@ -14,8 +14,8 @@
     "nsp": "nsp check",
     "production": "cross-env NODE_ENV=production node .",
     "dump": "node ./dump.js",
-    "deploy-heroku": "cd .. && git subtree push --prefix x-post-backend heroku master",
-    "deploy-heroku-force": "cd .. && git push heroku `git subtree split --prefix x-post-backend master`:master --force",
+    "deploy-heroku": "cd .. && git subtree push --prefix scribo-backend heroku master",
+    "deploy-heroku-force": "cd .. && git push heroku `git subtree split --prefix scribo-backend master`:master --force",
     "deploy": "npm run dump && npm run deploy-heroku-force"
   },
   "dependencies": {
@@ -45,5 +45,5 @@
     "url": ""
   },
   "license": "UNLICENSED",
-  "description": "x-post-backend"
+  "description": "scribo-backend"
 }

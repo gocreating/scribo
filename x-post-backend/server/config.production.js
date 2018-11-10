@@ -23,12 +23,12 @@ module.exports = {
         ],
       },
       donation: {
-        serverCallback: 'https://x-post.herokuapp.com/api/payments/ecpay/donation/callback',
-        serverRedirect: 'https://x-post.herokuapp.com/api/payments/ecpay/donation/redirect',
+        serverCallback: 'https://scribo-backend.herokuapp.com/api/payments/ecpay/donation/callback',
+        serverRedirect: 'https://scribo-backend.herokuapp.com/api/payments/ecpay/donation/redirect',
       },
     },
   },
-  clientHost: 'https://gocreating.github.io/x-post/#',
+  clientHost: 'https://gocreating.github.io/scribo/#',
   remoting: {
     rest: {
       handleErrors: true,

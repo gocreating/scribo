@@ -171,7 +171,7 @@ let ThemePage = () => (
           <Button>Two</Button>
         </Button.Group>
         <Segment attached>
-          <Image src={`${process.env.PUBLIC_URL}/img/x-post.png`} />
+          <Image src={`${process.env.PUBLIC_URL}/img/scribo.svg`} />
         </Segment>
         <Button.Group attached="bottom" widths={2}>
           <Button>One</Button>

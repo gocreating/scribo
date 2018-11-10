@@ -11,7 +11,7 @@ let imgurClientID = {
 }
 let donationHostMap = {
   development: 'http://localhost:4000',
-  production: 'https://x-post.herokuapp.com',
+  production: 'https://scribo-backend.herokuapp.com',
 }
 
 export default {

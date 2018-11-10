@@ -14,8 +14,8 @@ let Navigation = ({ isAuth, loggedUsername, logout, push }) => (
         <Menu.Item header>
           <Link to="/">
             <img
-              src={process.env.PUBLIC_URL + '/img/x-post.png'}
-              style={{ height: 32 }}
+              src={process.env.PUBLIC_URL + '/img/scribo.svg'}
+              style={{ height: 36 }}
               alt="logo"
             />
           </Link>

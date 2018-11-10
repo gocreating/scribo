@@ -1,4 +1,4 @@
-# X-Post-Frontend
+# Scribo-Frontend
 
 ## Development
 
@@ -17,7 +17,7 @@ npm start
 
     ```
     let history = createBrowserHistory({
-      basename: '/x-post',
+      basename: '/scribo',
     })
     ```
 
@@ -32,7 +32,7 @@ npm start
 3. Add `.env.production` if needed
 
   ```
-  PUBLIC_URL=https://gocreating.github.io/x-post
+  PUBLIC_URL=https://gocreating.github.io/scribo
   ```
 
 4. Run the command

@@ -1,7 +1,7 @@
 const envMap = {
   development: 'http://localhost:4000/api',
   test: '',
-  production: 'https://x-post.herokuapp.com/api',
+  production: 'https://scribo-backend.herokuapp.com/api',
 }
 
 export default {
