@@ -2,7 +2,7 @@ import React from 'react'
 import { Switch, Route } from 'react-router-dom'
 import { ConnectedRouter } from 'connected-react-router'
 import Loadable from 'react-loadable'
-import PageLoading from './components/PageLoading'
+import LoadingPage from './pages/basic/LoadingPage'
 import routes from './routes'
 
 let asyncRoutes = routes.map(({ path, component, ...rest }, idx) => (
@@ -11,7 +11,7 @@ let asyncRoutes = routes.map(({ path, component, ...rest }, idx) => (
     path={path}
     component={Loadable({
       loader: component,
-      loading: PageLoading,
+      loading: LoadingPage,
       delay: 300,
     })}
     {...rest}

@@ -1,15 +1,28 @@
 import React from 'react'
-import { Loader, Dimmer, Segment } from 'semantic-ui-react'
-import AppLayout from '../layouts/AppLayout'
+import { Segment, Container, Divider, Dimmer, Loader } from 'semantic-ui-react'
 
-let PageLoading = () => (
-  <AppLayout placeholder>
+let PageLoading = ({ active, content }) => (
+  active ? (
     <Segment basic>
-      <Dimmer active inverted>
-        <Loader inverted content='Loading' />
-      </Dimmer>
+      <Container>
+        <Divider hidden />
+        <Dimmer
+          inverted
+          active
+          style={{ backgroundColor: 'inherit' }}
+        >
+          <Loader inverted content={content} />
+        </Dimmer>
+      </Container>
     </Segment>
-  </AppLayout>
+  ) : (
+    null
+  )
 )
+
+PageLoading.defaultProps = {
+  active: false,
+  content: 'Loading',
+}
 
 export default PageLoading
