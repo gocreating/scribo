@@ -12,6 +12,10 @@ let routes = [{
   component: () => import('./pages/basic/DonationPage'),
 }, {
   exact: true,
+  path: '/contact',
+  component: () => import('./pages/basic/ContactPage'),
+}, {
+  exact: true,
   path: '/user/signup',
   component: () => import('./pages/user/NewPage'),
 }, {
