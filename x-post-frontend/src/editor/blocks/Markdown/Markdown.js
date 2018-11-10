@@ -6,6 +6,7 @@ import Han from 'han-css'
 // import Text from './renderers/Text'
 import Paragraph from './renderers/Paragraph'
 import Blockquote from './renderers/Blockquote'
+import Link from './renderers/Link'
 import Image from './renderers/Image'
 import Table from './renderers/Table'
 import ListItem from './renderers/ListItem'
@@ -21,6 +22,7 @@ let defaultRenderers = {
   // text: Text,
   paragraph: Paragraph,
   blockquote: Blockquote,
+  link: Link,
   image: Image,
   table: Table,
   tableHead: Table.Header,
