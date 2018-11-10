@@ -151,6 +151,7 @@ class NewOrEditForm extends Component {
       onCreate,
       onSave,
       onUpdate,
+      loading,
       handleSubmit,
       values,
       loggedUser,
@@ -159,6 +160,9 @@ class NewOrEditForm extends Component {
     let headerImage = values.headerImage || {}
     let isAutoSlugify = (values.slug === slugify(values.title))
 
+    if (loading) {
+      return null
+    }
     return (
       <DragDropContext onDragEnd={this.onDragEnd}>
         <Form as="div" className="post form">

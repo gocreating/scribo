@@ -65,12 +65,15 @@ class EditPage extends Component {
   }
 
   render() {
+    let { isLoading } = this.props
+
     return (
-      <AppLayout placeholder={false} container={false}>
+      <AppLayout placeholder={false} container={false} loading={isLoading}>
         <NewOrEditForm
           onInitialize={this.handleInitialize}
           onSave={this.handleSave}
           onUpdate={this.handleUpdate}
+          loading={isLoading}
         />
       </AppLayout>
     )
@@ -81,11 +84,16 @@ export default withRouter(connect(({ auth, posts }, { match }) => {
   let loggedUser = authSelectors.getLoggedUser(auth)
   let { postId } = match.params
   let post = postSelectors.getPost(posts, postId)
+  let isLoading = false
 
+  if (post.isNotExist || !post.blocks) {
+    isLoading = true
+  }
   return {
     loggedUser,
     postId,
     post,
+    isLoading,
   }
 }, {
   postRead: postReadApiRequest,
