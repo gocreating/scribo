@@ -15,6 +15,7 @@ const thunkActionCreators = {
       return response.body
     } catch (error) {
       let response = createApiError(error)
+
       dispatch(imgurImageCreateApiFailure(response))
       return response.body
     }

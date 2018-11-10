@@ -1,5 +1,6 @@
 export default (error) => {
   let { response } = error
+  let message = 'Unknown error'
 
   if (response) {
     return response
@@ -7,7 +8,7 @@ export default (error) => {
   return {
     body: {
       error: {
-        message: 'Unknown error',
+        message: error.message || message,
       },
     },
   }

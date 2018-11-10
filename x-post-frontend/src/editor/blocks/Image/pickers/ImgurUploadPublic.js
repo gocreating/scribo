@@ -34,7 +34,7 @@ class ImgurUploadPublic extends Component {
     })
 
     if (!result.success) {
-      return onError(result.data.error)
+      return onError(result.error || result.data.error)
     }
     onFinish(result)
   }

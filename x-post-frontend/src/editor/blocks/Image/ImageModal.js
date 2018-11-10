@@ -5,7 +5,9 @@ import ImgurUploadPublic from './pickers/ImgurUploadPublic'
 import SourceTypes from './SourceTypes'
 
 class ImageModal extends Component {
-  state = {}
+  state = {
+    isUploadError: false,
+  }
 
   componentDidMount() {
     this.initialize()
@@ -54,12 +56,15 @@ class ImageModal extends Component {
 
   handleImgurUploadStart = () => this.setState({
     isLoading: true,
+    isUploadError: false,
     loadingText: 'Your image is uploading...',
   })
 
   handleImgurUploading = ({ percent }) => {
+    let { isUploadError } = this.state
+
     this.setState({
-      isLoading: true,
+      isLoading: true && !isUploadError,
       loadingText: `Your image is uploading...${parseInt(percent)}%`,
     })
   }
@@ -85,11 +90,15 @@ class ImageModal extends Component {
       },
       activePicker: SourceTypes.MANUAL_INPUT,
       isLoading: false,
+      isUploadError: false,
     })
   }
 
   handleImgurUploadError = (error) => {
-    this.setState({ isLoading: false })
+    this.setState({
+      isLoading: false,
+      isUploadError: true,
+    })
     alert(error.message)
   }
 
