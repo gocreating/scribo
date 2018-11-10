@@ -193,22 +193,24 @@ class ShowPage extends Component {
                 </List>
 
                 <List relaxed>
-                  <List.Item>
-                    <List.Icon style={{ borderBottom: 0 }}>
-                      <FontAwesomeIcon icon={faCalendarAlt} />
-                    </List.Icon>
-                    <List.Content>
-                      <List.Header>Posted</List.Header>
-                      <List.Description>
-                        {new Date(post.createdAt).toLocaleDateString()}
-                      </List.Description>
+                  {!isLoading && (
+                    <List.Item>
+                      <List.Icon style={{ borderBottom: 0 }}>
+                        <FontAwesomeIcon icon={faCalendarAlt} />
+                      </List.Icon>
+                      <List.Content>
+                        <List.Header>Posted</List.Header>
+                        <List.Description>
+                          {new Date(post.createdAt).toLocaleDateString()}
+                        </List.Description>
 
-                      <List.Header>Updated</List.Header>
-                      <List.Description>
-                        {new Date(post.updatedAt).toLocaleDateString()}
-                      </List.Description>
-                    </List.Content>
-                  </List.Item>
+                        <List.Header>Updated</List.Header>
+                        <List.Description>
+                          {new Date(post.updatedAt).toLocaleDateString()}
+                        </List.Description>
+                      </List.Content>
+                    </List.Item>
+                  )}
 
                   {/* <List.Item>
                     <List.Icon style={{ borderBottom: 0 }}>
