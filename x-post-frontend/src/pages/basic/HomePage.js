@@ -23,13 +23,12 @@ class HomePage extends Component {
   }
 
   render() {
-    let { posts } = this.props
+    let { posts, isLoading } = this.props
 
     return (
-      <AppLayout placeholder>
-        {posts.length > 0 ? (
-          <PostList posts={posts} />
-        ) : (
+      <AppLayout placeholder loading={isLoading}>
+        <PostList posts={posts} />
+        {!isLoading && posts.length === 0 && (
           <BlankPostList subHeader="There is no post." />
         )}
       </AppLayout>
@@ -39,6 +38,7 @@ class HomePage extends Component {
 
 export default connect(({ posts, users }) => ({
   posts: postSelector.getMixedPostsWithAuthor(posts, users),
+  isLoading: postSelector.getMixedPostsLoadingStatus(posts),
 }), {
   postListMixed: postListMixedApiRequest,
 })(HomePage)

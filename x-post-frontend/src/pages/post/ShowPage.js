@@ -23,6 +23,7 @@ import AppLayout from '../../layouts/AppLayout'
 import DisplayRenderer from '../../editor/renderers/DisplayRenderer'
 // import DonationForm from '../../forms/post/DonationForm'
 import DonationMessage from '../../components/DonationMessage'
+import PageLoading from '../../components/PageLoading'
 import {
   postReadApiRequest,
   postReadByUsernameAndSlugApiRequest,
@@ -106,6 +107,7 @@ class ShowPage extends Component {
       query,
       username,
       post,
+      isLoading,
       isAuth,
       loggedUserId,
       // accessToken,
@@ -124,7 +126,9 @@ class ShowPage extends Component {
               src={headerImage.src}
             />
           )}
-          <Divider hidden />
+          {post.title && (
+            <Divider hidden />
+          )}
           <Container>
             <DonationMessage
               visible={isMessageVisible}
@@ -132,16 +136,20 @@ class ShowPage extends Component {
               errorCode={donationErrorCode}
               onDismiss={this.handleMessageDismiss}
             />
-            <Header size="huge" className="post-header web-font">
-              {post.title}
-              {post.subtitle && (
-                <Header.Subheader className="web-font">
-                  <Divider hidden />
-                  {post.subtitle}
-                </Header.Subheader>
-              )}
-            </Header>
-            <Divider hidden section />
+            {post.title && (
+              <Header size="huge" className="post-header web-font">
+                {post.title}
+                {post.subtitle && (
+                  <Header.Subheader className="web-font">
+                    <Divider hidden />
+                    {post.subtitle}
+                  </Header.Subheader>
+                )}
+              </Header>
+            )}
+            {post.title && (
+              <Divider hidden section />
+            )}
           </Container>
         </div>
         <Container>
@@ -149,9 +157,12 @@ class ShowPage extends Component {
             <Grid.Row>
               <Grid.Column width={12}>
                 <div className="white background">
-                <Segment padded="very" attached="top">
-                  <DisplayRenderer blocks={post.blocks} />
-                </Segment>
+                  <PageLoading active={isLoading} />
+                  {!isLoading && (
+                    <Segment padded="very" attached="top">
+                      <DisplayRenderer blocks={post.blocks} />
+                    </Segment>
+                  )}
                 </div>
               </Grid.Column>
               <Grid.Column width={4}>
@@ -268,12 +279,16 @@ export default withRouter(connect(({ posts, users, auth }, { match, location }) 
     postId,
   } = match.params
   let post = {}
+  let isLoading = false
 
   if (username) {
     post = postSelectors.getPostByUsernameAndSlug(posts, users, username, postSlug)
   }
   if (userId) {
     post = postSelectors.getPost(posts, postId)
+  }
+  if (post.isNotExist || !post.blocks) {
+    isLoading = true
   }
 
   return {
@@ -283,6 +298,7 @@ export default withRouter(connect(({ posts, users, auth }, { match, location }) 
     userId,
     postId,
     post,
+    isLoading,
     isAuth: authSelectors.getIsAuth(auth),
     loggedUserId: authSelectors.getLoggedUserId(auth),
     // accessToken: authSelectors.getAccessToken(auth),
