@@ -5,7 +5,7 @@ let PageLoading = ({ active, content }) => (
   active ? (
     <Segment basic>
       <Container>
-        <Divider hidden />
+        <Divider hidden section />
         <Dimmer
           inverted
           active
