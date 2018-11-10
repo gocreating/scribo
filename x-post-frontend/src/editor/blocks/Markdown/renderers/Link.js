@@ -1,7 +1,7 @@
 import React from 'react'
 
-let Link = (props) => (
-  <a className="web-font" {...props} />
+let Link = ({ children, ...rest }) => (
+  <a className="web-font" {...rest}>{children}</a>
 )
 
 export default Link
