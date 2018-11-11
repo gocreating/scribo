@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import config from '../config'
 
 const SHORTNAME = config.disqusShortname
+const WEBSITE_URL = config.host
 
 function renderDisqus() {
   if (window.DISQUS === undefined) {
@@ -46,7 +47,7 @@ class DisqusThread extends React.Component {
        window.disqus_shortname = SHORTNAME
        window.disqus_identifier = id
        window.disqus_title = title
-       window.disqus_url = path
+       window.disqus_url = WEBSITE_URL + path
     }
     return <div {...other} id="disqus_thread" />
   }
