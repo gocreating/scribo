@@ -1,0 +1,44 @@
+$text-font-size: 1.3em;
+
+textarea.markdown.editor {
+  border: 0px;
+  font-family: Consolas !important;
+  font-size: 1.215em;
+  line-height: 1.75em;
+  min-height: 1.75em;
+  padding: 0px;
+  margin: 10px 0;
+  overflow-wrap: break-word;
+}
+
+.markdown.content {
+  li {
+    font-size: $text-font-size;
+    line-height: 1.6em;
+    min-height: 1.6em;
+    margin: 10px 0;
+
+    li {
+      font-size: inherit;
+    }
+  }
+
+  /* inline code */
+  code {
+    font-size: 87.5%;
+    color: #e83e8c;
+    word-break: break-word;
+    font-family: Consolas;
+  }
+
+  /* block math & inline math */
+  .katex {
+    font-size: inherit;
+  }
+
+  /* block math */
+  .katex-display .katex {
+    margin: 10px 0;
+    font-size: $text-font-size;
+  }
+}

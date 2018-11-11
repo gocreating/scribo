@@ -15,7 +15,7 @@ import Code from './renderers/Code'
 import InlineMath from './renderers/InlineMath'
 import BlockMath from './renderers/BlockMath'
 import 'han-css/dist/han.min.css'
-import './Markdown.css'
+import './Markdown.scss'
 
 let defaultRenderers = {
   // disable applying pangu onto markdown paragraph
