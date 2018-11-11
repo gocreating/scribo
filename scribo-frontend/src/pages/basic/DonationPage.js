@@ -47,7 +47,7 @@ class DonationPage extends Component {
           padded="horizontally"
         >
           <Grid.Row>
-            <Grid.Column width={10}>
+            <Grid.Column width={9}>
               <DisplayRenderer blocks={[{
                 id: '1',
                 type: BlockTypes.MARKDOWN,
@@ -68,7 +68,7 @@ Scribo試圖補足坊間寫作平台的不足，致力於提供優良、舒適�
                 },
               }]} />
             </Grid.Column>
-            <Grid.Column width={6} textAlign="center">
+            <Grid.Column width={7} textAlign="center">
               <DisplayRenderer blocks={[{
                 id: '1',
                 type: BlockTypes.MARKDOWN,
