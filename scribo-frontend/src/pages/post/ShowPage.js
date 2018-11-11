@@ -24,6 +24,7 @@ import DisplayRenderer from '../../editor/renderers/DisplayRenderer'
 // import DonationForm from '../../forms/post/DonationForm'
 import DonationMessage from '../../components/DonationMessage'
 import PageLoading from '../../components/PageLoading'
+import DisqusThread from '../../components/DisqusThread'
 import {
   postReadApiRequest,
   postReadByUsernameAndSlugApiRequest,
@@ -267,6 +268,17 @@ class ShowPage extends Component {
                 </List>
               </Grid.Column>
             </Grid.Row>
+            <Grid.Row>
+              <Grid.Column width={12}>
+                {post.blocks && (
+                  <DisqusThread
+                    id={`post-id-${post.id}`}
+                    title={post.title}
+                    path={`/@${username}/${post.slug}`}
+                  />
+                )}
+              </Grid.Column>
+            </Grid.Row>
           </Grid>
         </Container>
       </AppLayout>
@@ -308,8 +320,8 @@ export default withRouter(connect(({ posts, users, auth }, { match, location }) 
     // accessToken: authSelectors.getAccessToken(auth),
   }
 }, {
-  postRead: postReadApiRequest,
-  postReadByUsernameAndSlug: postReadByUsernameAndSlugApiRequest,
-  postDelete: postDeleteApiRequest,
-  push,
-})(ShowPage))
+    postRead: postReadApiRequest,
+    postReadByUsernameAndSlug: postReadByUsernameAndSlugApiRequest,
+    postDelete: postDeleteApiRequest,
+    push,
+  })(ShowPage))

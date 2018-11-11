@@ -13,6 +13,10 @@ let donationHostMap = {
   development: 'http://localhost:4000',
   production: 'https://scribo-backend.herokuapp.com',
 }
+let disqusShortnameMap = {
+  development: 'scribo-dev',
+  production: 'scribo',
+}
 
 export default {
   imgur: {
@@ -20,4 +24,5 @@ export default {
     maxSize: 10 * 1024 * 1024, // 10MB
   },
   donationHost: donationHostMap[process.env.NODE_ENV],
+  disqusShortname: disqusShortnameMap[process.env.NODE_ENV],
 }
