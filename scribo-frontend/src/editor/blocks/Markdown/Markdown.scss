@@ -43,4 +43,9 @@ textarea.markdown.editor {
     margin: 10px 0;
     font-size: $text-font-size;
   }
+
+  /* Avoid being override by han.css */
+  .katex * {
+    font-family: KaTeX_Math !important;
+  }
 }
