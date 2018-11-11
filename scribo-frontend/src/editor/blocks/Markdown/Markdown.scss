@@ -25,10 +25,12 @@ textarea.markdown.editor {
 
   /* inline code */
   code {
-    font-size: 87.5%;
-    color: #e83e8c;
-    word-break: break-word;
-    font-family: Consolas;
+    background-color: #ffffe0;
+    border: 1px solid orange;
+    border-radius: 3px;
+    padding: 1px 2px;
+    margin: 0 2px;
+    font-family: inherit;
   }
 
   /* block math & inline math */
