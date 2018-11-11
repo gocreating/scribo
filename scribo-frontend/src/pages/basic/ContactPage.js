@@ -1,7 +1,8 @@
 import React from 'react'
-import { Grid } from 'semantic-ui-react'
+import { Grid, Divider } from 'semantic-ui-react'
 import AppLayout from '../../layouts/AppLayout'
 import DisplayRenderer from '../../editor/renderers/DisplayRenderer'
+import DisqusThread from '../../components/DisqusThread'
 import BlockTypes from '../../constants/BlockTypes'
 
 let ContactPage = () => (
@@ -19,6 +20,12 @@ let ContactPage = () => (
 如果您有私人疑問或需求，歡迎聯絡站長信箱：<gocreating@gmail.com>。`,
           },
         }]} />
+        <Divider section />
+        <DisqusThread
+          id="contact-page"
+          title="Discuss About Scribo"
+          path="/contact"
+        />
       </Grid.Column>
     </Grid>
   </AppLayout>
