@@ -1,6 +1,6 @@
 import React from 'react'
 
-let InlineCode = ({ children, ...rest }) => (
+let InlineCode = ({ inline, children, ...rest }) => (
   <code className="inline-code content" {...rest}>{children}</code>
 )
 
