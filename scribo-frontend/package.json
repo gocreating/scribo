@@ -1,6 +1,6 @@
 {
   "name": "scribo-client",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "private": true,
   "homepage": "https://gocreating.github.io/scribo/",
   "dependencies": {
@@ -48,7 +48,7 @@
     "start": "cross-env NODE_ENV=development react-scripts start",
     "build-semantic": "cd src/semantic && gulp build-css build-assets",
     "watch-semantic": "cd src/semantic && yarn run build-semantic && gulp watch",
-    "build": "npm run build-semantic && react-scripts build",
+    "build": "npm run build-semantic && cross-env GENERATE_SOURCEMAP=false react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",

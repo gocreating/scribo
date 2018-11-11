@@ -11,11 +11,12 @@ import Image from './renderers/Image'
 import Table from './renderers/Table'
 import ListItem from './renderers/ListItem'
 import Heading from './renderers/Heading'
+import InlineCode from './renderers/InlineCode'
 import Code from './renderers/Code'
 import InlineMath from './renderers/InlineMath'
 import BlockMath from './renderers/BlockMath'
 import 'han-css/dist/han.min.css'
-import './Markdown.css'
+import './Markdown.scss'
 
 let defaultRenderers = {
   // disable applying pangu onto markdown paragraph
@@ -31,6 +32,7 @@ let defaultRenderers = {
   tableCell: Table.Cell,
   listItem: ListItem,
   heading: Heading,
+  inlineCode: InlineCode,
   code: Code,
   // remark plugin
   inlineMath: InlineMath,
