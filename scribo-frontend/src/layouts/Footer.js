@@ -57,24 +57,23 @@ let Footer = () => (
         <Grid.Column>
           <Segment basic compact>
             <Header as="h3">
-              Comprehensive
+              多元用途
             </Header>
             <List>
-              <List.Item>Blog</List.Item>
-              <List.Item>News</List.Item>
-              <List.Item>Resume</List.Item>
-              <List.Item>Content Sharing</List.Item>
+              <List.Item>部落格</List.Item>
+              <List.Item>新聞</List.Item>
+              <List.Item>履歷</List.Item>
+              <List.Item>內容分享</List.Item>
             </List>
           </Segment>
         </Grid.Column>
         <Grid.Column>
           <Segment basic compact>
             <Header as="h3">
-              Professional
+              專業模組
             </Header>
             <List>
               <List.Item>Markdown</List.Item>
-              <List.Item>Flow Chart</List.Item>
               <List.Item>Code Block</List.Item>
               <List.Item>Math Support</List.Item>
             </List>

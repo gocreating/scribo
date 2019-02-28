@@ -22,7 +22,7 @@ let PageLoading = ({ active, content }) => (
 
 PageLoading.defaultProps = {
   active: false,
-  content: 'Loading',
+  content: '載入中',
 }
 
 export default PageLoading

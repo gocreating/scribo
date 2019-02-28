@@ -82,6 +82,10 @@ blockquote.quote.content {
   @extend %quote-wrapper;
   @extend %quote-text;
 
+  span {
+    @extend %quote-text;
+  }
+
   &::before {
     @extend %quote-symbol;
   }

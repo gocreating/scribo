@@ -16,7 +16,7 @@ import {
 
 export default [{
   type: BlockTypes.PARAGRAPH,
-  label: 'Paragraph',
+  label: '文字段落',
   icon: faParagraph,
   insertValues: {
     text: '',
@@ -24,7 +24,7 @@ export default [{
   },
 }, {
   type: BlockTypes.HEADER,
-  label: 'Header',
+  label: '章節標題',
   icon: faHeading,
   insertValues: {
     text: '',
@@ -32,7 +32,7 @@ export default [{
   },
 }, {
   type: BlockTypes.CODE_HIGHLIGHT,
-  label: 'Code',
+  label: '程式碼',
   icon: faCode,
   insertValues: {
     code: '',
@@ -47,7 +47,7 @@ export default [{
   },
 }, {
   type: BlockTypes.IMAGE,
-  label: 'Image',
+  label: '圖片',
   icon: faImage,
   insertValues: {
     src: '',
@@ -56,7 +56,7 @@ export default [{
   },
 }, {
   type: BlockTypes.QUOTE,
-  label: 'Quote',
+  label: '引言',
   icon: faQuoteLeft,
   insertValues: {
     text: '',
