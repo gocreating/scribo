@@ -7,7 +7,7 @@ import FormTypes from '../../constants/FormTypes'
 let SignupForm= ({ onSubmit, handleSubmit }) => (
   <Form onSubmit={handleSubmit(onSubmit)}>
     <Form.Field>
-      <label>Username</label>
+      <label>使用者帳號</label>
       <Field
         name="username"
         component={Input}
@@ -15,7 +15,7 @@ let SignupForm= ({ onSubmit, handleSubmit }) => (
       />
     </Form.Field>
     <Form.Field>
-      <label>Email</label>
+      <label>電子信箱</label>
       <Field
         name="email"
         component={Input}
@@ -23,14 +23,14 @@ let SignupForm= ({ onSubmit, handleSubmit }) => (
       />
     </Form.Field>
     <Form.Field>
-      <label>Password</label>
+      <label>密碼</label>
       <Field
         name="password"
         component={Input}
         type="password"
       />
     </Form.Field>
-    <Button basic>Signup</Button>
+    <Button basic>註冊</Button>
   </Form>
 )
 

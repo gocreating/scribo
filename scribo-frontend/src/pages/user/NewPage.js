@@ -27,7 +27,7 @@ class NewPage extends Component {
       <AppLayout>
         <Segment basic>
           <Header>
-            Signup
+            註冊Scribo帳戶
           </Header>
           <SignupForm onSubmit={this.handleSubmit} />
         </Segment>

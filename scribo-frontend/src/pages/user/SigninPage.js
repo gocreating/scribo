@@ -40,7 +40,7 @@ class NewPage extends Component {
       <AppLayout>
         <Segment basic>
           <Header>
-            Signin
+            登入Scribo
           </Header>
           <SigninForm onSubmit={this.handleSubmit} />
         </Segment>

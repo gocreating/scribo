@@ -198,7 +198,7 @@ class NewOrEditForm extends Component {
                       content: `https://gocreating.github.io/scribo/#/@${loggedUser.username}/`,
                       color: 'grey',
                     }}
-                    placeholder="slug"
+                    placeholder="文章網址"
                     size="mini"
                     action={{
                       icon: (
@@ -208,7 +208,7 @@ class NewOrEditForm extends Component {
                         </>
                       ),
                       onClick: () => this.setSlug(values.title),
-                      content: 'Apply from title',
+                      content: '從目前標題產生',
                       size: 'mini',
                       color: 'grey',
                       disabled: isAutoSlugify,
@@ -224,14 +224,14 @@ class NewOrEditForm extends Component {
                     color="grey"
                     onClick={this.handleChangeHeaderImageClick}
                   >
-                    Change Header Image
+                    編輯風格照
                   </Button>
                   <Button
                     color="grey"
                     disabled={!headerImage.src}
                     onClick={this.handleRemoveHeaderImageClick}
                   >
-                    Remove
+                    移除
                   </Button>
                 </Button.Group>
                 <Divider hidden />
@@ -249,7 +249,7 @@ class NewOrEditForm extends Component {
                       component={Input}
                       onChange={this.handleTitleChange}
                       type="text"
-                      placeholder="Title"
+                      placeholder="標題"
                       size="massive"
                     />
                   </Form.Field>
@@ -258,7 +258,7 @@ class NewOrEditForm extends Component {
                       name="subtitle"
                       component={Input}
                       type="text"
-                      placeholder="Subtitle"
+                      placeholder="副標題"
                     />
                   </Form.Field>
                 </Grid.Column>
@@ -290,22 +290,22 @@ class NewOrEditForm extends Component {
                         this.xeditor.current.getBlocks()
                       )
                     }}>
-                      Debug
+                      除錯
                     </Button>
                   )}
                   {onCreate && (
                     <Button basic onClick={handleSubmit(this.handleSubmit(onCreate))}>
-                      Create
+                      建立文章
                     </Button>
                   )}
                   {onSave && (
                     <Button basic onClick={handleSubmit(this.handleSubmit(onSave))}>
-                      Save
+                      儲存文章
                     </Button>
                   )}
                   {onUpdate && (
                     <Button basic onClick={handleSubmit(this.handleSubmit(onUpdate))}>
-                      Update
+                      更新文章
                     </Button>
                   )}
                 </Grid.Column>

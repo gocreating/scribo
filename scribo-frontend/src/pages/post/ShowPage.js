@@ -173,14 +173,14 @@ class ShowPage extends Component {
                       as={Link}
                       to={`/post/${post.id}/edit`}
                     >
-                      Edit Post
+                      編輯文章
                     </List.Item>
                     <List.Item
                       as={Link}
                       to="#"
                       onClick={this.handleDeletePostClick}
                     >
-                      Delete Post
+                      刪除文章
                     </List.Item>
                   </List>
                 )}
@@ -202,12 +202,12 @@ class ShowPage extends Component {
                         <FontAwesomeIcon icon={faCalendarAlt} />
                       </List.Icon>
                       <List.Content>
-                        <List.Header>Posted</List.Header>
+                        <List.Header>發表於</List.Header>
                         <List.Description>
                           {new Date(post.createdAt).toLocaleDateString()}
                         </List.Description>
 
-                        <List.Header>Updated</List.Header>
+                        <List.Header>最後更新於</List.Header>
                         <List.Description>
                           {new Date(post.updatedAt).toLocaleDateString()}
                         </List.Description>

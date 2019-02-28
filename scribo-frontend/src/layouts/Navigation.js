@@ -21,13 +21,13 @@ let Navigation = ({ isAuth, loggedUsername, logout, push }) => (
           </Link>
         </Menu.Item>
         {isAuth && (
-          <Menu.Item name="My Blog" as={Link} to={`/@${loggedUsername}`} />
+          <Menu.Item name="我的部落格" as={Link} to={`/@${loggedUsername}`} />
         )}
-        <Menu.Item name="Donate to Us" as={Link} to="/donation" />
-        <Menu.Item name="Contact" as={Link} to="/contact" />
+        <Menu.Item name="贊助" as={Link} to="/donation" />
+        <Menu.Item name="聯絡我們" as={Link} to="/contact" />
         <Menu.Menu position="right">
           {isAuth && (
-            <Menu.Item name="New Post" as={Link} to="/post/new" />
+            <Menu.Item name="撰寫新文章" as={Link} to="/post/new" />
           )}
           {isAuth && (
             <Menu.Item
@@ -36,15 +36,15 @@ let Navigation = ({ isAuth, loggedUsername, logout, push }) => (
                 push('/user/signin')
               }}
             >
-              Logout
+              登出
             </Menu.Item>
           )}
           {!isAuth && (
-            <Menu.Item as={Link} to="/user/signin">Signin</Menu.Item>
+            <Menu.Item as={Link} to="/user/signin">登入</Menu.Item>
           )}
           {!isAuth && (
             <Menu.Item>
-              <Button primary as={Link} to="/user/signup">Sign Up</Button>
+              <Button primary as={Link} to="/user/signup">註冊</Button>
             </Menu.Item>
           )}
         </Menu.Menu>
