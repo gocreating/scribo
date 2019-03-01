@@ -19,6 +19,7 @@
     "pangu": "^3.3.0",
     "prismjs": "^1.15.0",
     "prop-types": "^15.6.2",
+    "query-string": "^6.2.0",
     "react": "^16.5.0",
     "react-autosize-textarea": "^5.0.0",
     "react-beautiful-dnd": "^9.0.2",
