@@ -69,12 +69,16 @@ module.exports = (AppUser) => {
     },
   })
 
-  AppUser.findPostsByUsername = (username, filter, next) => {
+  AppUser.findPostsByUsername = (username, filter, pageId, next) => {
     let { Post } = AppUser.app.models
 
     AppUser.findOne({ where: { username } }, (err, appUser) => {
       if (err) return next(err)
       if (!appUser) return next(new Error('User not found'))
+
+      let limit = parseInt(Post.settings.scope.limit)
+      let page = parseInt(pageId)
+
       if (!filter) {
         filter = {
           include: 'author',
@@ -92,13 +96,28 @@ module.exports = (AppUser) => {
           order: 'updatedAt DESC',
         }
       }
-      Post.find({
-        where: { authorId: appUser.id },
-        ...filter,
-      }, (err, posts) => {
+      filter.skip = (page - 1) * limit
+
+      Post.count({
+        authorId: appUser.id,
+      }, (err, count) => {
         if (err) return next(err)
 
-        next(null, posts)
+        Post.find({
+          where: { authorId: appUser.id },
+          ...filter,
+        }, (err, posts) => {
+          if (err) return next(err)
+
+          next(null, {
+            posts,
+            meta: {
+              total: count,
+              pageId,
+              limit,
+            }
+          })
+        })
       })
     })
   }
@@ -120,6 +139,11 @@ module.exports = (AppUser) => {
       {
         arg: 'filter',
         type: 'object',
+        http: { source: 'query' },
+      },
+      {
+        arg: 'pageId',
+        type: 'string',
         http: { source: 'query' },
       },
     ],

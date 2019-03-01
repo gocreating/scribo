@@ -6,6 +6,9 @@
   "options": {
     "validateUpsert": true
   },
+  "scope":{
+    "limit": 12
+  },
   "properties": {
     "headerImage": {
       "type": "object"
