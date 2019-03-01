@@ -36,6 +36,7 @@ class NewOrEditForm extends Component {
 
   state = {
     isHeaderImageModalOpen: false,
+    targetSubmitButton: null,
   }
   xeditor = React.createRef()
 
@@ -131,7 +132,7 @@ class NewOrEditForm extends Component {
     }
   };
 
-  handleSubmit = (targetConsumerFn) => (data) => {
+  handleSubmit = (targetConsumerFn, targetSubmitButton) => (data) => {
     let blocks = this.xeditor.current
       .getBlocks()
       .map(block => ({
@@ -140,9 +141,13 @@ class NewOrEditForm extends Component {
         values: block.values,
       }))
 
-    targetConsumerFn({
-      ...data,
-      blocks,
+    this.setState({ targetSubmitButton })
+    // return a promise to trigger redux-form's `submitting` prop
+    return new Promise((resolve, reject) => {
+      resolve(targetConsumerFn({
+        ...data,
+        blocks,
+      }))
     })
   }
 
@@ -152,13 +157,21 @@ class NewOrEditForm extends Component {
       onSave,
       onUpdate,
       loading,
+      submitting,
       handleSubmit,
       values,
       loggedUser,
     } = this.props
-    let { isHeaderImageModalOpen } = this.state
+
+    let {
+      isHeaderImageModalOpen,
+      targetSubmitButton,
+    } = this.state
     let headerImage = values.headerImage || {}
     let isAutoSlugify = (values.slug === slugify(values.title))
+    let isCreating = submitting && targetSubmitButton === 'create'
+    let isSaving = submitting && targetSubmitButton === 'save'
+    let isUpdating = submitting && targetSubmitButton === 'update'
 
     if (loading) {
       return null
@@ -294,17 +307,32 @@ class NewOrEditForm extends Component {
                     </Button>
                   )}
                   {onCreate && (
-                    <Button basic onClick={handleSubmit(this.handleSubmit(onCreate))}>
+                    <Button
+                      basic={!isCreating}
+                      disabled={isCreating}
+                      loading={isCreating}
+                      onClick={handleSubmit(this.handleSubmit(onCreate, 'create'))}
+                    >
                       建立文章
                     </Button>
                   )}
                   {onSave && (
-                    <Button basic onClick={handleSubmit(this.handleSubmit(onSave))}>
+                    <Button
+                      basic={!isSaving}
+                      disabled={isSaving}
+                      loading={isSaving}
+                      onClick={handleSubmit(this.handleSubmit(onSave, 'save'))}
+                    >
                       儲存文章
                     </Button>
                   )}
                   {onUpdate && (
-                    <Button basic onClick={handleSubmit(this.handleSubmit(onUpdate))}>
+                    <Button
+                      basic={!isUpdating}
+                      disabled={isUpdating}
+                      loading={isUpdating}
+                      onClick={handleSubmit(this.handleSubmit(onUpdate, 'update'))}
+                    >
                       更新文章
                     </Button>
                   )}
