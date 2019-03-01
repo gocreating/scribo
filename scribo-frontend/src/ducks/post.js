@@ -29,8 +29,8 @@ const plainActionCreators = createActions({
   SET_MIXED_PAGE_LOADING_STATUS: (pageId, isLoading) => ({
     pageId, isLoading,
   }),
-  SET_USER_PAGE: (username, pageId, postIds) => ({
-    username, pageId, postIds,
+  SET_USER_PAGE: (username, pageId, meta, postIds) => ({
+    username, pageId, meta, postIds,
   }),
   SET_USER_PAGE_LOADING_STATUS: (username, pageId, isLoading) => ({
     username, pageId, isLoading,
@@ -89,21 +89,30 @@ const thunkActionCreators = {
       dispatch(setMixedPageLoadingStatus(1, false))
     }
   },
-  postListByUsernameApiRequest: (username) => async (dispatch) => {
-    dispatch(setUserPageLoadingStatus(username, 1, true))
+  postListByUsernameApiRequest: (username, pageId) => async (dispatch) => {
+    dispatch(setUserPageLoadingStatus(username, pageId, true))
     try {
-      let response = await postApi.listByUsername(username)
+      let response = await postApi.listByUsername(username, {
+        params: {
+          filter: {
+            include: 'author',
+            order: 'updatedAt DESC',
+          },
+          pageId,
+        },
+      })
       dispatch(postListByUsernameApiSuccess(response))
-      let { result, entities } = normalize(response.body, [postSchema])
+      let { posts, meta } = response.body
+      let { result, entities } = normalize(posts, [postSchema])
       dispatch(addEntities(entities))
-      dispatch(setUserPage(username, 1, result))
+      dispatch(setUserPage(username, pageId, meta, result))
       return response.body
     } catch (error) {
       let response = createApiError(error)
       dispatch(postListByUsernameApiFailure(response))
       return response.body
     } finally {
-      dispatch(setUserPageLoadingStatus(username, 1, false))
+      dispatch(setUserPageLoadingStatus(username, pageId, false))
     }
   },
   postCreateApiRequest: (userId, post) => async (dispatch) => {
@@ -211,6 +220,11 @@ export const {
 } = thunkActionCreators
 
 // Reducer
+const defaultUserPagesMeta = {
+  total: 1,
+  pageId: 1,
+  limit: 1,
+}
 const defaultState = {
   mixedPages: {},
   userPages: {},
@@ -249,7 +263,7 @@ export default handleActions({
     }
   },
   [setUserPage]: (state, {
-    payload: { username, pageId, postIds },
+    payload: { username, pageId, meta, postIds },
   }) => {
     let userPages = state.userPages[username] || {}
     let userPage = userPages[pageId] || {}
@@ -264,6 +278,7 @@ export default handleActions({
             ...userPage,
             elements: postIds,
           },
+          meta,
         },
       },
     }
@@ -308,10 +323,21 @@ export let selectors = {
     return mixedPage
   },
   getUserPage: (state, username, pageId) => {
+    if (!pageId) {
+      pageId = '1'
+    } else {
+      pageId = pageId.toString()
+    }
+
     let userPages = state.userPages[username] || {}
     let userPage = userPages[pageId] || {}
 
     return userPage
+  },
+  getUserPagesMeta: (state, username) => {
+    let userPages = state.userPages[username] || {}
+
+    return userPages.meta || defaultUserPagesMeta
   },
   getMixedPosts(state) {
     let mixedPage = this.getMixedPage(state, '1')
@@ -320,8 +346,8 @@ export let selectors = {
 
     return posts
   },
-  getUserPosts(state, username) {
-    let userPage = this.getUserPage(state, username, '1')
+  getUserPosts(state, username, page) {
+    let userPage = this.getUserPage(state, username, page)
     let elements = userPage.elements || []
     let posts = elements.map(postId => state[postId])
 
@@ -333,8 +359,8 @@ export let selectors = {
 
     return isLoading
   },
-  getUserPostsLoadingStatus(state, username) {
-    let userPage = this.getUserPage(state, username, '1')
+  getUserPostsLoadingStatus(state, username, pageId) {
+    let userPage = this.getUserPage(state, username, pageId)
     let isLoading = userPage.isLoading || false
 
     return isLoading
@@ -347,8 +373,8 @@ export let selectors = {
       author: userEntity[post.authorId],
     }))
   },
-  getUserPostsWithAuthor(state, userEntity, username) {
-    let posts = this.getUserPosts(state, username)
+  getUserPostsWithAuthor(state, userEntity, username, page = 1) {
+    let posts = this.getUserPosts(state, username, page)
 
     return posts.map(post => ({
       ...post,
