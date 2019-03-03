@@ -19,6 +19,7 @@ import ImageModal from '../../editor/blocks/Image/ImageModal'
 import headerImagePlaceholder from '../../editor/blocks/Image/header-image-placeholder.png'
 import slugify from '../../utils/slugify'
 import Input from '../../fields/Input'
+import SeriesPostSelect from '../../fields/SeriesPostSelect'
 import FormTypes from '../../constants/FormTypes'
 import XEditor from '../../editor/XEditor'
 import BlockBucket from '../../editor/BlockBucket'
@@ -295,6 +296,16 @@ class NewOrEditForm extends Component {
                 </Grid.Column>
               </Grid.Row>
 
+              <Grid.Row>
+                <Grid.Column>
+                  <Form.Field>
+                    <Field
+                      name="seriesPosts"
+                      component={SeriesPostSelect}
+                    />
+                  </Form.Field>
+                </Grid.Column>
+              </Grid.Row>
               <Grid.Row>
                 <Grid.Column>
                   {process.env.NODE_ENV === 'development' && (
