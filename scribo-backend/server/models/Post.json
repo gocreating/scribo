@@ -33,6 +33,9 @@
         "object"
       ]
     },
+    "isSeriesMain": {
+      "type": "boolean"
+    },
     "createdAt": {
       "type": "date",
       "defaultFn": "now"
@@ -50,6 +53,12 @@
       "model": "AppUser",
       "foreignKey": "",
       "required": true
+    },
+    "seriesPosts": {
+      "type": "hasMany",
+      "model": "Post",
+      "foreignKey": "",
+      "through": "SeriesPost"
     }
   },
   "acls": [
