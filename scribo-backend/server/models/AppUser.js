@@ -69,7 +69,7 @@ module.exports = (AppUser) => {
     },
   })
 
-  AppUser.findPostsByUsername = (username, filter, pageId, next) => {
+  AppUser.findPostsByUsername = (username, filter, pageId, keyword, next) => {
     let { Post } = AppUser.app.models
 
     AppUser.findOne({ where: { username } }, (err, appUser) => {
@@ -98,13 +98,21 @@ module.exports = (AppUser) => {
       }
       filter.skip = (page - 1) * limit
 
-      Post.count({
+      let query = {
         authorId: appUser.id,
-      }, (err, count) => {
+      }
+
+      if (keyword) {
+        query.title = {
+          like: keyword,
+        }
+      }
+
+      Post.count(query, (err, count) => {
         if (err) return next(err)
 
         Post.find({
-          where: { authorId: appUser.id },
+          where: query,
           ...filter,
         }, (err, posts) => {
           if (err) return next(err)
@@ -143,6 +151,11 @@ module.exports = (AppUser) => {
       },
       {
         arg: 'pageId',
+        type: 'string',
+        http: { source: 'query' },
+      },
+      {
+        arg: 'keyword',
         type: 'string',
         http: { source: 'query' },
       },
