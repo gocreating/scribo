@@ -43,7 +43,11 @@ class SeriesSelect extends Component {
 
   handleKeywordChange = async (e) => {
     await this.setState({ keyword: e.target.value })
-    this.fetchMatchedPosts()
+    if (!this.state.keyword) {
+      this.setState({ matchedPosts: [] })
+    } else {
+      this.fetchMatchedPosts()
+    }
   }
 
   handleAddClick = async (idx) => {
