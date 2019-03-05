@@ -116,6 +116,7 @@ module.exports = (AppUser) => {
         query.title = {
           like: keyword,
         }
+        delete query.isInSeries
       }
 
       Post.count(query, (err, count) => {
