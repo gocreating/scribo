@@ -55,6 +55,7 @@ class NewOrEditForm extends Component {
     let { initialize } = this.props
     let { blocks, ...formValues } = post
 
+    delete formValues.author
     initialize(formValues)
     this.xeditor.current.setBlocks(blocks)
   }
