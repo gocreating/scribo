@@ -79,7 +79,17 @@ module.exports = (AppUser) => {
 
       if (!filter) {
         filter = {
-          include: 'author',
+          include: [{
+            relation: 'author',
+            scope: {
+              fields: ['username'],
+            }
+          }, {
+            relation: 'seriesPosts',
+            scope: {
+              fields: ['title'],
+            }
+          }],
           fields: {
             id: true,
             authorId: true,
@@ -88,6 +98,7 @@ module.exports = (AppUser) => {
             title: true,
             subtitle: true,
             abstractBlocks: true,
+            seriesCount: true,
             createdAt: true,
             updatedAt: true,
           },
@@ -98,6 +109,7 @@ module.exports = (AppUser) => {
 
       let query = {
         authorId: appUser.id,
+        isInSeries: { inq: [null, false] },
       }
 
       if (keyword) {

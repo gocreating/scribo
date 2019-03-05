@@ -94,10 +94,6 @@ const thunkActionCreators = {
     try {
       let response = await postApi.listByUsername(username, {
         params: {
-          filter: {
-            include: 'author',
-            order: 'updatedAt DESC',
-          },
           pageId,
         },
       })
