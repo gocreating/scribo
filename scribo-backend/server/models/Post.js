@@ -2,7 +2,6 @@
 
 let whitelistMethods = require('../toolbox/whitelistMethods')
 const appendAbstractBlocks = require('../hooks/post/appendAbstractBlocks')
-const handleSeriesPosts = require('../hooks/post/handleSeriesPosts')
 
 module.exports = function(Post) {
   whitelistMethods(Post, [
@@ -10,7 +9,6 @@ module.exports = function(Post) {
   ])
 
   Post.observe('before save', appendAbstractBlocks)
-  Post.observe('before save', handleSeriesPosts)
 
   Post.findMixed = (filter, next) => {
     if (!filter) {
