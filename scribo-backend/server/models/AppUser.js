@@ -308,7 +308,9 @@ module.exports = (AppUser) => {
       if (err) return next(err)
 
       // Update related series posts
-      SeriesPost.find({ mainPostId: postId }, (err, originSeriesPosts) => {
+      SeriesPost.find({
+        where: { mainPostId: postId },
+      }, (err, originSeriesPosts) => {
         if (err) return next(err)
 
         Post.updateAll({
