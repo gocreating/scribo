@@ -10,7 +10,6 @@ module.exports = (AppUser) => {
     '__get__posts',
     '__create__posts',
     '__findById__posts',
-    '__updateById__posts',
     '__destroyById__posts',
   ])
 
@@ -213,6 +212,101 @@ module.exports = (AppUser) => {
         arg: 'filter',
         type: 'object',
         http: { source: 'query' },
+      },
+    ],
+    returns: {
+      arg: 'data',
+      type: 'object',
+      root: true,
+    },
+  })
+
+  AppUser.updatePostByUserIdAndPostId = (userId, postId, data, next) => {
+    let { Post, SeriesPost } = AppUser.app.models
+    let { seriesPosts, ...updatedData } = data
+
+    if (!seriesPosts) {
+      seriesPosts = []
+    }
+
+    let seriesCount = seriesPosts.length
+
+    // Update target post
+    Post.updateAll({
+      id: postId,
+      authorId: userId,
+    }, {
+      ...updatedData,
+      seriesCount,
+    }, (err, info) => {
+      if (err) return next(err)
+
+      // Update related series posts
+      SeriesPost.find({ mainPostId: postId }, (err, originSeriesPosts) => {
+        if (err) return next(err)
+
+        Post.updateAll({
+          id: { inq: originSeriesPosts.map(post => post.seriesPostId) },
+        }, {
+          isInSeries: false,
+        }, (err, info) => {
+          if (err) return next(err)
+
+          // skip if there is no series posts
+          if (seriesCount === 0) {
+            return next(null, {})
+          }
+
+          // start updating series posts
+          SeriesPost.destroyAll({
+            mainPostId: postId,
+          }, (err, info) => {
+            if (err) return next(err)
+
+            SeriesPost.create(seriesPosts.map(seriesPostId => ({
+              mainPostId: postId,
+              seriesPostId,
+            })), (err) => {
+              if (err) return next(err)
+
+              Post.updateAll({
+                id: { inq: seriesPosts },
+              }, {
+                isInSeries: true,
+              }, (err) => {
+                if (err) return next(err)
+
+                return next(null, {})
+              })
+            })
+          })
+        })
+      })
+    })
+  }
+  AppUser.remoteMethod('updatePostByUserIdAndPostId', {
+    isStatic: true,
+    http: { verb: 'put', path: '/:userId/posts/:postId' },
+    description: 'Update post',
+    accepts: [
+      {
+        arg: 'userId',
+        description: 'User ID',
+        type: 'string',
+        required: true,
+      },
+      {
+        arg: 'postId',
+        description: 'Post ID',
+        type: 'string',
+        required: true,
+      },
+      {
+        arg: 'data',
+        description: 'An object contains post\'s data.',
+        type: 'object',
+        http: { source: 'body' },
+        required: true,
       },
     ],
     returns: {
