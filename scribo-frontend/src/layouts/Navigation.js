@@ -20,12 +20,12 @@ let Navigation = ({ isAuth, loggedUsername, logout, push }) => (
             />
           </Link>
         </Menu.Item>
-        {isAuth && (
-          <Menu.Item name="我的部落格" as={Link} to={`/@${loggedUsername}`} />
-        )}
         <Menu.Item name="贊助" as={Link} to="/donation" />
-        <Menu.Item name="聯絡我們" as={Link} to="/contact" />
+        <Menu.Item name="意見回饋" as={Link} to="/contact" />
         <Menu.Menu position="right">
+          {isAuth && (
+            <Menu.Item name="我的部落格" as={Link} to={`/@${loggedUsername}`} />
+          )}
           {isAuth && (
             <Menu.Item name="撰寫新文章" as={Link} to="/post/new" />
           )}
