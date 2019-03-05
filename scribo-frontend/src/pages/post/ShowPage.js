@@ -268,6 +268,29 @@ class ShowPage extends Component {
                 </List>
               </Grid.Column>
             </Grid.Row>
+            {post.seriesCount && post.seriesCount > 0 && (
+              <Grid.Row>
+                <Grid.Column width={12}>
+                  <Segment secondary padded="very" color="blue">
+                    <List divided ordered relaxed="very" size="big">
+                      {post.seriesPosts.map(seriesPost => (
+                        <List.Item key={seriesPost.id}>
+                          <List.Content>
+                            <List.Header
+                              as={Link}
+                              to={`/@${username}/${seriesPost.slug}`}
+                            >
+                              {seriesPost.title}
+                            </List.Header>
+                            {seriesPost.subtitle}
+                          </List.Content>
+                        </List.Item>
+                      ))}
+                    </List>
+                  </Segment>
+                </Grid.Column>
+              </Grid.Row>
+            )}
             <Grid.Row>
               <Grid.Column width={12}>
                 {post.blocks && (

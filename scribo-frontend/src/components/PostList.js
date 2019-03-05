@@ -1,6 +1,8 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Card, Image, Header, Divider } from 'semantic-ui-react'
+import { Card, Image, Header, Divider, Label } from 'semantic-ui-react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCopy } from '@fortawesome/free-solid-svg-icons'
 
 let PostList = ({ posts }) => (
   <Card.Group doubling stackable itemsPerRow={3}>
@@ -29,6 +31,17 @@ let PostList = ({ posts }) => (
             )}
           </Header>
         </Card.Content>
+        {post.seriesCount > 0 && (
+          <Card.Content extra>
+            <Label color="blue">
+              <FontAwesomeIcon icon={faCopy} />
+              {' '}
+              {post.seriesCount}
+              {' '}
+              篇系列文
+            </Label>
+          </Card.Content>
+        )}
       </Card>
     ))}
   </Card.Group>
