@@ -138,13 +138,7 @@ const thunkActionCreators = {
     let response = null
 
     try {
-      response = await postApi.readByUsernameAndSlug(username, postSlug, {
-        params: {
-          filter: {
-            include: 'author',
-          },
-        },
-      })
+      response = await postApi.readByUsernameAndSlug(username, postSlug)
       dispatch(postReadByUsernameAndSlugApiSuccess(response))
       let { entities } = normalize(response.body, postSchema)
       dispatch(addEntities(entities))

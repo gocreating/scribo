@@ -242,7 +242,17 @@ module.exports = (AppUser) => {
 
       Post.findOne({
         where: { authorId: appUser.id, slug },
-        include: filter.include,
+        include: [{
+          relation: 'author',
+          scope: {
+            fields: ['username'],
+          }
+        }, {
+          relation: 'seriesPosts',
+          scope: {
+            fields: ['title', 'subtitle', 'slug'],
+          }
+        }],
       }, (err, post) => {
         if (err) return next(err)
         if (!post) return next(new Error('Post not found'))
