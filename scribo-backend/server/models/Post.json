@@ -33,7 +33,10 @@
         "object"
       ]
     },
-    "isSeriesMain": {
+    "seriesCount": {
+      "type": "number"
+    },
+    "isInSeries": {
       "type": "boolean"
     },
     "createdAt": {
@@ -57,8 +60,9 @@
     "seriesPosts": {
       "type": "hasMany",
       "model": "Post",
-      "foreignKey": "",
-      "through": "SeriesPost"
+      "foreignKey": "mainPostId",
+      "through": "SeriesPost",
+      "keyThrough": "seriesPostId"
     }
   },
   "acls": [
