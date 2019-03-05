@@ -134,6 +134,7 @@ class NewOrEditForm extends Component {
   };
 
   handleSubmit = (targetConsumerFn, targetSubmitButton) => (data) => {
+    let { seriesPosts, ...formData } = data
     let blocks = this.xeditor.current
       .getBlocks()
       .map(block => ({
@@ -141,12 +142,14 @@ class NewOrEditForm extends Component {
         type: block.type,
         values: block.values,
       }))
+    let seriesPostIds = (seriesPosts || []).map(seriesPost => seriesPost.id)
 
     this.setState({ targetSubmitButton })
     // return a promise to trigger redux-form's `submitting` prop
     return new Promise((resolve, reject) => {
       resolve(targetConsumerFn({
-        ...data,
+        ...formData,
+        seriesPosts: seriesPostIds,
         blocks,
       }))
     })
