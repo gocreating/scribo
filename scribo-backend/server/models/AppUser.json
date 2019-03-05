@@ -67,10 +67,10 @@
         "logout",
         "findById",
         "findPostsByUsername",
+        "findPostByUserIdAndPostId",
         "findPostByUsernameAndSlug",
-        "__get__posts",
-        "__findById__posts"
         "updatePostByUserIdAndPostId",
+        "__get__posts"
       ]
     },
     {

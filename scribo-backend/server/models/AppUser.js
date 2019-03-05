@@ -9,7 +9,6 @@ module.exports = (AppUser) => {
     'findById',
     '__get__posts',
     '__create__posts',
-    '__findById__posts',
     '__destroyById__posts',
   ])
 
@@ -156,6 +155,61 @@ module.exports = (AppUser) => {
       {
         arg: 'keyword',
         type: 'string',
+        http: { source: 'query' },
+      },
+    ],
+    returns: {
+      arg: 'data',
+      type: 'object',
+      root: true,
+    },
+  })
+
+  AppUser.findPostByUserIdAndPostId = (userId, postId, filter, next) => {
+    let { Post } = AppUser.app.models
+
+    if (!filter) {
+      filter = {
+        include: [{
+          relation: 'author',
+          scope: {
+            fields: ['username'],
+          }
+        }, {
+          relation: 'seriesPosts',
+          scope: {
+            fields: ['title'],
+          }
+        }],
+      }
+    }
+
+    Post.findById(postId, { ...filter }, (err, post) => {
+      if (err) return next(err)
+
+      return next(null, post)
+    })
+  }
+  AppUser.remoteMethod('findPostByUserIdAndPostId', {
+    isStatic: true,
+    http: { verb: 'get', path: '/:userId/posts/:postId' },
+    description: 'Find post',
+    accepts: [
+      {
+        arg: 'userId',
+        description: 'User ID',
+        type: 'string',
+        required: true,
+      },
+      {
+        arg: 'postId',
+        description: 'Post ID',
+        type: 'string',
+        required: true,
+      },
+      {
+        arg: 'filter',
+        type: 'object',
         http: { source: 'query' },
       },
     ],
