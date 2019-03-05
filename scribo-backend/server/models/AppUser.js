@@ -296,6 +296,12 @@ module.exports = (AppUser) => {
     }
 
     let seriesCount = seriesPosts.length
+    let success = () => {
+      Post.findById(postId, (err, post) => {
+        if (err) return next(err)
+        next(null, post)
+      })
+    }
 
     // Update target post
     Post.updateAll({
@@ -322,7 +328,7 @@ module.exports = (AppUser) => {
 
           // skip if there is no series posts
           if (seriesCount === 0) {
-            return next(null, {})
+            return success()
           }
 
           // start updating series posts
@@ -344,7 +350,7 @@ module.exports = (AppUser) => {
               }, (err) => {
                 if (err) return next(err)
 
-                return next(null, {})
+                return success()
               })
             })
           })
