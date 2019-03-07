@@ -12,6 +12,8 @@ import {
   Container,
   Image,
   Divider,
+  Accordion,
+  Icon,
 } from 'semantic-ui-react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMagnet } from '@fortawesome/free-solid-svg-icons'
@@ -19,6 +21,7 @@ import ImageModal from '../../editor/blocks/Image/ImageModal'
 import headerImagePlaceholder from '../../editor/blocks/Image/header-image-placeholder.png'
 import slugify from '../../utils/slugify'
 import Input from '../../fields/Input'
+import SeriesPostSelect from '../../fields/SeriesPostSelect'
 import FormTypes from '../../constants/FormTypes'
 import XEditor from '../../editor/XEditor'
 import BlockBucket from '../../editor/BlockBucket'
@@ -37,6 +40,7 @@ class NewOrEditForm extends Component {
   state = {
     isHeaderImageModalOpen: false,
     targetSubmitButton: null,
+    activeIndex: -1,
   }
   xeditor = React.createRef()
 
@@ -54,6 +58,7 @@ class NewOrEditForm extends Component {
     let { initialize } = this.props
     let { blocks, ...formValues } = post
 
+    delete formValues.author
     initialize(formValues)
     this.xeditor.current.setBlocks(blocks)
   }
@@ -162,10 +167,10 @@ class NewOrEditForm extends Component {
       values,
       loggedUser,
     } = this.props
-
     let {
       isHeaderImageModalOpen,
       targetSubmitButton,
+      activeIndex,
     } = this.state
     let headerImage = values.headerImage || {}
     let isAutoSlugify = (values.slug === slugify(values.title))
@@ -295,6 +300,30 @@ class NewOrEditForm extends Component {
                 </Grid.Column>
               </Grid.Row>
 
+              <Grid.Row>
+                <Grid.Column>
+                  <Accordion>
+                    <Accordion.Title
+                      active={activeIndex === 0}
+                      index={0}
+                      onClick={(e, { index }) => this.setState({
+                        activeIndex: activeIndex === index ? -1 : index
+                      })}
+                    >
+                      <Icon name='dropdown' />
+                      系列文章設定
+                    </Accordion.Title>
+                    <Accordion.Content active={activeIndex === 0}>
+                      <Form.Field>
+                        <Field
+                          name="seriesPosts"
+                          component={SeriesPostSelect}
+                        />
+                      </Form.Field>
+                    </Accordion.Content>
+                  </Accordion>
+                </Grid.Column>
+              </Grid.Row>
               <Grid.Row>
                 <Grid.Column>
                   {process.env.NODE_ENV === 'development' && (

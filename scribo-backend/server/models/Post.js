@@ -13,7 +13,17 @@ module.exports = function(Post) {
   Post.findMixed = (filter, next) => {
     if (!filter) {
       filter = {
-        include: 'author',
+        include: [{
+          relation: 'author',
+          scope: {
+            fields: ['username'],
+          }
+        }, {
+          relation: 'seriesPosts',
+          scope: {
+            fields: ['title'],
+          }
+        }],
         fields: {
           id: true,
           authorId: true,
@@ -22,6 +32,7 @@ module.exports = function(Post) {
           title: true,
           subtitle: true,
           abstractBlocks: true,
+          seriesCount: true,
           createdAt: true,
           updatedAt: true,
         },

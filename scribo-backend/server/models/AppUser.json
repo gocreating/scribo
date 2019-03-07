@@ -67,9 +67,10 @@
         "logout",
         "findById",
         "findPostsByUsername",
+        "findPostByUserIdAndPostId",
         "findPostByUsernameAndSlug",
-        "__get__posts",
-        "__findById__posts"
+        "updatePostByUserIdAndPostId",
+        "__get__posts"
       ]
     },
     {
@@ -78,7 +79,6 @@
       "permission": "ALLOW",
       "property": [
         "__create__posts",
-        "__updateById__posts",
         "__destroyById__posts"
       ]
     }
