@@ -52,6 +52,17 @@ class ShowPage extends Component {
     this.fetchPost()
   }
 
+  componentDidUpdate(prevProps) {
+    let { username, postSlug } = this.props
+
+    if (
+      username !== prevProps.username ||
+      postSlug !== prevProps.postSlug
+    ) {
+      this.fetchPost()
+    }
+  }
+
   handleMessageDismiss = () => {
     this.setState({ isMessageVisible: false })
   }
