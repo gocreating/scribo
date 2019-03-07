@@ -14,11 +14,11 @@ class SeriesSelect extends Component {
   componentDidUpdate(prevProps) {
     let { input } = this.props
     let prevInput = prevProps.input
+    let seriesPosts = input.value || []
 
+    seriesPosts.sort((a, b) => a.order - b.order)
     if (input.value !== prevInput.value) {
-      this.setState({
-        seriesPosts: input.value || [],
-      })
+      this.setState({ seriesPosts })
     }
   }
 
@@ -50,40 +50,44 @@ class SeriesSelect extends Component {
     }
   }
 
-  handleAddClick = async (idx) => {
-    let { input: { onChange } } = this.props
+  applyChange = async (newSeriesPosts) => {
+    let { input } = this.props
+    let orderedSeriesPosts = newSeriesPosts.map((post, idx) => ({
+      ...post,
+      order: idx,
+    }))
+
+    await this.setState({
+      seriesPosts: orderedSeriesPosts,
+    })
+    input.onChange(orderedSeriesPosts)
+  }
+
+  handleAddClick = (idx) => {
     let { matchedPosts, seriesPosts } = this.state
     let newSeriesPosts = [
       ...seriesPosts,
       matchedPosts[idx],
     ]
 
-    await this.setState({
-      seriesPosts: newSeriesPosts,
-    })
-    onChange(newSeriesPosts)
+    this.applyChange(newSeriesPosts)
   }
 
-  handleRemoveClick = async (idx) => {
-    let { input: { onChange } } = this.props
+  handleRemoveClick = (idx) => {
     let { seriesPosts } = this.state
     let newSeriesPosts = [
       ...seriesPosts.slice(0, idx),
       ...seriesPosts.slice(idx + 1),
     ]
 
-    await this.setState({
-      seriesPosts: newSeriesPosts,
-    })
-    onChange(newSeriesPosts)
+    this.applyChange(newSeriesPosts)
   }
 
-  handleUpClick = async (idx) => {
+  handleUpClick = (idx) => {
     if (idx === 0) {
       return
     }
 
-    let { input: { onChange } } = this.props
     let { seriesPosts } = this.state
     let newSeriesPosts = [
       ...seriesPosts.slice(0, idx - 1),
@@ -92,14 +96,10 @@ class SeriesSelect extends Component {
       ...seriesPosts.slice(idx + 1),
     ]
 
-    await this.setState({
-      seriesPosts: newSeriesPosts,
-    })
-    onChange(newSeriesPosts)
+    this.applyChange(newSeriesPosts)
   }
 
-  handleDownClick = async (idx) => {
-    let { input: { onChange } } = this.props
+  handleDownClick = (idx) => {
     let { seriesPosts } = this.state
 
     if (idx === seriesPosts.length - 1) {
@@ -113,10 +113,7 @@ class SeriesSelect extends Component {
       ...seriesPosts.slice(idx + 2),
     ]
 
-    await this.setState({
-      seriesPosts: newSeriesPosts,
-    })
-    onChange(newSeriesPosts)
+    this.applyChange(newSeriesPosts)
   }
 
   isPostInSeries = (postId) => {
