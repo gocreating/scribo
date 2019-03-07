@@ -4,6 +4,7 @@ import postApi from '../api/postApi'
 import { addEntities } from './entity'
 import { post as postSchema } from '../schema'
 import createApiError from '../utils/createApiError'
+import zipSeriesPostsOrder from '../utils/zipSeriesPostsOrder'
 
 // Action Creators
 const plainActionCreators = createActions({
@@ -126,6 +127,7 @@ const thunkActionCreators = {
       let response = await postApi.read(userId, postId)
       dispatch(postReadApiSuccess(response))
       let { entities } = normalize(response.body, postSchema)
+      entities.posts = zipSeriesPostsOrder(entities.posts)
       dispatch(addEntities(entities))
       return response.body
     } catch (error) {
@@ -141,6 +143,7 @@ const thunkActionCreators = {
       response = await postApi.readByUsernameAndSlug(username, postSlug)
       dispatch(postReadByUsernameAndSlugApiSuccess(response))
       let { entities } = normalize(response.body, postSchema)
+      entities.posts = zipSeriesPostsOrder(entities.posts)
       dispatch(addEntities(entities))
       return response.body
     } catch (error) {
