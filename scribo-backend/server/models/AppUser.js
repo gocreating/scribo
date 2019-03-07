@@ -193,6 +193,11 @@ module.exports = (AppUser) => {
           scope: {
             fields: ['title'],
           }
+        }, {
+          relation: 'seriesPostsMetadata',
+          scope: {
+            fields: ['order', 'seriesPostId'],
+          }
         }],
       }
     }
@@ -251,6 +256,11 @@ module.exports = (AppUser) => {
           relation: 'seriesPosts',
           scope: {
             fields: ['title', 'subtitle', 'slug'],
+          }
+        }, {
+          relation: 'seriesPostsMetadata',
+          scope: {
+            fields: ['order', 'seriesPostId'],
           }
         }],
       }, (err, post) => {
@@ -348,14 +358,17 @@ module.exports = (AppUser) => {
           }, (err, info) => {
             if (err) return next(err)
 
-            SeriesPost.create(seriesPosts.map(seriesPostId => ({
+            SeriesPost.create(seriesPosts.map(seriesPost => ({
               mainPostId: postId,
-              seriesPostId,
+              seriesPostId: seriesPost.id,
+              order: seriesPost.order,
             })), (err) => {
               if (err) return next(err)
 
+              let seriesPostsIds = seriesPosts.map(post => post.id)
+
               Post.updateAll({
-                id: { inq: seriesPosts },
+                id: { inq: seriesPostsIds },
               }, {
                 isInSeries: true,
               }, (err) => {

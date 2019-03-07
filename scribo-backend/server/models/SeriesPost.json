@@ -6,7 +6,11 @@
   "options": {
     "validateUpsert": true
   },
-  "properties": {},
+  "properties": {
+    "order": {
+      "type": "number"
+    }
+  },
   "validations": [],
   "relations": {
     "mainPost": {

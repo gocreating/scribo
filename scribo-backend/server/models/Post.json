@@ -63,6 +63,11 @@
       "foreignKey": "mainPostId",
       "through": "SeriesPost",
       "keyThrough": "seriesPostId"
+    },
+    "seriesPostsMetadata": {
+      "type": "hasMany",
+      "model": "SeriesPost",
+      "foreignKey": "mainPostId"
     }
   },
   "acls": [
