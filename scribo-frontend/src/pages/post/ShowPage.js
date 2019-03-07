@@ -108,6 +108,7 @@ class ShowPage extends Component {
       query,
       username,
       post,
+      seriesPosts,
       isLoading,
       isAuth,
       loggedUserId,
@@ -268,12 +269,12 @@ class ShowPage extends Component {
                 </List>
               </Grid.Column>
             </Grid.Row>
-            {post.seriesCount && post.seriesCount > 0 && (
+            {seriesPosts.length > 0 && (
               <Grid.Row>
                 <Grid.Column width={12}>
                   <Segment secondary padded="very" color="blue">
                     <List divided ordered relaxed="very" size="big">
-                      {post.seriesPosts.map(seriesPost => (
+                      {seriesPosts.map(seriesPost => (
                         <List.Item key={seriesPost.id}>
                           <List.Content>
                             <List.Header
@@ -330,6 +331,10 @@ export default withRouter(connect(({ posts, users, auth }, { match, location }) 
     isLoading = true
   }
 
+  let seriesPosts = post.seriesPosts || []
+
+  seriesPosts.sort((a, b) => a.order - b.order)
+
   return {
     query,
     username,
@@ -337,6 +342,7 @@ export default withRouter(connect(({ posts, users, auth }, { match, location }) 
     userId,
     postId,
     post,
+    seriesPosts,
     isLoading,
     isAuth: authSelectors.getIsAuth(auth),
     loggedUserId: authSelectors.getLoggedUserId(auth),
