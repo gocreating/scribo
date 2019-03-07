@@ -52,6 +52,17 @@ class ShowPage extends Component {
     this.fetchPost()
   }
 
+  componentDidUpdate(prevProps) {
+    let { username, postSlug } = this.props
+
+    if (
+      username !== prevProps.username ||
+      postSlug !== prevProps.postSlug
+    ) {
+      this.fetchPost()
+    }
+  }
+
   handleMessageDismiss = () => {
     this.setState({ isMessageVisible: false })
   }
@@ -108,6 +119,7 @@ class ShowPage extends Component {
       query,
       username,
       post,
+      seriesPosts,
       isLoading,
       isAuth,
       loggedUserId,
@@ -268,6 +280,29 @@ class ShowPage extends Component {
                 </List>
               </Grid.Column>
             </Grid.Row>
+            {seriesPosts.length > 0 && (
+              <Grid.Row>
+                <Grid.Column width={12}>
+                  <Segment secondary padded="very" color="blue">
+                    <List divided ordered relaxed="very" size="big">
+                      {seriesPosts.map(seriesPost => (
+                        <List.Item key={seriesPost.id}>
+                          <List.Content>
+                            <List.Header
+                              as={Link}
+                              to={`/@${username}/${seriesPost.slug}`}
+                            >
+                              {seriesPost.title}
+                            </List.Header>
+                            {seriesPost.subtitle}
+                          </List.Content>
+                        </List.Item>
+                      ))}
+                    </List>
+                  </Segment>
+                </Grid.Column>
+              </Grid.Row>
+            )}
             <Grid.Row>
               <Grid.Column width={12}>
                 {post.blocks && (
@@ -307,6 +342,10 @@ export default withRouter(connect(({ posts, users, auth }, { match, location }) 
     isLoading = true
   }
 
+  let seriesPosts = post.seriesPosts || []
+
+  seriesPosts.sort((a, b) => a.order - b.order)
+
   return {
     query,
     username,
@@ -314,6 +353,7 @@ export default withRouter(connect(({ posts, users, auth }, { match, location }) 
     userId,
     postId,
     post,
+    seriesPosts,
     isLoading,
     isAuth: authSelectors.getIsAuth(auth),
     loggedUserId: authSelectors.getLoggedUserId(auth),

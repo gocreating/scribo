@@ -33,6 +33,12 @@
         "object"
       ]
     },
+    "seriesCount": {
+      "type": "number"
+    },
+    "isInSeries": {
+      "type": "boolean"
+    },
     "createdAt": {
       "type": "date",
       "defaultFn": "now"
@@ -50,6 +56,18 @@
       "model": "AppUser",
       "foreignKey": "",
       "required": true
+    },
+    "seriesPosts": {
+      "type": "hasMany",
+      "model": "Post",
+      "foreignKey": "mainPostId",
+      "through": "SeriesPost",
+      "keyThrough": "seriesPostId"
+    },
+    "seriesPostsMetadata": {
+      "type": "hasMany",
+      "model": "SeriesPost",
+      "foreignKey": "mainPostId"
     }
   },
   "acls": [

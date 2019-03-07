@@ -8,6 +8,9 @@ let appendAbstractBlocks = (ctx, next) => {
   } else {
     post = ctx.data
   }
+  if (!post.blocks) {
+    return next()
+  }
   post.abstractBlocks = post.blocks.slice(0, 2)
   next()
 }

@@ -48,5 +48,9 @@
   "Post": {
     "dataSource": "db",
     "public": true
+  },
+  "SeriesPost": {
+    "dataSource": "db",
+    "public": false
   }
 }

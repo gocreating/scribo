@@ -9,8 +9,6 @@ module.exports = (AppUser) => {
     'findById',
     '__get__posts',
     '__create__posts',
-    '__findById__posts',
-    '__updateById__posts',
     '__destroyById__posts',
   ])
 
@@ -69,7 +67,7 @@ module.exports = (AppUser) => {
     },
   })
 
-  AppUser.findPostsByUsername = (username, filter, pageId, next) => {
+  AppUser.findPostsByUsername = (username, filter, pageId, keyword, next) => {
     let { Post } = AppUser.app.models
 
     AppUser.findOne({ where: { username } }, (err, appUser) => {
@@ -81,7 +79,12 @@ module.exports = (AppUser) => {
 
       if (!filter) {
         filter = {
-          include: 'author',
+          include: [{
+            relation: 'author',
+            scope: {
+              fields: ['username'],
+            }
+          }],
           fields: {
             id: true,
             authorId: true,
@@ -90,6 +93,7 @@ module.exports = (AppUser) => {
             title: true,
             subtitle: true,
             abstractBlocks: true,
+            seriesCount: true,
             createdAt: true,
             updatedAt: true,
           },
@@ -98,13 +102,23 @@ module.exports = (AppUser) => {
       }
       filter.skip = (page - 1) * limit
 
-      Post.count({
+      let query = {
         authorId: appUser.id,
-      }, (err, count) => {
+        isInSeries: { inq: [null, false] },
+      }
+
+      if (keyword) {
+        query.title = {
+          like: keyword,
+        }
+        delete query.isInSeries
+      }
+
+      Post.count(query, (err, count) => {
         if (err) return next(err)
 
         Post.find({
-          where: { authorId: appUser.id },
+          where: query,
           ...filter,
         }, (err, posts) => {
           if (err) return next(err)
@@ -146,6 +160,71 @@ module.exports = (AppUser) => {
         type: 'string',
         http: { source: 'query' },
       },
+      {
+        arg: 'keyword',
+        type: 'string',
+        http: { source: 'query' },
+      },
+    ],
+    returns: {
+      arg: 'data',
+      type: 'object',
+      root: true,
+    },
+  })
+
+  AppUser.findPostByUserIdAndPostId = (userId, postId, filter, next) => {
+    let { Post } = AppUser.app.models
+
+    if (!filter) {
+      filter = {
+        include: [{
+          relation: 'author',
+          scope: {
+            fields: ['username'],
+          }
+        }, {
+          relation: 'seriesPosts',
+          scope: {
+            fields: ['title'],
+          }
+        }, {
+          relation: 'seriesPostsMetadata',
+          scope: {
+            fields: ['order', 'seriesPostId'],
+          }
+        }],
+      }
+    }
+
+    Post.findById(postId, { ...filter }, (err, post) => {
+      if (err) return next(err)
+
+      return next(null, post)
+    })
+  }
+  AppUser.remoteMethod('findPostByUserIdAndPostId', {
+    isStatic: true,
+    http: { verb: 'get', path: '/:userId/posts/:postId' },
+    description: 'Find post',
+    accepts: [
+      {
+        arg: 'userId',
+        description: 'User ID',
+        type: 'string',
+        required: true,
+      },
+      {
+        arg: 'postId',
+        description: 'Post ID',
+        type: 'string',
+        required: true,
+      },
+      {
+        arg: 'filter',
+        type: 'object',
+        http: { source: 'query' },
+      },
     ],
     returns: {
       arg: 'data',
@@ -163,7 +242,22 @@ module.exports = (AppUser) => {
 
       Post.findOne({
         where: { authorId: appUser.id, slug },
-        include: filter.include,
+        include: [{
+          relation: 'author',
+          scope: {
+            fields: ['username'],
+          }
+        }, {
+          relation: 'seriesPosts',
+          scope: {
+            fields: ['title', 'subtitle', 'slug'],
+          }
+        }, {
+          relation: 'seriesPostsMetadata',
+          scope: {
+            fields: ['order', 'seriesPostId'],
+          }
+        }],
       }, (err, post) => {
         if (err) return next(err)
         if (!post) return next(new Error('Post not found'))
@@ -200,6 +294,112 @@ module.exports = (AppUser) => {
         arg: 'filter',
         type: 'object',
         http: { source: 'query' },
+      },
+    ],
+    returns: {
+      arg: 'data',
+      type: 'object',
+      root: true,
+    },
+  })
+
+  AppUser.updatePostByUserIdAndPostId = (userId, postId, data, next) => {
+    let { Post, SeriesPost } = AppUser.app.models
+    let { seriesPosts, ...updatedData } = data
+
+    if (!seriesPosts) {
+      seriesPosts = []
+    }
+
+    let seriesCount = seriesPosts.length
+    let success = () => {
+      Post.findById(postId, (err, post) => {
+        if (err) return next(err)
+        next(null, post)
+      })
+    }
+
+    // Update target post
+    Post.updateAll({
+      id: postId,
+      authorId: userId,
+    }, {
+      ...updatedData,
+      seriesCount,
+    }, (err, info) => {
+      if (err) return next(err)
+
+      // Update related series posts
+      SeriesPost.find({
+        where: { mainPostId: postId },
+      }, (err, originSeriesPosts) => {
+        if (err) return next(err)
+
+        Post.updateAll({
+          id: { inq: originSeriesPosts.map(post => post.seriesPostId) },
+        }, {
+          isInSeries: false,
+        }, (err, info) => {
+          if (err) return next(err)
+
+          // skip if there is no series posts
+          if (seriesCount === 0) {
+            return success()
+          }
+
+          // start updating series posts
+          SeriesPost.destroyAll({
+            mainPostId: postId,
+          }, (err, info) => {
+            if (err) return next(err)
+
+            SeriesPost.create(seriesPosts.map(seriesPost => ({
+              mainPostId: postId,
+              seriesPostId: seriesPost.id,
+              order: seriesPost.order,
+            })), (err) => {
+              if (err) return next(err)
+
+              let seriesPostsIds = seriesPosts.map(post => post.id)
+
+              Post.updateAll({
+                id: { inq: seriesPostsIds },
+              }, {
+                isInSeries: true,
+              }, (err) => {
+                if (err) return next(err)
+
+                return success()
+              })
+            })
+          })
+        })
+      })
+    })
+  }
+  AppUser.remoteMethod('updatePostByUserIdAndPostId', {
+    isStatic: true,
+    http: { verb: 'put', path: '/:userId/posts/:postId' },
+    description: 'Update post',
+    accepts: [
+      {
+        arg: 'userId',
+        description: 'User ID',
+        type: 'string',
+        required: true,
+      },
+      {
+        arg: 'postId',
+        description: 'Post ID',
+        type: 'string',
+        required: true,
+      },
+      {
+        arg: 'data',
+        description: 'An object contains post\'s data.',
+        type: 'object',
+        http: { source: 'body' },
+        required: true,
       },
     ],
     returns: {
