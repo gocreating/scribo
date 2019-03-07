@@ -84,11 +84,6 @@ module.exports = (AppUser) => {
             scope: {
               fields: ['username'],
             }
-          }, {
-            relation: 'seriesPosts',
-            scope: {
-              fields: ['title'],
-            }
           }],
           fields: {
             id: true,
