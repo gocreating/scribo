@@ -12,6 +12,8 @@ import {
   Container,
   Image,
   Divider,
+  Accordion,
+  Icon,
 } from 'semantic-ui-react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMagnet } from '@fortawesome/free-solid-svg-icons'
@@ -38,6 +40,7 @@ class NewOrEditForm extends Component {
   state = {
     isHeaderImageModalOpen: false,
     targetSubmitButton: null,
+    activeIndex: -1,
   }
   xeditor = React.createRef()
 
@@ -164,10 +167,10 @@ class NewOrEditForm extends Component {
       values,
       loggedUser,
     } = this.props
-
     let {
       isHeaderImageModalOpen,
       targetSubmitButton,
+      activeIndex,
     } = this.state
     let headerImage = values.headerImage || {}
     let isAutoSlugify = (values.slug === slugify(values.title))
@@ -299,12 +302,26 @@ class NewOrEditForm extends Component {
 
               <Grid.Row>
                 <Grid.Column>
-                  <Form.Field>
-                    <Field
-                      name="seriesPosts"
-                      component={SeriesPostSelect}
-                    />
-                  </Form.Field>
+                  <Accordion>
+                    <Accordion.Title
+                      active={activeIndex === 0}
+                      index={0}
+                      onClick={(e, { index }) => this.setState({
+                        activeIndex: activeIndex === index ? -1 : index
+                      })}
+                    >
+                      <Icon name='dropdown' />
+                      系列文章設定
+                    </Accordion.Title>
+                    <Accordion.Content active={activeIndex === 0}>
+                      <Form.Field>
+                        <Field
+                          name="seriesPosts"
+                          component={SeriesPostSelect}
+                        />
+                      </Form.Field>
+                    </Accordion.Content>
+                  </Accordion>
                 </Grid.Column>
               </Grid.Row>
               <Grid.Row>
