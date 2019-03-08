@@ -74,7 +74,7 @@ module.exports = (AppUser) => {
       if (err) return next(err)
       if (!appUser) return next(new Error('User not found'))
 
-      let limit = parseInt(Post.settings.scope.limit)
+      let limit = parseInt(Post.settings.scribo.limit)
       let page = parseInt(pageId)
 
       if (!filter) {
@@ -100,6 +100,7 @@ module.exports = (AppUser) => {
           order: 'updatedAt DESC',
         }
       }
+      filter.limit = limit
       filter.skip = (page - 1) * limit
 
       let query = {
