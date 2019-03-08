@@ -342,16 +342,16 @@ module.exports = (AppUser) => {
         }, (err, info) => {
           if (err) return next(err)
 
-          // skip if there is no series posts
-          if (seriesCount === 0) {
-            return success()
-          }
-
           // start updating series posts
           SeriesPost.destroyAll({
             mainPostId: postId,
           }, (err, info) => {
             if (err) return next(err)
+
+            // skip if there is no series posts
+            if (seriesCount === 0) {
+              return success()
+            }
 
             SeriesPost.create(seriesPosts.map(seriesPost => ({
               mainPostId: postId,

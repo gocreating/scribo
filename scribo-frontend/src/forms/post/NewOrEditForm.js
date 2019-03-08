@@ -35,6 +35,7 @@ class NewOrEditForm extends Component {
     onSubmit: PropTypes.func,
     initialize: PropTypes.func,
     handleSubmit: PropTypes.func,
+    seriesPostEditable: PropTypes.bool,
   }
 
   state = {
@@ -158,6 +159,7 @@ class NewOrEditForm extends Component {
 
   render() {
     let {
+      seriesPostEditable,
       onCreate,
       onSave,
       onUpdate,
@@ -299,31 +301,33 @@ class NewOrEditForm extends Component {
                   </Sticky>
                 </Grid.Column>
               </Grid.Row>
+              {seriesPostEditable && (
+                <Grid.Row>
+                  <Grid.Column>
+                    <Accordion>
+                      <Accordion.Title
+                        active={activeIndex === 0}
+                        index={0}
+                        onClick={(e, { index }) => this.setState({
+                          activeIndex: activeIndex === index ? -1 : index
+                        })}
+                      >
+                        <Icon name='dropdown' />
+                        系列文章設定
+                      </Accordion.Title>
+                      <Accordion.Content active={activeIndex === 0}>
+                        <Form.Field>
+                          <Field
+                            name="seriesPosts"
+                            component={SeriesPostSelect}
+                          />
+                        </Form.Field>
+                      </Accordion.Content>
+                    </Accordion>
+                  </Grid.Column>
+                </Grid.Row>
+              )}
 
-              <Grid.Row>
-                <Grid.Column>
-                  <Accordion>
-                    <Accordion.Title
-                      active={activeIndex === 0}
-                      index={0}
-                      onClick={(e, { index }) => this.setState({
-                        activeIndex: activeIndex === index ? -1 : index
-                      })}
-                    >
-                      <Icon name='dropdown' />
-                      系列文章設定
-                    </Accordion.Title>
-                    <Accordion.Content active={activeIndex === 0}>
-                      <Form.Field>
-                        <Field
-                          name="seriesPosts"
-                          component={SeriesPostSelect}
-                        />
-                      </Form.Field>
-                    </Accordion.Content>
-                  </Accordion>
-                </Grid.Column>
-              </Grid.Row>
               <Grid.Row>
                 <Grid.Column>
                   {process.env.NODE_ENV === 'development' && (

@@ -96,16 +96,21 @@ class ShowPage extends Component {
   }
 
   deletePost = async () => {
-    if (!window.confirm('sure?')) {
-      return
-    }
-
     let {
       postDelete,
       post,
       push,
       username,
     } = this.props
+
+    if (post.seriesCount > 0) {
+      alert(`本文章包含 ${post.seriesCount} 篇系列文章，請移除所有系列文章後再刪除。`)
+      return
+    }
+    if (!window.confirm('sure?')) {
+      return
+    }
+
     let result = await postDelete(post.authorId, post.id)
 
     if (result.error) {
