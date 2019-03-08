@@ -51,6 +51,7 @@ class NewPage extends Component {
     return (
       <AppLayout placeholder={false} container={false}>
         <NewOrEditForm
+          seriesPostEditable={false}
           onCreate={this.handleCreate}
           onInitialize={this.handleInitialize}
         />

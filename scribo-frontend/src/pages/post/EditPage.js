@@ -70,6 +70,7 @@ class EditPage extends Component {
     return (
       <AppLayout placeholder={false} container={false} loading={isLoading}>
         <NewOrEditForm
+          seriesPostEditable
           onInitialize={this.handleInitialize}
           onSave={this.handleSave}
           onUpdate={this.handleUpdate}
