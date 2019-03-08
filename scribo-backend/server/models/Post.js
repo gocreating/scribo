@@ -32,6 +32,7 @@ module.exports = function(Post) {
           updatedAt: true,
         },
         order: 'createdAt DESC',
+        limit: parseInt(Post.settings.scribo.limit),
       }
     }
     Post.find({ ...filter }, (err, posts) => {

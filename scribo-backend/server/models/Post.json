@@ -6,7 +6,7 @@
   "options": {
     "validateUpsert": true
   },
-  "scope":{
+  "scribo": {
     "limit": 12
   },
   "properties": {

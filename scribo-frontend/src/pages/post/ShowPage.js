@@ -11,6 +11,7 @@ import {
   List,
   Image,
   Segment,
+  Label,
 } from 'semantic-ui-react'
 import qs from 'query-string'
 import { push } from 'connected-react-router'
@@ -289,17 +290,23 @@ class ShowPage extends Component {
               <Grid.Row>
                 <Grid.Column width={12}>
                   <Segment secondary padded="very" color="blue">
-                    <List divided ordered relaxed="very" size="big">
-                      {seriesPosts.map(seriesPost => (
+                    <List divided relaxed="very" size="big">
+                      {seriesPosts.map((seriesPost, idx) => (
                         <List.Item key={seriesPost.id}>
                           <List.Content>
+                            <Label style={{ float:'right' }}>
+                              # {idx + 1}
+                            </Label>
                             <List.Header
                               as={Link}
                               to={`/@${username}/${seriesPost.slug}`}
+                              className="web-font"
                             >
                               {seriesPost.title}
                             </List.Header>
-                            {seriesPost.subtitle}
+                            <span className="web-font">
+                              {seriesPost.subtitle}
+                            </span>
                           </List.Content>
                         </List.Item>
                       ))}
