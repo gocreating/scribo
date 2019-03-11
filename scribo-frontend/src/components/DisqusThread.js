@@ -8,18 +8,16 @@ const WEBSITE_URL = config.host
 
 function renderDisqus() {
   if (window.DISQUS === undefined) {
-    var script = document.createElement('script')
+    // manually controlled language
+    // ref: <https://help.disqus.com/installation/multi-lingual-websites>
+    window.disqus_config = function () {
+      this.language = 'zh'
+    }
+
+    let script = document.createElement('script')
     script.async = true
     script.src = 'https://' + SHORTNAME + '.disqus.com/embed.js'
     document.getElementsByTagName('head')[0].appendChild(script)
-  } else {
-    window.DISQUS.reset({
-      reload: true,
-      // ref:
-      //   <https://help.disqus.com/installation/multi-lingual-websites>
-      //   <https://www.transifex.com/explore/languages/>
-      language: 'zh',
-    })
   }
 }
 
