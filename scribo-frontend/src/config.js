@@ -19,7 +19,7 @@ let donationHostMap = {
 }
 let disqusShortnameMap = {
   development: 'scribo-dev',
-  production: 'scribo',
+  production: 'scribo-1',
 }
 
 export default {
