@@ -9,22 +9,24 @@ import SourceTypes from './SourceTypes'
 
 class ImageModal extends Component {
   state = {
+    activePicker: SourceTypes.MANUAL_INPUT,
+    isLoading: false,
     isUploadError: false,
+    loadingText: 'Loading',
   }
 
-  componentDidMount() {
-    this.initialize()
+  componentDidUpdate(prevProps) {
+    if (this.props.block.values !== prevProps.block.values) {
+      this.snapshotBlockValues()
+    }
   }
 
   // Modal level member functions
 
-  initialize = () => this.setState({
+  snapshotBlockValues = () => this.setState({
     blockValues: {
       ...this.props.block.values,
     },
-    activePicker: SourceTypes.MANUAL_INPUT,
-    isLoading: false,
-    loadingText: 'Loading',
   })
 
   handleConfirm = () => {
