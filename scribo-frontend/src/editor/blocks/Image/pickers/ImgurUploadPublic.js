@@ -51,7 +51,7 @@ class ImgurUploadPublic extends Component {
         rejectClassName="reject"
       >
         <Segment vertical textAlign="center" padded="very" size="massive">
-          Click to Upload or Drag Files Here
+          點擊上傳或是拖曳圖片至此區塊
         </Segment>
       </Dropzone>
     )

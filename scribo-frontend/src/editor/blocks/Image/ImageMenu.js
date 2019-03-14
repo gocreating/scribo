@@ -42,12 +42,12 @@ class ImageMenu extends Component {
         />
         <Menu.Item
           link
-          name="Edit Image"
+          name="編輯圖片"
           onClick={this.handleInsertClick}
         />
         <Menu.Item>
           <Checkbox
-            label="Show caption"
+            label="顯示圖片說明"
             className="white"
             checked={block.values.isShowCaption}
             onChange={this.handleShowCaptionChange}

@@ -15,7 +15,7 @@ class QuoteMenu extends Component {
       <Menu inverted icon borderless size="mini">
         <Menu.Item>
           <Checkbox
-            label="Show cite"
+            label="顯示出處"
             className="white"
             checked={block.values.isShowCite}
             onChange={this.handleShowCiteChange}

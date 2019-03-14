@@ -53,7 +53,7 @@ class ImageEditor extends Component {
                 name="caption"
                 component={TextArea}
                 onChange={autoUpdateValues}
-                placeholder="Write caption here"
+                placeholder="輸入圖片說明"
                 rows={1}
                 autoHeight
                 className="caption web-font"

@@ -14,7 +14,7 @@ let themeOptions = [{
 
 let languageOptions = [{
   value: Languages.DEFAULT,
-  text: 'Don\'t set language',
+  text: '不指定',
 }, {
   value: Languages.MARKUP,
   text: 'Markup',
@@ -67,7 +67,7 @@ class CodeHighlightMenu extends Component {
       <Menu inverted icon borderless size="mini">
         <Dropdown
           item
-          header="Theme"
+          header="佈景主題"
           placeholder="Theme"
           options={themeOptions}
           value={block.values.theme}
@@ -75,7 +75,7 @@ class CodeHighlightMenu extends Component {
         />
         <Dropdown
           item
-          header="Language"
+          header="語言"
           placeholder="Language"
           options={languageOptions}
           value={block.values.language}
@@ -86,7 +86,7 @@ class CodeHighlightMenu extends Component {
         />
         <Menu.Item>
           <Checkbox
-            label="Show line numbers"
+            label="顯示行號"
             className="white"
             checked={block.values.isShowLineNumbers}
             onChange={this.handleShowLineNumbersChange}
@@ -94,7 +94,7 @@ class CodeHighlightMenu extends Component {
         </Menu.Item>
         <Menu.Item>
           <Input
-            placeholder="Highlight (ex: 1,4-5,7)"
+            placeholder="醒目行號 (ex: 1,4-5,7)"
             value={block.values.highlightLines}
             onChange={this.handleHighlightLinesChange}
             style={{ minWidth: 150 }}

@@ -5,13 +5,13 @@ import Typesettings from './Typesettings'
 
 let typesettingOptions = [{
   value: Typesettings.RAW,
-  text: 'Raw',
+  text: '原始文字',
 }, {
   value: Typesettings.HAN,
-  text: 'Beautify Hanzi',
+  text: '最佳化（Beautify Hanzi）',
 }, {
   value: Typesettings.PANGU,
-  text: 'Space Patching',
+  text: '自動填補文字間距（Space Patching）',
 }]
 
 class ParagraphMenu extends Component {
@@ -28,7 +28,7 @@ class ParagraphMenu extends Component {
       <Menu inverted icon borderless size="mini">
         <Dropdown
           item
-          header="Typesetting"
+          header="排版方式"
           placeholder="Typesetting"
           options={typesettingOptions}
           value={block.values.typesetting}

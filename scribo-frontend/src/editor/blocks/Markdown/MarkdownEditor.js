@@ -21,7 +21,7 @@ class MarkdownEditor extends Component {
           name="text"
           component={TextAreaAutoSize}
           onChange={autoUpdateValues}
-          placeholder="Write markdown here"
+          placeholder="輸入 Markdown 語法"
           className="markdown editor web-font"
         />
       </Form>

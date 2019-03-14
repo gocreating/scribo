@@ -25,7 +25,7 @@ class CodeHighlightEditor extends Component {
           name="code"
           component={TextArea}
           onChange={autoUpdateValues}
-          placeholder="Put your code here"
+          placeholder="輸入程式碼"
           rows={1}
           autoHeight
           className="code-highlight editor web-font"

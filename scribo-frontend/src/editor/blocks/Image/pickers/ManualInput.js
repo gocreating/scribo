@@ -4,7 +4,7 @@ import { Form } from 'semantic-ui-react'
 let ManualInput = ({ value, onChange }) => (
   <Form>
     <Form.Field>
-      <label>URL Link to Image</label>
+      <label>圖片網址</label>
       <input
         placeholder="URL"
         value={value}
