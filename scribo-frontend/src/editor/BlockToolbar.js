@@ -9,9 +9,7 @@ import {
 
 let BlockToolbar = ({
   preview,
-  onPreviewClick,
-  onPrependClick,
-  onAppendClick,
+  onPreviewClick,  
   onRemoveClick,
 }) => (
   <div className="toolbar">
