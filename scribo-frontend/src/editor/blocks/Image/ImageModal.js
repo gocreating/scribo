@@ -14,6 +14,10 @@ class ImageModal extends Component {
     isUploadError: false,
     loadingText: 'Loading',
   }
+  
+  componentDidMount() {
+    this.snapshotBlockValues()
+  }
 
   componentDidUpdate(prevProps) {
     if (this.props.block.values !== prevProps.block.values) {
@@ -38,7 +42,7 @@ class ImageModal extends Component {
   handleCancel = () => {
     let { onCancel } = this.props
 
-    this.initialize()
+    this.snapshotBlockValues()
     onCancel()
   }
 
