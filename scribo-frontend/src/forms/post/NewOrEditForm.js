@@ -16,7 +16,8 @@ import {
   Icon,
 } from 'semantic-ui-react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faMagnet } from '@fortawesome/free-solid-svg-icons'
+import { faMagnet, faTrashAlt, faCheck } from '@fortawesome/free-solid-svg-icons'
+import { faImage, faSave } from '@fortawesome/free-regular-svg-icons'
 import ImageModal from '../../editor/blocks/Image/ImageModal'
 import headerImagePlaceholder from '../../editor/blocks/Image/header-image-placeholder.png'
 import slugify from '../../utils/slugify'
@@ -244,14 +245,16 @@ class NewOrEditForm extends Component {
                     color="grey"
                     onClick={this.handleChangeHeaderImageClick}
                   >
-                    編輯風格照
+                    <FontAwesomeIcon icon={faImage} />
+                    {' 編輯風格照'}
                   </Button>
                   <Button
                     color="grey"
                     disabled={!headerImage.src}
                     onClick={this.handleRemoveHeaderImageClick}
                   >
-                    移除
+                    <FontAwesomeIcon icon={faTrashAlt} />
+                    {' 移除'}
                   </Button>
                 </Button.Group>
                 <Divider hidden />
@@ -346,7 +349,8 @@ class NewOrEditForm extends Component {
                       loading={isCreating}
                       onClick={handleSubmit(this.handleSubmit(onCreate, 'create'))}
                     >
-                      建立文章
+                      <FontAwesomeIcon icon={faCheck} />
+                      {' 建立文章'}
                     </Button>
                   )}
                   {onSave && (
@@ -356,7 +360,8 @@ class NewOrEditForm extends Component {
                       loading={isSaving}
                       onClick={handleSubmit(this.handleSubmit(onSave, 'save'))}
                     >
-                      儲存文章
+                      <FontAwesomeIcon icon={faSave} />
+                      {' 儲存文章'}
                     </Button>
                   )}
                   {onUpdate && (
@@ -366,7 +371,8 @@ class NewOrEditForm extends Component {
                       loading={isUpdating}
                       onClick={handleSubmit(this.handleSubmit(onUpdate, 'update'))}
                     >
-                      更新文章
+                      <FontAwesomeIcon icon={faCheck} />
+                      {' 更新文章'}
                     </Button>
                   )}
                 </Grid.Column>

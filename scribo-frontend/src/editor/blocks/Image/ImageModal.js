@@ -1,5 +1,8 @@
 import React, { Component } from 'react'
 import { Modal, Menu, Icon, Dimmer, Loader, Button } from 'semantic-ui-react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faLink, faUpload, faCheck } from '@fortawesome/free-solid-svg-icons'
+import { faImage } from '@fortawesome/free-regular-svg-icons'
 import ManualInput from './pickers/ManualInput'
 import ImgurUploadPublic from './pickers/ImgurUploadPublic'
 import SourceTypes from './SourceTypes'
@@ -127,23 +130,27 @@ class ImageModal extends Component {
           style={{ marginBottom: 0 }}
         >
           <Menu.Item header>
-            <Icon name="picture" />
-            Edit Image
+            <FontAwesomeIcon icon={faImage} />
+            {'　編輯圖片'}
           </Menu.Item>
           <Menu.Item
-            content="URL Link"
             name={SourceTypes.MANUAL_INPUT}
             active={activePicker === SourceTypes.MANUAL_INPUT}
             as="a"
             onClick={this.handlePickerSelect}
-          />
+          >
+            <FontAwesomeIcon icon={faLink} />
+            {'　超連結'}
+          </Menu.Item>
           <Menu.Item
-            content="Upload"
             name={SourceTypes.IMGUR_UPLOAD_PUBLIC}
             active={activePicker === SourceTypes.IMGUR_UPLOAD_PUBLIC}
             as="a"
             onClick={this.handlePickerSelect}
-          />
+          >
+            <FontAwesomeIcon icon={faUpload} />
+            {'　上傳'}
+          </Menu.Item>
         </Menu>
         <Modal.Content>
           {isLoading && (
@@ -167,9 +174,10 @@ class ImageModal extends Component {
           )}
         </Modal.Content>
         <Modal.Actions>
-          <Button onClick={this.handleCancel}>Cancel</Button>
+          <Button onClick={this.handleCancel}>取消</Button>
           <Button primary onClick={this.handleConfirm}>
-            <Icon name="checkmark" /> Use This Image
+            <FontAwesomeIcon icon={faCheck} />
+            {'　確定'}
           </Button>
         </Modal.Actions>
       </Modal>
