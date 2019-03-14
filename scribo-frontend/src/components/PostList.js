@@ -4,7 +4,7 @@ import { Card, Image, Header, Divider, Label } from 'semantic-ui-react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCopy } from '@fortawesome/free-solid-svg-icons'
 
-let PostList = ({ posts }) => (
+let PostList = ({ posts, showAuthor }) => (
   <Card.Group doubling stackable itemsPerRow={3}>
     {posts.map(post => (
       <Card key={post.id}>
@@ -31,20 +31,31 @@ let PostList = ({ posts }) => (
             )}
           </Header>
         </Card.Content>
-        {post.seriesCount > 0 && (
+        {(post.seriesCount > 0 || showAuthor) && (
           <Card.Content extra>
-            <Label color="blue">
-              <FontAwesomeIcon icon={faCopy} />
-              {' '}
-              {post.seriesCount}
-              {' '}
-              篇系列文
-            </Label>
+            {showAuthor && post.author && (
+              <Label basic as={Link} to={`/@${post.author.username}`} color="grey">
+                {`@ ${post.author.username}`}
+              </Label>
+            )}
+            {post.seriesCount > 0 && (
+              <Label basic color="blue">
+                <FontAwesomeIcon icon={faCopy} />
+                {' '}
+                {post.seriesCount}
+                {' '}
+                篇系列文
+              </Label>
+            )}
           </Card.Content>
         )}
       </Card>
     ))}
   </Card.Group>
 )
+
+PostList.defaultProps = {
+  showAuthor: false,
+}
 
 export default PostList

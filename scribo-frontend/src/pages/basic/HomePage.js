@@ -27,7 +27,7 @@ class HomePage extends Component {
 
     return (
       <AppLayout placeholder loading={isLoading}>
-        <PostList posts={posts} />
+        <PostList showAuthor posts={posts} />
         {!isLoading && posts.length === 0 && (
           <BlankPostList subHeader="There is no post." />
         )}
