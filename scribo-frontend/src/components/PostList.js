@@ -34,8 +34,9 @@ let PostList = ({ posts, showAuthor }) => (
         {(post.seriesCount > 0 || showAuthor) && (
           <Card.Content extra>
             {showAuthor && post.author && (
-              <Label basic as={Link} to={`/@${post.author.username}`} color="grey">
-                {`@ ${post.author.username}`}
+              <Label image basic as={Link} to={`/@${post.author.username}`} color="grey">
+                <img src={`${process.env.PUBLIC_URL}/img/default-avatar.png`} />
+                {post.author.username}
               </Label>
             )}
             {post.seriesCount > 0 && (
