@@ -119,6 +119,7 @@ class ImageModal extends Component {
       <Modal
         open={isOpen}
         onClose={this.handleCancel}
+        closeOnDimmerClick={false}
       >
         <Menu
           pointing
