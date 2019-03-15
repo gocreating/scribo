@@ -95,6 +95,14 @@ class NewOrEditForm extends Component {
     }
   }
 
+  handleAccordionClick = (e, { index }) => {
+    let { activeIndex } = this.state
+
+    this.setState({
+      activeIndex: (activeIndex === index ? -1 : index),
+    })
+  }
+
   setSlug = (title = '') => {
     let { change } = this.props
 
@@ -304,20 +312,21 @@ class NewOrEditForm extends Component {
                   </Sticky>
                 </Grid.Column>
               </Grid.Row>
-              {seriesPostEditable && (
-                <Grid.Row>
-                  <Grid.Column>
-                    <Accordion>
+              
+              <Grid.Row>
+                <Grid.Column>
+                  <Accordion>
+                    {seriesPostEditable && (
                       <Accordion.Title
                         active={activeIndex === 0}
                         index={0}
-                        onClick={(e, { index }) => this.setState({
-                          activeIndex: activeIndex === index ? -1 : index
-                        })}
+                        onClick={this.handleAccordionClick}
                       >
-                        <Icon name='dropdown' />
+                        <Icon name="dropdown" />
                         系列文章設定
                       </Accordion.Title>
+                    )}
+                    {seriesPostEditable && (
                       <Accordion.Content active={activeIndex === 0}>
                         <Form.Field>
                           <Field
@@ -326,10 +335,10 @@ class NewOrEditForm extends Component {
                           />
                         </Form.Field>
                       </Accordion.Content>
-                    </Accordion>
-                  </Grid.Column>
-                </Grid.Row>
-              )}
+                    )}
+                  </Accordion>
+                </Grid.Column>
+              </Grid.Row>              
 
               <Grid.Row>
                 <Grid.Column>
