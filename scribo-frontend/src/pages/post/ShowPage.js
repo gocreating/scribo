@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { Link } from 'react-router-dom'
+import moment from 'moment'
 import {
   Grid,
   Divider,
@@ -25,6 +26,7 @@ import DisplayRenderer from '../../editor/renderers/DisplayRenderer'
 // import DonationForm from '../../forms/post/DonationForm'
 import DonationMessage from '../../components/DonationMessage'
 import PageLoading from '../../components/PageLoading'
+import Timestamp from '../../components/Timestamp'
 import DisqusThread from '../../components/DisqusThread'
 import {
   postReadApiRequest,
@@ -134,7 +136,14 @@ class ShowPage extends Component {
     let { isMessageVisible } = this.state
     let { donationSuccessCode, donationErrorCode } = query
     let headerImage = post.headerImage || {}
-
+    let createdAt = post.customCreatedAt || post.createdAt
+    let updatedAt = post.customUpdatedAt || post.updatedAt
+    let isUpdated = (
+      createdAt &&
+      updatedAt &&
+      moment(updatedAt).diff(createdAt) > 1000
+    )
+    
     return (
       <AppLayout placeholder={false} container={false}>
         <div className="post-header-container">
@@ -220,15 +229,17 @@ class ShowPage extends Component {
                         <FontAwesomeIcon icon={faCalendarAlt} />
                       </List.Icon>
                       <List.Content>
-                        <List.Header>發表於</List.Header>
-                        <List.Description>
-                          {new Date(post.createdAt).toLocaleDateString()}
-                        </List.Description>
-
-                        <List.Header>最後更新於</List.Header>
-                        <List.Description>
-                          {new Date(post.updatedAt).toLocaleDateString()}
-                        </List.Description>
+                        <p>
+                          <Timestamp prefix="發表於 " relative>
+                            {createdAt}
+                          </Timestamp>
+                          {isUpdated && ([
+                            <br key="0" />,
+                            <Timestamp key="1" prefix="最後更新於 " relative>
+                              {updatedAt}
+                            </Timestamp>
+                          ])}
+                        </p>
                       </List.Content>
                     </List.Item>
                   )}
