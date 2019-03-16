@@ -24,7 +24,7 @@ class ParagraphEditor extends Component {
           name="text"
           component={TextAreaAutoSize}
           onChange={autoUpdateValues}
-          placeholder="Write something..."
+          placeholder="輸入段落文字"
           className="paragraph editor web-font"
         />
       </Form>

@@ -11,6 +11,7 @@ import propsToolbar from '../../hoc/propsToolbar'
 import withImageHelpers from '../../hoc/withImageHelpers'
 import BlockTypes from '../../../constants/BlockTypes'
 import SourceTypes from './SourceTypes'
+import ImageSizes from './ImageSizes';
 import Image from './Image'
 import ImageMenu from './ImageMenu'
 import TextArea from '../../../fields/TextArea'
@@ -37,7 +38,11 @@ class ImageEditor extends Component {
       meta,
       ...helpers
     } = imageHelpers
-    let { src, isShowCaption } = block.values
+    let { src, size, isShowCaption } = block.values
+ 
+    size = size || ImageSizes.DEFAULT
+
+    let isSizeAppliable = (size !== ImageSizes.DEFAULT)
 
     return (
       <div className="image editor">
@@ -45,6 +50,7 @@ class ImageEditor extends Component {
           <SUIImage
             src={src}
             centered
+            size={isSizeAppliable? size.toLowerCase(): undefined}
             {...helpers}
           />
           {isShowCaption && (
@@ -53,7 +59,7 @@ class ImageEditor extends Component {
                 name="caption"
                 component={TextArea}
                 onChange={autoUpdateValues}
-                placeholder="Write caption here"
+                placeholder="輸入圖片說明"
                 rows={1}
                 autoHeight
                 className="caption web-font"
@@ -90,6 +96,7 @@ let enhance = compose(
       src: '',
       isShowCaption: false,
       caption: '',
+      size: '',
       meta: {},
     },
   }),

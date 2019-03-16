@@ -32,6 +32,7 @@ class HeaderEditor extends Component {
           autoHeight
           className={`header-level-${block.values.level} editor web-font`}
           onKeyPress={this.handleKeyPress}
+          placeholder="輸入標題文字"
         />
       </Form>
     )

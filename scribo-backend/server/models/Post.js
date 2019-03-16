@@ -1,7 +1,8 @@
 'use strict'
 
 let whitelistMethods = require('../toolbox/whitelistMethods')
-const appendAbstractBlocks = require('../hooks/post/appendAbstractBlocks')
+let appendAbstractBlocks = require('../hooks/post/appendAbstractBlocks')
+let formatTimestamps = require('../hooks/post/formatTimestamps')
 
 module.exports = function(Post) {
   whitelistMethods(Post, [
@@ -9,6 +10,7 @@ module.exports = function(Post) {
   ])
 
   Post.observe('before save', appendAbstractBlocks)
+  Post.observe('before save', formatTimestamps)
 
   Post.findMixed = (filter, next) => {
     if (!filter) {
@@ -31,7 +33,7 @@ module.exports = function(Post) {
           createdAt: true,
           updatedAt: true,
         },
-        order: 'createdAt DESC',
+        order: 'mergedCreatedAt DESC',
         limit: parseInt(Post.settings.scribo.limit),
       }
     }

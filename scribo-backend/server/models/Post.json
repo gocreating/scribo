@@ -42,6 +42,22 @@
     "createdAt": {
       "type": "date",
       "defaultFn": "now"
+    },
+    "updatedAt": {
+      "type": "date",
+      "defaultFn": "now"
+    },
+    "customCreatedAt": {
+      "type": "date"
+    },
+    "customUpdatedAt": {
+      "type": "date"
+    },
+    "mergedCreatedAt": {
+      "type": "date"
+    },
+    "mergedUpdatedAt": {
+      "type": "date"
     }
   },
   "mixins": {

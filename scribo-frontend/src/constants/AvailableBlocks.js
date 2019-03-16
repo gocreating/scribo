@@ -56,7 +56,7 @@ export default [{
   },
 }, {
   type: BlockTypes.QUOTE,
-  label: '引言',
+  label: '引文',
   icon: faQuoteLeft,
   insertValues: {
     text: '',

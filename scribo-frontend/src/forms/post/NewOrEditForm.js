@@ -16,11 +16,13 @@ import {
   Icon,
 } from 'semantic-ui-react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faMagnet } from '@fortawesome/free-solid-svg-icons'
+import { faMagnet, faTrashAlt, faCheck } from '@fortawesome/free-solid-svg-icons'
+import { faImage, faSave } from '@fortawesome/free-regular-svg-icons'
 import ImageModal from '../../editor/blocks/Image/ImageModal'
 import headerImagePlaceholder from '../../editor/blocks/Image/header-image-placeholder.png'
 import slugify from '../../utils/slugify'
 import Input from '../../fields/Input'
+import Datetime from '../../fields/Datetime'
 import SeriesPostSelect from '../../fields/SeriesPostSelect'
 import FormTypes from '../../constants/FormTypes'
 import XEditor from '../../editor/XEditor'
@@ -92,6 +94,14 @@ class NewOrEditForm extends Component {
     if (!values.slug || isAutoSlugify) {
       this.setSlug(e.target.value)
     }
+  }
+
+  handleAccordionClick = (e, { index }) => {
+    let { activeIndex } = this.state
+
+    this.setState({
+      activeIndex: (activeIndex === index ? -1 : index),
+    })
   }
 
   setSlug = (title = '') => {
@@ -244,14 +254,16 @@ class NewOrEditForm extends Component {
                     color="grey"
                     onClick={this.handleChangeHeaderImageClick}
                   >
-                    編輯風格照
+                    <FontAwesomeIcon icon={faImage} />
+                    {' 編輯風格照'}
                   </Button>
                   <Button
                     color="grey"
                     disabled={!headerImage.src}
                     onClick={this.handleRemoveHeaderImageClick}
                   >
-                    移除
+                    <FontAwesomeIcon icon={faTrashAlt} />
+                    {' 移除'}
                   </Button>
                 </Button.Group>
                 <Divider hidden />
@@ -301,21 +313,48 @@ class NewOrEditForm extends Component {
                   </Sticky>
                 </Grid.Column>
               </Grid.Row>
-              {seriesPostEditable && (
-                <Grid.Row>
-                  <Grid.Column>
-                    <Accordion>
+              
+              <Grid.Row>
+                <Grid.Column>
+                  <Accordion fluid styled>
+                    <Accordion.Title
+                      active={activeIndex === 0}
+                      index={0}
+                      onClick={this.handleAccordionClick}
+                    >
+                      <Icon name="dropdown" />
+                      自訂時間戳記
+                    </Accordion.Title>
+                    <Accordion.Content active={activeIndex === 0}>
+                      <Form.Field width={5}>
+                        <label>發文時間</label>
+                        <Field
+                          name="customCreatedAt"
+                          component={Datetime}
+                          inputProps={{ placeholder: '點擊選擇自訂時間 / 空白時採用預設時間' }}
+                        />
+                      </Form.Field>
+                      <Form.Field width={5}>
+                        <label>最後更新時間</label>
+                        <Field
+                          name="customUpdatedAt"
+                          component={Datetime}
+                          inputProps={{ placeholder: '點擊選擇自訂時間 / 空白時採用預設時間' }}
+                        />
+                      </Form.Field>
+                    </Accordion.Content>
+                    {seriesPostEditable && (
                       <Accordion.Title
-                        active={activeIndex === 0}
-                        index={0}
-                        onClick={(e, { index }) => this.setState({
-                          activeIndex: activeIndex === index ? -1 : index
-                        })}
+                        active={activeIndex === 1}
+                        index={1}
+                        onClick={this.handleAccordionClick}
                       >
-                        <Icon name='dropdown' />
+                        <Icon name="dropdown" />
                         系列文章設定
                       </Accordion.Title>
-                      <Accordion.Content active={activeIndex === 0}>
+                    )}
+                    {seriesPostEditable && (
+                      <Accordion.Content active={activeIndex === 1}>
                         <Form.Field>
                           <Field
                             name="seriesPosts"
@@ -323,10 +362,10 @@ class NewOrEditForm extends Component {
                           />
                         </Form.Field>
                       </Accordion.Content>
-                    </Accordion>
-                  </Grid.Column>
-                </Grid.Row>
-              )}
+                    )}
+                  </Accordion>
+                </Grid.Column>
+              </Grid.Row>              
 
               <Grid.Row>
                 <Grid.Column>
@@ -346,7 +385,8 @@ class NewOrEditForm extends Component {
                       loading={isCreating}
                       onClick={handleSubmit(this.handleSubmit(onCreate, 'create'))}
                     >
-                      建立文章
+                      <FontAwesomeIcon icon={faCheck} />
+                      {' 建立文章'}
                     </Button>
                   )}
                   {onSave && (
@@ -356,7 +396,8 @@ class NewOrEditForm extends Component {
                       loading={isSaving}
                       onClick={handleSubmit(this.handleSubmit(onSave, 'save'))}
                     >
-                      儲存文章
+                      <FontAwesomeIcon icon={faSave} />
+                      {' 儲存文章'}
                     </Button>
                   )}
                   {onUpdate && (
@@ -366,7 +407,8 @@ class NewOrEditForm extends Component {
                       loading={isUpdating}
                       onClick={handleSubmit(this.handleSubmit(onUpdate, 'update'))}
                     >
-                      更新文章
+                      <FontAwesomeIcon icon={faCheck} />
+                      {' 更新文章'}
                     </Button>
                   )}
                 </Grid.Column>

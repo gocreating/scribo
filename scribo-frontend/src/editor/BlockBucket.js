@@ -39,7 +39,10 @@ class BlockBucket extends Component {
                         <Menu.Item link>
                           {block.icon && (
                             <>
-                              <FontAwesomeIcon icon={block.icon} />
+                              <FontAwesomeIcon
+                                icon={block.icon}
+                                size="lg"
+                              />
                               <br />
                             </>
                           )}
@@ -49,7 +52,10 @@ class BlockBucket extends Component {
                       {snapshot.isDragging && (
                         <Menu.Item link className="hide-sibling">
                           {block.icon && (
-                            <FontAwesomeIcon icon={block.icon} />
+                            <>
+                              <FontAwesomeIcon icon={block.icon} />
+                              <br />
+                            </>
                           )}
                           {block.label}
                         </Menu.Item>

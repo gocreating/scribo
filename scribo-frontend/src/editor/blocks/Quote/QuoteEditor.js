@@ -29,7 +29,7 @@ class QuoteEditor extends Component {
           name="text"
           component={TextAreaAutoSize}
           onChange={autoUpdateValues}
-          placeholder="Write quote here"
+          placeholder="輸入引文"
           className="text web-font"
         />
         {block.values.isShowCite && (
@@ -37,7 +37,7 @@ class QuoteEditor extends Component {
             name="cite"
             component={TextAreaAutoSize}
             onChange={autoUpdateValues}
-            placeholder="Write cite here"
+            placeholder="輸入出處"
             onKeyPress={this.handleKeyPress}
             className="cite web-font"
           />
