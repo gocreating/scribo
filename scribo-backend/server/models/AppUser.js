@@ -97,7 +97,7 @@ module.exports = (AppUser) => {
             createdAt: true,
             updatedAt: true,
           },
-          order: 'updatedAt DESC',
+          order: 'mergedUpdatedAt DESC',
         }
       }
       filter.limit = limit

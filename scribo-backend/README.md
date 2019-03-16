@@ -40,3 +40,12 @@ npm run dump
 ```
 
 > Remember to sync the printed environment variable to hosting servicce
+
+## Migration
+
+如需要執行Migration，範例如下：
+
+```
+/scribo/scribo-backend $ npm run migrate-dev -- 2019_03_16_add_post_order_timestamp.js
+/scribo/scribo-backend $ npm run migrate-production -- 2019_03_16_add_post_order_timestamp.js
+```

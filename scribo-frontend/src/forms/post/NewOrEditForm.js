@@ -22,6 +22,7 @@ import ImageModal from '../../editor/blocks/Image/ImageModal'
 import headerImagePlaceholder from '../../editor/blocks/Image/header-image-placeholder.png'
 import slugify from '../../utils/slugify'
 import Input from '../../fields/Input'
+import Datetime from '../../fields/Datetime'
 import SeriesPostSelect from '../../fields/SeriesPostSelect'
 import FormTypes from '../../constants/FormTypes'
 import XEditor from '../../editor/XEditor'
@@ -93,6 +94,14 @@ class NewOrEditForm extends Component {
     if (!values.slug || isAutoSlugify) {
       this.setSlug(e.target.value)
     }
+  }
+
+  handleAccordionClick = (e, { index }) => {
+    let { activeIndex } = this.state
+
+    this.setState({
+      activeIndex: (activeIndex === index ? -1 : index),
+    })
   }
 
   setSlug = (title = '') => {
@@ -304,21 +313,48 @@ class NewOrEditForm extends Component {
                   </Sticky>
                 </Grid.Column>
               </Grid.Row>
-              {seriesPostEditable && (
-                <Grid.Row>
-                  <Grid.Column>
-                    <Accordion>
+              
+              <Grid.Row>
+                <Grid.Column>
+                  <Accordion fluid styled>
+                    <Accordion.Title
+                      active={activeIndex === 0}
+                      index={0}
+                      onClick={this.handleAccordionClick}
+                    >
+                      <Icon name="dropdown" />
+                      自訂時間戳記
+                    </Accordion.Title>
+                    <Accordion.Content active={activeIndex === 0}>
+                      <Form.Field width={5}>
+                        <label>發文時間</label>
+                        <Field
+                          name="customCreatedAt"
+                          component={Datetime}
+                          inputProps={{ placeholder: '點擊選擇自訂時間 / 空白時採用預設時間' }}
+                        />
+                      </Form.Field>
+                      <Form.Field width={5}>
+                        <label>最後更新時間</label>
+                        <Field
+                          name="customUpdatedAt"
+                          component={Datetime}
+                          inputProps={{ placeholder: '點擊選擇自訂時間 / 空白時採用預設時間' }}
+                        />
+                      </Form.Field>
+                    </Accordion.Content>
+                    {seriesPostEditable && (
                       <Accordion.Title
-                        active={activeIndex === 0}
-                        index={0}
-                        onClick={(e, { index }) => this.setState({
-                          activeIndex: activeIndex === index ? -1 : index
-                        })}
+                        active={activeIndex === 1}
+                        index={1}
+                        onClick={this.handleAccordionClick}
                       >
-                        <Icon name='dropdown' />
+                        <Icon name="dropdown" />
                         系列文章設定
                       </Accordion.Title>
-                      <Accordion.Content active={activeIndex === 0}>
+                    )}
+                    {seriesPostEditable && (
+                      <Accordion.Content active={activeIndex === 1}>
                         <Form.Field>
                           <Field
                             name="seriesPosts"
@@ -326,10 +362,10 @@ class NewOrEditForm extends Component {
                           />
                         </Form.Field>
                       </Accordion.Content>
-                    </Accordion>
-                  </Grid.Column>
-                </Grid.Row>
-              )}
+                    )}
+                  </Accordion>
+                </Grid.Column>
+              </Grid.Row>              
 
               <Grid.Row>
                 <Grid.Column>

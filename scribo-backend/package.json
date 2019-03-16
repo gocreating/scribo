@@ -11,6 +11,8 @@
     "dev": "cross-env NODE_ENV=development nodemon .",
     "test": "cross-env NODE_ENV=test mocha --timeout 50000 test/main-endpoints.js",
     "posttest": "npm run lint",
+    "migrate-dev": "cross-env NODE_ENV=development node ./server/migrations/migrate.js",
+    "migrate-production": "cross-env NODE_ENV=production node ./server/migrations/migrate.js",
     "nsp": "nsp check",
     "production": "cross-env NODE_ENV=production node .",
     "dump": "node ./dump.js",
