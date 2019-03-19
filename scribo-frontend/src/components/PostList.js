@@ -35,7 +35,7 @@ let PostList = ({ posts, showAuthor }) => (
           <Card.Content extra>
             {showAuthor && post.author && (
               <Label image basic as={Link} to={`/@${post.author.username}`} color="grey">
-                <img src={`${process.env.PUBLIC_URL}/img/default-avatar.png`} />
+                <img src={`${process.env.PUBLIC_URL}/img/default-avatar.png`} alt="" />
                 {post.author.username}
               </Label>
             )}

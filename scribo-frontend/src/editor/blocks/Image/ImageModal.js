@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Modal, Menu, Icon, Dimmer, Loader, Button } from 'semantic-ui-react'
+import { Modal, Menu, Dimmer, Loader, Button } from 'semantic-ui-react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLink, faUpload, faCheck } from '@fortawesome/free-solid-svg-icons'
 import { faImage } from '@fortawesome/free-regular-svg-icons'
@@ -11,6 +11,7 @@ class ImageModal extends Component {
   state = {
     activePicker: SourceTypes.MANUAL_INPUT,
     isLoading: false,
+    blockValues: {},
     isUploadError: false,
     loadingText: 'Loading',
   }
@@ -166,7 +167,7 @@ class ImageModal extends Component {
           )}
           {activePicker === SourceTypes.MANUAL_INPUT && (
             <ManualInput
-              value={blockValues.src}
+              value={blockValues.src || ''}
               onChange={this.handleManualInputChange}
             />
           )}

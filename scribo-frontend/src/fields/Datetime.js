@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import ReactDatetime from 'react-datetime'
 import moment from 'moment'
 import 'react-datetime/css/react-datetime.css'
