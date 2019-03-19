@@ -11,6 +11,7 @@ class ImageModal extends Component {
   state = {
     activePicker: SourceTypes.MANUAL_INPUT,
     isLoading: false,
+    blockValues: {},
     isUploadError: false,
     loadingText: 'Loading',
   }
@@ -166,7 +167,7 @@ class ImageModal extends Component {
           )}
           {activePicker === SourceTypes.MANUAL_INPUT && (
             <ManualInput
-              value={blockValues.src}
+              value={blockValues.src || ''}
               onChange={this.handleManualInputChange}
             />
           )}
