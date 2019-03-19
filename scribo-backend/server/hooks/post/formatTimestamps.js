@@ -2,7 +2,7 @@
 
 let formatTimestamps = (ctx, next) => {
   let post
-
+  
   if (ctx.instance) {
     post = ctx.instance
   } else {
@@ -14,12 +14,12 @@ let formatTimestamps = (ctx, next) => {
   if (post.customCreatedAt) {
     post.customCreatedAt = new Date(post.customCreatedAt)
   } else {
-    delete post.customCreatedAt
+    post.customCreatedAt = null
   }
   if (post.customUpdatedAt) {
     post.customUpdatedAt = new Date(post.customUpdatedAt)
   } else {
-    delete post.customUpdatedAt
+    post.customUpdatedAt = null
   }
 
   post.mergedCreatedAt = post.customCreatedAt || post.createdAt
