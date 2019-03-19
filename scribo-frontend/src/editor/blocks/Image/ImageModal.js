@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Modal, Menu, Icon, Dimmer, Loader, Button } from 'semantic-ui-react'
+import { Modal, Menu, Dimmer, Loader, Button } from 'semantic-ui-react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLink, faUpload, faCheck } from '@fortawesome/free-solid-svg-icons'
 import { faImage } from '@fortawesome/free-regular-svg-icons'
