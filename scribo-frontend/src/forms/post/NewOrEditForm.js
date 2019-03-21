@@ -283,6 +283,7 @@ class NewOrEditForm extends Component {
                       type="text"
                       placeholder="標題"
                       size="massive"
+                      autoComplete="off"
                     />
                   </Form.Field>
                   <Form.Field>
@@ -291,6 +292,7 @@ class NewOrEditForm extends Component {
                       component={Input}
                       type="text"
                       placeholder="副標題"
+                      autoComplete="off"
                     />
                   </Form.Field>
                 </Grid.Column>
