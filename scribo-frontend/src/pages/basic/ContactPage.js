@@ -6,7 +6,7 @@ import DisqusThread from '../../components/DisqusThread'
 import BlockTypes from '../../constants/BlockTypes'
 
 let ContactPage = () => (
-  <AppLayout>
+  <AppLayout title="意見回饋">
     <Grid padded="horizontally">
       <Grid.Column>
         <DisplayRenderer blocks={[{

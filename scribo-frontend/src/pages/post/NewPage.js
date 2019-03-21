@@ -49,7 +49,11 @@ class NewPage extends Component {
 
   render() {
     return (
-      <AppLayout placeholder={false} container={false}>
+      <AppLayout
+        placeholder={false}
+        container={false}
+        title="撰寫新文章"
+      >
         <NewOrEditForm
           seriesPostEditable={false}
           onCreate={this.handleCreate}

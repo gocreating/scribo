@@ -145,7 +145,11 @@ class ShowPage extends Component {
     )
     
     return (
-      <AppLayout placeholder={false} container={false}>
+      <AppLayout
+        placeholder={false}
+        container={false}
+        title={post.title}
+      >
         <div className="post-header-container">
           {headerImage.src && (
             <Image
