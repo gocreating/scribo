@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import ReactDOM from 'react-dom'
 import { compose } from 'recompose'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
@@ -44,10 +45,14 @@ class NewOrEditForm extends Component {
     isHeaderImageModalOpen: false,
     targetSubmitButton: null,
     activeIndex: -1,
+    editorMinHeight: undefined,
   }
   xeditor = React.createRef()
 
   setMainEditorRef = mainEditorRef => this.setState({ mainEditorRef })
+  setBlockBucketRef = blockBucketRef => {
+    this.blockBucketRef = blockBucketRef
+  }
 
   componentDidMount() {
     let { onInitialize } = this.props
@@ -55,6 +60,21 @@ class NewOrEditForm extends Component {
     if (onInitialize) {
       onInitialize(this.handleInitialize)
     }
+  }
+
+  componentDidUpdate(prevProps) {
+    if (
+      this.blockBucketRef &&
+      !this.state.editorMinHeight
+    ) {
+      this.setEditorHeight()
+    }
+  }
+
+  setEditorHeight = () => {
+    this.setState({
+      editorMinHeight: ReactDOM.findDOMNode(this.blockBucketRef).offsetHeight,
+    })
   }
 
   handleInitialize = (post) => {
@@ -183,6 +203,7 @@ class NewOrEditForm extends Component {
       isHeaderImageModalOpen,
       targetSubmitButton,
       activeIndex,
+      editorMinHeight,
     } = this.state
     let headerImage = values.headerImage || {}
     let isAutoSlugify = (values.slug === slugify(values.title))
@@ -299,7 +320,14 @@ class NewOrEditForm extends Component {
               </Grid.Row>
 
               <Grid.Row>
-                <Grid.Column width={14}>
+                <Grid.Column
+                  width={14}
+                  style={{
+                    // sync min-height with height of block bucket to avoid oscillation
+                    // when editor height is smaller than block bucket height
+                    minHeight: editorMinHeight,
+                  }}
+                >
                   <Form.Field width={16}>
                     <div ref={this.setMainEditorRef}>
                       <XEditor ref={this.xeditor} />
@@ -311,7 +339,7 @@ class NewOrEditForm extends Component {
                     offset={20}
                     context={this.state.mainEditorRef}
                   >
-                    <BlockBucket />
+                    <BlockBucket ref={this.setBlockBucketRef} />
                   </Sticky>
                 </Grid.Column>
               </Grid.Row>
