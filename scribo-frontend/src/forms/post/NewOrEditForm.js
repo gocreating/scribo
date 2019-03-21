@@ -47,7 +47,7 @@ class NewOrEditForm extends Component {
   }
   xeditor = React.createRef()
 
-  setBlockBucketRef = blockBucketRef => this.setState({ blockBucketRef })
+  setMainEditorRef = mainEditorRef => this.setState({ mainEditorRef })
 
   componentDidMount() {
     let { onInitialize } = this.props
@@ -301,7 +301,7 @@ class NewOrEditForm extends Component {
               <Grid.Row>
                 <Grid.Column width={14}>
                   <Form.Field width={16}>
-                    <div ref={this.setBlockBucketRef}>
+                    <div ref={this.setMainEditorRef}>
                       <XEditor ref={this.xeditor} />
                     </div>
                   </Form.Field>
@@ -309,7 +309,7 @@ class NewOrEditForm extends Component {
                 <Grid.Column width={2}>
                   <Sticky
                     offset={20}
-                    context={this.state.blockBucketRef}
+                    context={this.state.mainEditorRef}
                   >
                     <BlockBucket />
                   </Sticky>
