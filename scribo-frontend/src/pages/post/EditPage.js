@@ -13,6 +13,10 @@ import {
 } from '../../ducks/post'
 
 class EditPage extends Component {
+  state = {
+    isInitializing: true,
+  }
+
   static propTypes = {
     post: PropTypes.object,
     postRead: PropTypes.func,
@@ -44,8 +48,11 @@ class EditPage extends Component {
   }
 
   handleInitialize = async (cb) => {
-    let result = await this.fetchPost()
+    await this.setState({ isInitializing: true })
 
+    let result = await this.fetchPost()
+    
+    await this.setState({ isInitializing: false })
     if (result) {
       cb(this.props.post)
     }
@@ -65,7 +72,9 @@ class EditPage extends Component {
   }
 
   render() {
-    let { isLoading } = this.props
+    let { post } = this.props
+    let { isInitializing } = this.state
+    let isLoading = post.isNotExist || !post.blocks || isInitializing
 
     return (
       <AppLayout placeholder={false} container={false} loading={isLoading}>
@@ -85,16 +94,11 @@ export default withRouter(connect(({ auth, posts }, { match }) => {
   let loggedUser = authSelectors.getLoggedUser(auth)
   let { postId } = match.params
   let post = postSelectors.getPost(posts, postId)
-  let isLoading = false
 
-  if (post.isNotExist || !post.blocks) {
-    isLoading = true
-  }
   return {
     loggedUser,
     postId,
     post,
-    isLoading,
   }
 }, {
   postRead: postReadApiRequest,
