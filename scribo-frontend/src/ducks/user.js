@@ -51,8 +51,8 @@ const thunkActionCreators = {
   },
   logoutApiRequest: () => async (dispatch) => {
     try {
-      dispatch(clearAuth())
-
+      // userApi.logout() requires accessToken,
+      // so don't clear auth before the request is fired
       let response = await userApi.logout()
 
       dispatch(logoutApiSuccess(response))
@@ -61,6 +61,8 @@ const thunkActionCreators = {
       let response = createApiError(error)
       dispatch(logoutApiFailure(response))
       return response.body
+    } finally {
+      dispatch(clearAuth())
     }
   },
 }
