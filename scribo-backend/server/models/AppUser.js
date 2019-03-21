@@ -111,6 +111,8 @@ module.exports = (AppUser) => {
       if (keyword) {
         query.title = {
           like: keyword,
+          // ref: <https://stackoverflow.com/questions/48536322/loopback-filter-like-case-insensitive>
+          options: 'i',
         }
         delete query.isInSeries
       }
