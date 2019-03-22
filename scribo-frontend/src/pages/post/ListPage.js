@@ -19,7 +19,12 @@ class ListPage extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.pageId !== this.props.pageId) {
+    let { username, pageId } = this.props
+
+    if (
+      username !== prevProps.username ||
+      pageId !== prevProps.pageId
+    ) {
       this.fetchPosts()
     }
   }
