@@ -459,7 +459,7 @@ let enhance = compose(
     },
   }),
   connect(state => ({
-    values: getFormValues(FormTypes.POST_NEW_OR_EDIT)(state),
+    values: getFormValues(FormTypes.POST_NEW_OR_EDIT)(state) || {},
     loggedUser: selectors.getLoggedUser(state.auth),
   }))
 )
