@@ -343,7 +343,7 @@ class NewOrEditForm extends Component {
                   </Sticky>
                 </Grid.Column>
               </Grid.Row>
-              
+
               <Grid.Row>
                 <Grid.Column>
                   <Accordion fluid styled>
@@ -395,7 +395,7 @@ class NewOrEditForm extends Component {
                     )}
                   </Accordion>
                 </Grid.Column>
-              </Grid.Row>              
+              </Grid.Row>
 
               <Grid.Row>
                 <Grid.Column>
