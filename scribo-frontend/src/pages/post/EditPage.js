@@ -7,6 +7,7 @@ import { selectors as authSelectors } from '../../ducks/auth'
 import { selectors as postSelectors } from '../../ducks/post'
 import AppLayout from '../../layouts/AppLayout'
 import NewOrEditForm from '../../forms/post/NewOrEditForm'
+import Prompt from '../../components/Prompt'
 import {
   postReadApiRequest,
   postUpdateApiRequest,
@@ -15,6 +16,7 @@ import {
 class EditPage extends Component {
   state = {
     isInitializing: true,
+    shouldPreventTransition: true,
   }
 
   static propTypes = {
@@ -51,7 +53,7 @@ class EditPage extends Component {
     await this.setState({ isInitializing: true })
 
     let result = await this.fetchPost()
-    
+
     await this.setState({ isInitializing: false })
     if (result) {
       cb(this.props.post)
@@ -63,7 +65,10 @@ class EditPage extends Component {
     let result = await this.updatePost(data)
 
     if (result) {
-      push(`/@${loggedUser.username}/${result.slug}`)
+      await this.setState({ shouldPreventTransition: false })
+      setImmediate(() => {
+        push(`/@${loggedUser.username}/${result.slug}`)
+      })
     }
   }
 
@@ -73,11 +78,15 @@ class EditPage extends Component {
 
   render() {
     let { post } = this.props
-    let { isInitializing } = this.state
+    let { isInitializing, shouldPreventTransition } = this.state
     let isLoading = post.isNotExist || !post.blocks || isInitializing
 
     return (
       <AppLayout placeholder={false} container={false} loading={isLoading}>
+        <Prompt
+          whenTransition={shouldPreventTransition}
+          message="您可能有內容尚未儲存，是否確定要離開？"
+        />
         <NewOrEditForm
           seriesPostEditable
           onInitialize={this.handleInitialize}

@@ -6,6 +6,7 @@ import shortid from 'shortid'
 import { selectors } from '../../ducks/auth'
 import AppLayout from '../../layouts/AppLayout'
 import NewOrEditForm from '../../forms/post/NewOrEditForm'
+import Prompt from '../../components/Prompt'
 import BlockTypes from '../../constants/BlockTypes'
 import Typesettings from '../../editor/blocks/Paragraph/Typesettings'
 import { postCreateApiRequest } from '../../ducks/post'
@@ -14,6 +15,10 @@ class NewPage extends Component {
   static propTypes = {
     postCreate: PropTypes.func,
     push: PropTypes.func,
+  }
+
+  state = {
+    shouldPreventTransition: true,
   }
 
   handleInitialize = (cb) => {
@@ -44,16 +49,25 @@ class NewPage extends Component {
     if (result.error) {
       return alert(result.error.message)
     }
-    push(`/@${loggedUser.username}/${result.slug}`)
+    await this.setState({ shouldPreventTransition: false })
+    setImmediate(() => {
+      push(`/@${loggedUser.username}/${result.slug}`)
+    })
   }
 
   render() {
+    let { shouldPreventTransition } = this.state
+
     return (
       <AppLayout
         placeholder={false}
         container={false}
         title="撰寫新文章"
       >
+        <Prompt
+          whenTransition={shouldPreventTransition}
+          message="您可能有內容尚未儲存，是否確定要離開？"
+        />
         <NewOrEditForm
           seriesPostEditable={false}
           onCreate={this.handleCreate}
