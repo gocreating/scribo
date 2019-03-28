@@ -1,8 +1,12 @@
+import { combineReducers } from 'redux'
 import { createActions, handleActions } from 'redux-actions'
+import { select, call, put, takeEvery } from 'redux-saga/effects'
+import { push } from 'connected-react-router'
 import { normalize } from 'normalizr'
 import postApi from '../api/postApi'
 import { addEntities } from './entity'
 import { post as postSchema } from '../schema'
+import { selectors as authSelectors } from './auth'
 import createApiError from '../utils/createApiError'
 import zipSeriesPostsOrder from '../utils/zipSeriesPostsOrder'
 
@@ -10,10 +14,14 @@ import zipSeriesPostsOrder from '../utils/zipSeriesPostsOrder'
 const plainActionCreators = createActions({
   POST_LIST_API_SUCCESS: (res) => ({ res }),
   POST_LIST_API_FAILURE: (res) => ({ res }),
+  POST_CREATE_API_REQUEST: (post, resolve, reject) => ({ post, resolve, reject }),
   POST_CREATE_API_SUCCESS: (res) => ({ res }),
   POST_CREATE_API_FAILURE: (res) => ({ res }),
   POST_READ_API_SUCCESS: (res) => ({ res }),
   POST_READ_API_FAILURE: (res) => ({ res }),
+  POST_UPDATE_API_REQUEST: (postId, post, isSaveOnly, resolve, reject) => ({
+    postId, post, isSaveOnly, resolve, reject,
+  }),
   POST_UPDATE_API_SUCCESS: (res) => ({ res }),
   POST_UPDATE_API_FAILURE: (res) => ({ res }),
   POST_DELETE_API_SUCCESS: (res) => ({ res }),
@@ -112,16 +120,6 @@ const thunkActionCreators = {
       dispatch(setUserPageLoadingStatus(username, pageId, false))
     }
   },
-  postCreateApiRequest: (userId, post) => async (dispatch) => {
-    try {
-      let response = await postApi.create(userId, post)
-      dispatch(postCreateApiSuccess(response))
-      return response.body
-    } catch ({ response }) {
-      dispatch(postCreateApiFailure(response))
-      return response.body
-    }
-  },
   postReadApiRequest: (userId, postId) => async (dispatch) => {
     try {
       let response = await postApi.read(userId, postId)
@@ -154,16 +152,6 @@ const thunkActionCreators = {
       dispatch(setPostLoadingStatus(response.body.id, false))
     }
   },
-  postUpdateApiRequest: (userId, postId, post) => async (dispatch) => {
-    try {
-      let response = await postApi.update(userId, postId, post)
-      dispatch(postUpdateApiSuccess(response))
-      return response.body
-    } catch ({ response }) {
-      dispatch(postUpdateApiFailure(response))
-      return response.body
-    }
-  },
   postDeleteApiRequest: (userId, postId) => async (dispatch) => {
     try {
       let response = await postApi.delete(userId, postId)
@@ -176,14 +164,66 @@ const thunkActionCreators = {
     }
   },
 }
+// Sagas
+export const sagas = {
+  *handlePostCreateApiRequest(action) {
+    let { post, resolve, reject } = action.payload
+
+    try {
+      let loggedUser = yield select(({ auth }) => authSelectors.getLoggedUser(auth))
+      let response = yield call(postApi.create, loggedUser.id, post)
+      let { slug } = response.body
+
+      yield put(postCreateApiSuccess(response))
+      yield put(push(`/@${loggedUser.username}/${slug}`))
+      resolve && (yield call(resolve, response.body))
+    } catch (error) {
+      let response = createApiError(error)
+
+      yield put(postCreateApiFailure(response))
+      reject && (yield call(reject, response.body))
+    }
+  },
+  *handlePostUpdateApiRequest(action) {
+    let { postId, post, isSaveOnly, resolve, reject } = action.payload
+
+    try {
+      let loggedUser = yield select(({ auth }) => authSelectors.getLoggedUser(auth))
+      let response = yield call(postApi.update, loggedUser.id, postId, post)
+      let { slug } = response.body
+
+      yield put(postUpdateApiSuccess(response))
+
+      if (!isSaveOnly) {
+        yield put(push(`/@${loggedUser.username}/${slug}`))
+      }
+      resolve && (yield call(resolve, response.body))
+    } catch (error) {
+      let response = createApiError(error)
+
+      yield put(postUpdateApiFailure(response))
+      reject && (yield call(reject, response.body))
+    }
+  },
+}
+export const rootSaga = {
+  *onPostCreateApiRequest() {
+    yield takeEvery(postCreateApiRequest, sagas.handlePostCreateApiRequest)
+  },
+  *onPostUpdateApiRequest() {
+    yield takeEvery(postUpdateApiRequest, sagas.handlePostUpdateApiRequest)
+  },
+}
 
 export const {
   postListApiSuccess,
   postListApiFailure,
+  postCreateApiRequest,
   postCreateApiSuccess,
   postCreateApiFailure,
   postReadApiSuccess,
   postReadApiFailure,
+  postUpdateApiRequest,
   postUpdateApiSuccess,
   postUpdateApiFailure,
   postDeleteApiSuccess,
@@ -203,9 +243,7 @@ export const {
 } = plainActionCreators
 export const {
   postListApiRequest,
-  postCreateApiRequest,
   postReadApiRequest,
-  postUpdateApiRequest,
   postDeleteApiRequest,
   postListMixedApiRequest,
   postListByUsernameApiRequest,
@@ -213,89 +251,36 @@ export const {
 } = thunkActionCreators
 
 // Reducer
+const defaultState = {
+  entities: {},
+  mixedPages: {},
+  userPages: {},
+  context: {
+    create: {
+      post: {},
+      isPending: false,
+      isFulfilled: false,
+      isRejected: false,
+    },
+    update: {
+      isSaveOnly: false,
+      isPending: false,
+      isFulfilled: false,
+      isRejected: false,
+    },
+  },
+}
 const defaultUserPagesMeta = {
   total: 1,
   pageId: 1,
   limit: 1,
 }
-const defaultState = {
-  mixedPages: {},
-  userPages: {},
-}
-export default handleActions({
+
+const entitiesReducer = handleActions({
   [addEntities]: (state, { payload: { entities } }) => ({
     ...state,
     ...entities.posts,
   }),
-  [setMixedPage]: (state, { payload: { pageId, postIds } }) => {
-    let mixedPage = state.mixedPages[pageId] || {}
-
-    return {
-      ...state,
-      mixedPages: {
-        ...state.mixedPages,
-        [pageId]: {
-          ...mixedPage,
-          elements: postIds,
-        },
-      },
-    }
-  },
-  [setMixedPageLoadingStatus]: (state, { payload: { pageId, isLoading } }) => {
-    let mixedPage = state.mixedPages[pageId] || {}
-
-    return {
-      ...state,
-      mixedPages: {
-        ...state.mixedPages,
-        [pageId]: {
-          ...mixedPage,
-          isLoading,
-        },
-      },
-    }
-  },
-  [setUserPage]: (state, {
-    payload: { username, pageId, meta, postIds },
-  }) => {
-    let userPages = state.userPages[username] || {}
-    let userPage = userPages[pageId] || {}
-
-    return {
-      ...state,
-      userPages: {
-        ...state.userPages,
-        [username]: {
-          ...userPages,
-          [pageId]: {
-            ...userPage,
-            elements: postIds,
-          },
-          meta,
-        },
-      },
-    }
-  },
-  [setUserPageLoadingStatus]: (state, {
-    payload: { username, pageId, isLoading },
-  }) => {
-    let userPages = state.userPages[username] || {}
-    let userPage = userPages[pageId] || {}
-
-    return {
-      ...state,
-      userPages: {
-        ...state.userPages,
-        [username]: {
-          ...userPages,
-          [pageId]: {
-            ...userPage,
-            isLoading,
-          },
-        },
-      },
-    }
-  },
   [setPostLoadingStatus]: (state, { payload: { postId, isLoading } }) => {
     let post = state[postId] || {}
 
@@ -307,9 +292,135 @@ export default handleActions({
       }
     }
   },
-}, defaultState)
+}, defaultState.entities)
+
+const mixedPagesReducer = handleActions({
+  [setMixedPage]: (state, { payload: { pageId, postIds } }) => {
+    let mixedPage = state[pageId] || {}
+
+    return {
+      ...state,
+      [pageId]: {
+        ...mixedPage,
+        elements: postIds,
+      }
+    }
+  },
+  [setMixedPageLoadingStatus]: (state, { payload: { pageId, isLoading } }) => {
+    let mixedPage = state[pageId] || {}
+
+    return {
+      ...state,
+      [pageId]: {
+        ...mixedPage,
+        isLoading,
+      },
+    }
+  },
+}, defaultState.mixedPages)
+
+const userPagesReducer = handleActions({
+  [setUserPage]: (state, {
+    payload: { username, pageId, meta, postIds },
+  }) => {
+    let userPages = state[username] || {}
+    let userPage = userPages[pageId] || {}
+
+    return {
+      ...state,
+      [username]: {
+        ...userPages,
+        [pageId]: {
+          ...userPage,
+          elements: postIds,
+        },
+        meta,
+      },
+    }
+  },
+  [setUserPageLoadingStatus]: (state, {
+    payload: { username, pageId, isLoading },
+  }) => {
+    let userPages = state[username] || {}
+    let userPage = userPages[pageId] || {}
+
+    return {
+      ...state,
+      [username]: {
+        ...userPages,
+        [pageId]: {
+          ...userPage,
+          isLoading,
+        },
+      },
+    }
+  },
+}, defaultState.userPages)
+
+const contextReducer = handleActions({
+  [postCreateApiRequest]: (state) => ({
+    ...state,
+    create: {
+      ...state.create,
+      isPending: true,
+      isFulfilled: false,
+      isRejected: false,
+    },
+  }),
+  [postCreateApiSuccess]: (state) => ({
+    ...state,
+    create: {
+      ...state.create,
+      isPending: false,
+      isFulfilled: true,
+    },
+  }),
+  [postCreateApiFailure]: (state) => ({
+    ...state,
+    create: {
+      ...state.create,
+      isPending: false,
+      isRejected: true,
+    },
+  }),
+  [postUpdateApiRequest]: (state, { payload: { isSaveOnly } }) => ({
+    ...state,
+    update: {
+      ...state.update,
+      isSaveOnly,
+      isPending: true,
+      isFulfilled: false,
+      isRejected: false,
+    },
+  }),
+  [postUpdateApiSuccess]: (state) => ({
+    ...state,
+    update: {
+      ...state.update,
+      isPending: false,
+      isFulfilled: true,
+    },
+  }),
+  [postUpdateApiFailure]: (state) => ({
+    ...state,
+    update: {
+      ...state.update,
+      isPending: false,
+      isRejected: true,
+    },
+  }),
+}, defaultState.context)
+
+export default combineReducers({
+  entities: entitiesReducer,
+  mixedPages: mixedPagesReducer,
+  userPages: userPagesReducer,
+  context: contextReducer,
+})
 
 export let selectors = {
+  getCreateContext: (state) => (state.context.create || {}),
+  getUpdateContext: (state) => (state.context.update || {}),
   getMixedPage: (state, pageId) => {
     let mixedPage = state.mixedPages[pageId] || {}
 
@@ -335,14 +446,14 @@ export let selectors = {
   getMixedPosts(state) {
     let mixedPage = this.getMixedPage(state, '1')
     let elements = mixedPage.elements || []
-    let posts = elements.map(postId => state[postId])
+    let posts = elements.map(postId => state.entities[postId])
 
     return posts
   },
   getUserPosts(state, username, page) {
     let userPage = this.getUserPage(state, username, page)
     let elements = userPage.elements || []
-    let posts = elements.map(postId => state[postId])
+    let posts = elements.map(postId => state.entities[postId])
 
     return posts
   },
@@ -374,7 +485,7 @@ export let selectors = {
       author: userEntity[post.authorId],
     }))
   },
-  getPost: (state, postId) => (state[postId] || { isNotExist: true }),
+  getPost: (state, postId) => (state.entities[postId] || { isNotExist: true }),
   getPostByUsernameAndSlug: (posts, users, username, postSlug) => {
     let defaultPost = { isNotExist: true }
     let filteredUserIds = Object
@@ -387,9 +498,9 @@ export let selectors = {
 
     let userId = filteredUserIds[0]
     let filteredPostIds = Object
-      .keys(posts)
+      .keys(posts.entities)
       .filter(postId => {
-        let post = posts[postId]
+        let post = posts.entities[postId]
 
         return (
           post.slug === postSlug &&
@@ -403,6 +514,6 @@ export let selectors = {
 
     let postId = filteredPostIds[0]
 
-    return posts[postId]
+    return posts.entities[postId]
   },
 }

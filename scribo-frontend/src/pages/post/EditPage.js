@@ -16,7 +16,6 @@ import {
 class EditPage extends Component {
   state = {
     isInitializing: true,
-    shouldPreventTransition: true,
   }
 
   static propTypes = {
@@ -39,16 +38,6 @@ class EditPage extends Component {
     return result
   }
 
-  updatePost = async (post) => {
-    let { loggedUser, postId, postUpdate } = this.props
-    let result = await postUpdate(loggedUser.id, postId, post)
-
-    if (result.error) {
-      return alert(result.error.message)
-    }
-    return result
-  }
-
   handleInitialize = async (cb) => {
     await this.setState({ isInitializing: true })
 
@@ -60,35 +49,36 @@ class EditPage extends Component {
     }
   }
 
-  handleUpdate = async (data) => {
-    let { loggedUser, push } = this.props
-    let result = await this.updatePost(data)
+  handleUpdate = (post) => {
+    let { postUpdate, postId } = this.props
 
-    if (result) {
-      await this.setState({ shouldPreventTransition: false })
-      setImmediate(() => {
-        push(`/@${loggedUser.username}/${result.slug}`)
-      })
-    }
+    postUpdate(postId, post, false, null, (result) => {
+      alert(result.error.message)
+    })
   }
 
-  handleSave = async (data) => {
-    await this.updatePost(data)
+  handleSave = (post) => {
+    let { postUpdate, postId } = this.props
+
+    postUpdate(postId, post, true, null, (result) => {
+      alert(result.error.message)
+    })
   }
 
   render() {
-    let { post } = this.props
-    let { isInitializing, shouldPreventTransition } = this.state
+    let { post, isSaveOnly, isPending, isFulfilled } = this.props
+    let { isInitializing } = this.state
     let isLoading = post.isNotExist || !post.blocks || isInitializing
 
     return (
       <AppLayout placeholder={false} container={false} loading={isLoading}>
-        <Prompt
-          whenTransition={shouldPreventTransition}
-          message="您可能有內容尚未儲存，是否確定要離開？"
-        />
+        {!isFulfilled && (
+          <Prompt message="您可能有內容尚未儲存，是否確定要離開？" />
+        )}
         <NewOrEditForm
           seriesPostEditable
+          isSaving={isSaveOnly && isPending}
+          isUpdating={!isSaveOnly && isPending}
           onInitialize={this.handleInitialize}
           onSave={this.handleSave}
           onUpdate={this.handleUpdate}
@@ -101,6 +91,7 @@ class EditPage extends Component {
 
 export default withRouter(connect(({ auth, posts }, { match }) => {
   let loggedUser = authSelectors.getLoggedUser(auth)
+  let ctx = postSelectors.getUpdateContext(posts)
   let { postId } = match.params
   let post = postSelectors.getPost(posts, postId)
 
@@ -108,6 +99,9 @@ export default withRouter(connect(({ auth, posts }, { match }) => {
     loggedUser,
     postId,
     post,
+    isSaveOnly: ctx.isSaveOnly,
+    isPending: ctx.isPending,
+    isFulfilled: ctx.isFulfilled,
   }
 }, {
   postRead: postReadApiRequest,
