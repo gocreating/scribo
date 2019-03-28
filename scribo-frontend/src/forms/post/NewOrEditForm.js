@@ -190,6 +190,7 @@ class NewOrEditForm extends Component {
   render() {
     let {
       seriesPostEditable,
+      isCreating,
       onCreate,
       onSave,
       onUpdate,
@@ -207,7 +208,6 @@ class NewOrEditForm extends Component {
     } = this.state
     let headerImage = values.headerImage || {}
     let isAutoSlugify = (values.slug === slugify(values.title))
-    let isCreating = submitting && targetSubmitButton === 'create'
     let isSaving = submitting && targetSubmitButton === 'save'
     let isUpdating = submitting && targetSubmitButton === 'update'
 

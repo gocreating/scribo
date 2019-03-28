@@ -1,9 +1,12 @@
 import { combineReducers } from 'redux'
 import { createActions, handleActions } from 'redux-actions'
+import { select, call, put, takeEvery } from 'redux-saga/effects'
+import { push } from 'connected-react-router'
 import { normalize } from 'normalizr'
 import postApi from '../api/postApi'
 import { addEntities } from './entity'
 import { post as postSchema } from '../schema'
+import { selectors as authSelectors } from './auth'
 import createApiError from '../utils/createApiError'
 import zipSeriesPostsOrder from '../utils/zipSeriesPostsOrder'
 
@@ -11,6 +14,7 @@ import zipSeriesPostsOrder from '../utils/zipSeriesPostsOrder'
 const plainActionCreators = createActions({
   POST_LIST_API_SUCCESS: (res) => ({ res }),
   POST_LIST_API_FAILURE: (res) => ({ res }),
+  POST_CREATE_API_REQUEST: (post, resolve, reject) => ({ post, resolve, reject }),
   POST_CREATE_API_SUCCESS: (res) => ({ res }),
   POST_CREATE_API_FAILURE: (res) => ({ res }),
   POST_READ_API_SUCCESS: (res) => ({ res }),
@@ -113,16 +117,6 @@ const thunkActionCreators = {
       dispatch(setUserPageLoadingStatus(username, pageId, false))
     }
   },
-  postCreateApiRequest: (userId, post) => async (dispatch) => {
-    try {
-      let response = await postApi.create(userId, post)
-      dispatch(postCreateApiSuccess(response))
-      return response.body
-    } catch ({ response }) {
-      dispatch(postCreateApiFailure(response))
-      return response.body
-    }
-  },
   postReadApiRequest: (userId, postId) => async (dispatch) => {
     try {
       let response = await postApi.read(userId, postId)
@@ -179,13 +173,35 @@ const thunkActionCreators = {
 }
 // Sagas
 export const sagas = {
+  *handlePostCreateApiRequest(action) {
+    let { post, resolve, reject } = action.payload
+
+    try {
+      let loggedUser = yield select(({ auth }) => authSelectors.getLoggedUser(auth))
+      let response = yield call(postApi.create, loggedUser.id, post)
+      let { slug } = response.body
+
+      yield put(postCreateApiSuccess(response))
+      yield put(push(`/@${loggedUser.username}/${slug}`))
+      resolve && (yield call(resolve, response.body))
+    } catch (error) {
+      let response = createApiError(error)
+
+      yield put(postCreateApiFailure(response))
+      reject && (yield call(reject, response.body))
+    }
+  }
 }
 export const rootSaga = {
+  *onPostCreateApiRequest() {
+    yield takeEvery(postCreateApiRequest, sagas.handlePostCreateApiRequest)
+  },
 }
 
 export const {
   postListApiSuccess,
   postListApiFailure,
+  postCreateApiRequest,
   postCreateApiSuccess,
   postCreateApiFailure,
   postReadApiSuccess,
@@ -209,7 +225,6 @@ export const {
 } = plainActionCreators
 export const {
   postListApiRequest,
-  postCreateApiRequest,
   postReadApiRequest,
   postUpdateApiRequest,
   postDeleteApiRequest,
@@ -262,9 +277,9 @@ const mixedPagesReducer = handleActions({
 
     return {
       ...state,
-        [pageId]: {
-          ...mixedPage,
-          elements: postIds,
+      [pageId]: {
+        ...mixedPage,
+        elements: postIds,
       }
     }
   },
@@ -273,10 +288,10 @@ const mixedPagesReducer = handleActions({
 
     return {
       ...state,
-        [pageId]: {
-          ...mixedPage,
-          isLoading,
-        },
+      [pageId]: {
+        ...mixedPage,
+        isLoading,
+      },
     }
   },
 }, defaultState.mixedPages)
@@ -290,14 +305,14 @@ const userPagesReducer = handleActions({
 
     return {
       ...state,
-        [username]: {
-          ...userPages,
-          [pageId]: {
-            ...userPage,
-            elements: postIds,
-          },
-          meta,
+      [username]: {
+        ...userPages,
+        [pageId]: {
+          ...userPage,
+          elements: postIds,
         },
+        meta,
+      },
     }
   },
   [setUserPageLoadingStatus]: (state, {
@@ -308,24 +323,54 @@ const userPagesReducer = handleActions({
 
     return {
       ...state,
-        [username]: {
-          ...userPages,
-          [pageId]: {
-            ...userPage,
-            isLoading,
-          },
+      [username]: {
+        ...userPages,
+        [pageId]: {
+          ...userPage,
+          isLoading,
         },
+      },
     }
   },
 }, defaultState.userPages)
+
+const contextReducer = handleActions({
+  [postCreateApiRequest]: (state) => ({
+    ...state,
+    create: {
+      ...state.create,
+      isPending: true,
+      isFulfilled: false,
+      isRejected: false,
+    },
+  }),
+  [postCreateApiSuccess]: (state) => ({
+    ...state,
+    create: {
+      ...state.create,
+      isPending: false,
+      isFulfilled: true,
+    },
+  }),
+  [postCreateApiFailure]: (state) => ({
+    ...state,
+    create: {
+      ...state.create,
+      isPending: false,
+      isRejected: true,
+    },
+  }),
+}, defaultState.context)
 
 export default combineReducers({
   entities: entitiesReducer,
   mixedPages: mixedPagesReducer,
   userPages: userPagesReducer,
+  context: contextReducer,
 })
 
 export let selectors = {
+  getCreateContext: (state) => (state.context.create || {}),
   getMixedPage: (state, pageId) => {
     let mixedPage = state.mixedPages[pageId] || {}
 
