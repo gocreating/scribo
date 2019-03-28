@@ -1,3 +1,4 @@
+import { combineReducers } from 'redux'
 import { createActions, handleActions } from 'redux-actions'
 import { normalize } from 'normalizr'
 import postApi from '../api/postApi'
@@ -213,89 +214,30 @@ export const {
 } = thunkActionCreators
 
 // Reducer
+const defaultState = {
+  entities: {},
+  mixedPages: {},
+  userPages: {},
+  context: {
+    create: {
+      post: {},
+      isPending: false,
+      isFulfilled: false,
+      isRejected: false,
+    },
+  },
+}
 const defaultUserPagesMeta = {
   total: 1,
   pageId: 1,
   limit: 1,
 }
-const defaultState = {
-  mixedPages: {},
-  userPages: {},
-}
-export default handleActions({
+
+const entitiesReducer = handleActions({
   [addEntities]: (state, { payload: { entities } }) => ({
     ...state,
     ...entities.posts,
   }),
-  [setMixedPage]: (state, { payload: { pageId, postIds } }) => {
-    let mixedPage = state.mixedPages[pageId] || {}
-
-    return {
-      ...state,
-      mixedPages: {
-        ...state.mixedPages,
-        [pageId]: {
-          ...mixedPage,
-          elements: postIds,
-        },
-      },
-    }
-  },
-  [setMixedPageLoadingStatus]: (state, { payload: { pageId, isLoading } }) => {
-    let mixedPage = state.mixedPages[pageId] || {}
-
-    return {
-      ...state,
-      mixedPages: {
-        ...state.mixedPages,
-        [pageId]: {
-          ...mixedPage,
-          isLoading,
-        },
-      },
-    }
-  },
-  [setUserPage]: (state, {
-    payload: { username, pageId, meta, postIds },
-  }) => {
-    let userPages = state.userPages[username] || {}
-    let userPage = userPages[pageId] || {}
-
-    return {
-      ...state,
-      userPages: {
-        ...state.userPages,
-        [username]: {
-          ...userPages,
-          [pageId]: {
-            ...userPage,
-            elements: postIds,
-          },
-          meta,
-        },
-      },
-    }
-  },
-  [setUserPageLoadingStatus]: (state, {
-    payload: { username, pageId, isLoading },
-  }) => {
-    let userPages = state.userPages[username] || {}
-    let userPage = userPages[pageId] || {}
-
-    return {
-      ...state,
-      userPages: {
-        ...state.userPages,
-        [username]: {
-          ...userPages,
-          [pageId]: {
-            ...userPage,
-            isLoading,
-          },
-        },
-      },
-    }
-  },
   [setPostLoadingStatus]: (state, { payload: { postId, isLoading } }) => {
     let post = state[postId] || {}
 
@@ -307,7 +249,76 @@ export default handleActions({
       }
     }
   },
-}, defaultState)
+}, defaultState.entities)
+
+const mixedPagesReducer = handleActions({
+  [setMixedPage]: (state, { payload: { pageId, postIds } }) => {
+    let mixedPage = state[pageId] || {}
+
+    return {
+      ...state,
+        [pageId]: {
+          ...mixedPage,
+          elements: postIds,
+      }
+    }
+  },
+  [setMixedPageLoadingStatus]: (state, { payload: { pageId, isLoading } }) => {
+    let mixedPage = state[pageId] || {}
+
+    return {
+      ...state,
+        [pageId]: {
+          ...mixedPage,
+          isLoading,
+        },
+    }
+  },
+}, defaultState.mixedPages)
+
+const userPagesReducer = handleActions({
+  [setUserPage]: (state, {
+    payload: { username, pageId, meta, postIds },
+  }) => {
+    let userPages = state[username] || {}
+    let userPage = userPages[pageId] || {}
+
+    return {
+      ...state,
+        [username]: {
+          ...userPages,
+          [pageId]: {
+            ...userPage,
+            elements: postIds,
+          },
+          meta,
+        },
+    }
+  },
+  [setUserPageLoadingStatus]: (state, {
+    payload: { username, pageId, isLoading },
+  }) => {
+    let userPages = state[username] || {}
+    let userPage = userPages[pageId] || {}
+
+    return {
+      ...state,
+        [username]: {
+          ...userPages,
+          [pageId]: {
+            ...userPage,
+            isLoading,
+          },
+        },
+    }
+  },
+}, defaultState.userPages)
+
+export default combineReducers({
+  entities: entitiesReducer,
+  mixedPages: mixedPagesReducer,
+  userPages: userPagesReducer,
+})
 
 export let selectors = {
   getMixedPage: (state, pageId) => {
@@ -335,14 +346,14 @@ export let selectors = {
   getMixedPosts(state) {
     let mixedPage = this.getMixedPage(state, '1')
     let elements = mixedPage.elements || []
-    let posts = elements.map(postId => state[postId])
+    let posts = elements.map(postId => state.entities[postId])
 
     return posts
   },
   getUserPosts(state, username, page) {
     let userPage = this.getUserPage(state, username, page)
     let elements = userPage.elements || []
-    let posts = elements.map(postId => state[postId])
+    let posts = elements.map(postId => state.entities[postId])
 
     return posts
   },
@@ -374,7 +385,7 @@ export let selectors = {
       author: userEntity[post.authorId],
     }))
   },
-  getPost: (state, postId) => (state[postId] || { isNotExist: true }),
+  getPost: (state, postId) => (state.entities[postId] || { isNotExist: true }),
   getPostByUsernameAndSlug: (posts, users, username, postSlug) => {
     let defaultPost = { isNotExist: true }
     let filteredUserIds = Object
@@ -387,9 +398,9 @@ export let selectors = {
 
     let userId = filteredUserIds[0]
     let filteredPostIds = Object
-      .keys(posts)
+      .keys(posts.entities)
       .filter(postId => {
-        let post = posts[postId]
+        let post = posts.entities[postId]
 
         return (
           post.slug === postSlug &&
@@ -403,6 +414,6 @@ export let selectors = {
 
     let postId = filteredPostIds[0]
 
-    return posts[postId]
+    return posts.entities[postId]
   },
 }
