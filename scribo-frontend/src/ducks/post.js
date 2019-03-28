@@ -19,6 +19,9 @@ const plainActionCreators = createActions({
   POST_CREATE_API_FAILURE: (res) => ({ res }),
   POST_READ_API_SUCCESS: (res) => ({ res }),
   POST_READ_API_FAILURE: (res) => ({ res }),
+  POST_UPDATE_API_REQUEST: (postId, post, isSaveOnly, resolve, reject) => ({
+    postId, post, isSaveOnly, resolve, reject,
+  }),
   POST_UPDATE_API_SUCCESS: (res) => ({ res }),
   POST_UPDATE_API_FAILURE: (res) => ({ res }),
   POST_DELETE_API_SUCCESS: (res) => ({ res }),
@@ -149,16 +152,6 @@ const thunkActionCreators = {
       dispatch(setPostLoadingStatus(response.body.id, false))
     }
   },
-  postUpdateApiRequest: (userId, postId, post) => async (dispatch) => {
-    try {
-      let response = await postApi.update(userId, postId, post)
-      dispatch(postUpdateApiSuccess(response))
-      return response.body
-    } catch ({ response }) {
-      dispatch(postUpdateApiFailure(response))
-      return response.body
-    }
-  },
   postDeleteApiRequest: (userId, postId) => async (dispatch) => {
     try {
       let response = await postApi.delete(userId, postId)
@@ -190,11 +183,35 @@ export const sagas = {
       yield put(postCreateApiFailure(response))
       reject && (yield call(reject, response.body))
     }
-  }
+  },
+  *handlePostUpdateApiRequest(action) {
+    let { postId, post, isSaveOnly, resolve, reject } = action.payload
+
+    try {
+      let loggedUser = yield select(({ auth }) => authSelectors.getLoggedUser(auth))
+      let response = yield call(postApi.update, loggedUser.id, postId, post)
+      let { slug } = response.body
+
+      yield put(postUpdateApiSuccess(response))
+
+      if (!isSaveOnly) {
+        yield put(push(`/@${loggedUser.username}/${slug}`))
+      }
+      resolve && (yield call(resolve, response.body))
+    } catch (error) {
+      let response = createApiError(error)
+
+      yield put(postUpdateApiFailure(response))
+      reject && (yield call(reject, response.body))
+    }
+  },
 }
 export const rootSaga = {
   *onPostCreateApiRequest() {
     yield takeEvery(postCreateApiRequest, sagas.handlePostCreateApiRequest)
+  },
+  *onPostUpdateApiRequest() {
+    yield takeEvery(postUpdateApiRequest, sagas.handlePostUpdateApiRequest)
   },
 }
 
@@ -206,6 +223,7 @@ export const {
   postCreateApiFailure,
   postReadApiSuccess,
   postReadApiFailure,
+  postUpdateApiRequest,
   postUpdateApiSuccess,
   postUpdateApiFailure,
   postDeleteApiSuccess,
@@ -226,7 +244,6 @@ export const {
 export const {
   postListApiRequest,
   postReadApiRequest,
-  postUpdateApiRequest,
   postDeleteApiRequest,
   postListMixedApiRequest,
   postListByUsernameApiRequest,
@@ -241,6 +258,12 @@ const defaultState = {
   context: {
     create: {
       post: {},
+      isPending: false,
+      isFulfilled: false,
+      isRejected: false,
+    },
+    update: {
+      isSaveOnly: false,
       isPending: false,
       isFulfilled: false,
       isRejected: false,
@@ -360,6 +383,32 @@ const contextReducer = handleActions({
       isRejected: true,
     },
   }),
+  [postUpdateApiRequest]: (state, { payload: { isSaveOnly } }) => ({
+    ...state,
+    update: {
+      ...state.update,
+      isSaveOnly,
+      isPending: true,
+      isFulfilled: false,
+      isRejected: false,
+    },
+  }),
+  [postUpdateApiSuccess]: (state) => ({
+    ...state,
+    update: {
+      ...state.update,
+      isPending: false,
+      isFulfilled: true,
+    },
+  }),
+  [postUpdateApiFailure]: (state) => ({
+    ...state,
+    update: {
+      ...state.update,
+      isPending: false,
+      isRejected: true,
+    },
+  }),
 }, defaultState.context)
 
 export default combineReducers({
@@ -371,6 +420,7 @@ export default combineReducers({
 
 export let selectors = {
   getCreateContext: (state) => (state.context.create || {}),
+  getUpdateContext: (state) => (state.context.update || {}),
   getMixedPage: (state, pageId) => {
     let mixedPage = state.mixedPages[pageId] || {}
 

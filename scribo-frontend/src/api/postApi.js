@@ -10,7 +10,7 @@ class PostApi extends ApiClient {
   read(userId, postId) {
     return this.get(`/app-users/${userId}/posts/${postId}`)
   }
-  update(userId, postId, post) {
+  update = (userId, postId, post) => {
     return this.put(`/app-users/${userId}/posts/${postId}`, { data: post })
   }
   delete(userId, postId) {

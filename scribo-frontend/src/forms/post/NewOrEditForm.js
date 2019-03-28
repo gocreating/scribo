@@ -43,7 +43,6 @@ class NewOrEditForm extends Component {
 
   state = {
     isHeaderImageModalOpen: false,
-    targetSubmitButton: null,
     activeIndex: -1,
     editorMinHeight: undefined,
   }
@@ -168,7 +167,7 @@ class NewOrEditForm extends Component {
     }
   };
 
-  handleSubmit = (targetConsumerFn, targetSubmitButton) => (data) => {
+  handleSubmit = (targetConsumerFn) => (data) => {
     let blocks = this.xeditor.current
       .getBlocks()
       .map(block => ({
@@ -177,7 +176,6 @@ class NewOrEditForm extends Component {
         values: block.values,
       }))
 
-    this.setState({ targetSubmitButton })
     // return a promise to trigger redux-form's `submitting` prop
     return new Promise((resolve, reject) => {
       resolve(targetConsumerFn({
@@ -191,6 +189,8 @@ class NewOrEditForm extends Component {
     let {
       seriesPostEditable,
       isCreating,
+      isSaving,
+      isUpdating,
       onCreate,
       onSave,
       onUpdate,
@@ -202,14 +202,11 @@ class NewOrEditForm extends Component {
     } = this.props
     let {
       isHeaderImageModalOpen,
-      targetSubmitButton,
       activeIndex,
       editorMinHeight,
     } = this.state
     let headerImage = values.headerImage || {}
     let isAutoSlugify = (values.slug === slugify(values.title))
-    let isSaving = submitting && targetSubmitButton === 'save'
-    let isUpdating = submitting && targetSubmitButton === 'update'
 
     if (loading) {
       return null
@@ -413,7 +410,7 @@ class NewOrEditForm extends Component {
                       basic={!isCreating}
                       disabled={isCreating}
                       loading={isCreating}
-                      onClick={handleSubmit(this.handleSubmit(onCreate, 'create'))}
+                      onClick={handleSubmit(this.handleSubmit(onCreate))}
                     >
                       <FontAwesomeIcon icon={faCheck} />
                       {' 建立文章'}
@@ -424,7 +421,7 @@ class NewOrEditForm extends Component {
                       basic={!isSaving}
                       disabled={isSaving}
                       loading={isSaving}
-                      onClick={handleSubmit(this.handleSubmit(onSave, 'save'))}
+                      onClick={handleSubmit(this.handleSubmit(onSave))}
                     >
                       <FontAwesomeIcon icon={faSave} />
                       {' 儲存文章'}
@@ -435,7 +432,7 @@ class NewOrEditForm extends Component {
                       basic={!isUpdating}
                       disabled={isUpdating}
                       loading={isUpdating}
-                      onClick={handleSubmit(this.handleSubmit(onUpdate, 'update'))}
+                      onClick={handleSubmit(this.handleSubmit(onUpdate))}
                     >
                       <FontAwesomeIcon icon={faCheck} />
                       {' 更新文章'}
