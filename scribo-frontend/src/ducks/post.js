@@ -27,6 +27,9 @@ const plainActionCreators = createActions({
   }),
   POST_UPDATE_API_SUCCESS: (res) => ({ res }),
   POST_UPDATE_API_FAILURE: (res) => ({ res }),
+  POST_DELETE_API_REQUEST: (userId, postId, resolve, reject) => ({
+    userId, postId, resolve, reject,
+  }),
   POST_DELETE_API_SUCCESS: (res) => ({ res }),
   POST_DELETE_API_FAILURE: (res) => ({ res }),
   POST_LIST_MIXED_API_SUCCESS: (res) => ({ res }),
@@ -141,17 +144,6 @@ const thunkActionCreators = {
       dispatch(setPostLoadingStatus(response.body.id, false))
     }
   },
-  postDeleteApiRequest: (userId, postId) => async (dispatch) => {
-    try {
-      let response = await postApi.delete(userId, postId)
-
-      dispatch(postDeleteApiSuccess(response))
-      return response.body || {}
-    } catch ({ response }) {
-      dispatch(postDeleteApiFailure(response))
-      return response.body || {}
-    }
-  },
 }
 // Sagas
 export const sagas = {
@@ -212,6 +204,21 @@ export const sagas = {
       reject && (yield call(reject, response.body))
     }
   },
+  *handlePostDeleteApiRequest(action) {
+    let { userId, postId, resolve, reject } = action.payload
+
+    try {
+      let response = yield call(postApi.delete, userId, postId)
+
+      yield put(postDeleteApiSuccess(response))
+      resolve && (yield call(resolve, response.body))
+    } catch (error) {
+      let response = createApiError(error)
+
+      yield put(postDeleteApiFailure(response))
+      reject && (yield call(reject, response.body))
+    }
+  },
 }
 export const rootSaga = {
   *onPostCreateApiRequest() {
@@ -222,6 +229,9 @@ export const rootSaga = {
   },
   *onPostUpdateApiRequest() {
     yield takeEvery(postUpdateApiRequest, sagas.handlePostUpdateApiRequest)
+  },
+  *onPostDeleteApiRequest() {
+    yield takeEvery(postDeleteApiRequest, sagas.handlePostDeleteApiRequest)
   },
 }
 
@@ -237,6 +247,7 @@ export const {
   postUpdateApiRequest,
   postUpdateApiSuccess,
   postUpdateApiFailure,
+  postDeleteApiRequest,
   postDeleteApiSuccess,
   postDeleteApiFailure,
   postListMixedApiSuccess,
@@ -254,7 +265,6 @@ export const {
 } = plainActionCreators
 export const {
   postListApiRequest,
-  postDeleteApiRequest,
   postListMixedApiRequest,
   postListByUsernameApiRequest,
   postReadByUsernameAndSlugApiRequest,

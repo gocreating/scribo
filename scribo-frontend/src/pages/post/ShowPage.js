@@ -98,7 +98,7 @@ class ShowPage extends Component {
     }
   }
 
-  deletePost = async () => {
+  deletePost = () => {
     let {
       postDelete,
       post,
@@ -114,12 +114,11 @@ class ShowPage extends Component {
       return
     }
 
-    let result = await postDelete(post.authorId, post.id)
-
-    if (result.error) {
-      return alert(result.error.message)
-    }
-    push(`/@${username}`)
+    postDelete(post.authorId, post.id, () => {
+      push(`/@${username}`)
+    }, (result) => {
+      alert(result.error.message)
+    })
   }
 
   render() {
@@ -143,7 +142,7 @@ class ShowPage extends Component {
       updatedAt &&
       moment(updatedAt).diff(createdAt) > 1000
     )
-    
+
     return (
       <AppLayout
         placeholder={false}

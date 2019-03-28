@@ -13,7 +13,7 @@ class PostApi extends ApiClient {
   update = (userId, postId, post) => {
     return this.put(`/app-users/${userId}/posts/${postId}`, { data: post })
   }
-  delete(userId, postId) {
+  delete = (userId, postId) => {
     return this.del(`/app-users/${userId}/posts/${postId}`)
   }
   listMixed(...rest) {
