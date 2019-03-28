@@ -177,6 +177,11 @@ const thunkActionCreators = {
     }
   },
 }
+// Sagas
+export const sagas = {
+}
+export const rootSaga = {
+}
 
 export const {
   postListApiSuccess,
