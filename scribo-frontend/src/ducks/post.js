@@ -17,6 +17,9 @@ const plainActionCreators = createActions({
   POST_CREATE_API_REQUEST: (post, resolve, reject) => ({ post, resolve, reject }),
   POST_CREATE_API_SUCCESS: (res) => ({ res }),
   POST_CREATE_API_FAILURE: (res) => ({ res }),
+  POST_READ_API_REQUEST: (userId, postId, resolve, reject) => ({
+    userId, postId, resolve, reject,
+  }),
   POST_READ_API_SUCCESS: (res) => ({ res }),
   POST_READ_API_FAILURE: (res) => ({ res }),
   POST_UPDATE_API_REQUEST: (postId, post, isSaveOnly, resolve, reject) => ({
@@ -120,20 +123,6 @@ const thunkActionCreators = {
       dispatch(setUserPageLoadingStatus(username, pageId, false))
     }
   },
-  postReadApiRequest: (userId, postId) => async (dispatch) => {
-    try {
-      let response = await postApi.read(userId, postId)
-      dispatch(postReadApiSuccess(response))
-      let { entities } = normalize(response.body, postSchema)
-      entities.posts = zipSeriesPostsOrder(entities.posts)
-      dispatch(addEntities(entities))
-      return response.body
-    } catch (error) {
-      let response = createApiError(error)
-      dispatch(postReadApiFailure(response))
-      return response.body
-    }
-  },
   postReadByUsernameAndSlugApiRequest: (username, postSlug) => async (dispatch) => {
     let response = null
 
@@ -184,6 +173,24 @@ export const sagas = {
       reject && (yield call(reject, response.body))
     }
   },
+  *handlePostReadApiRequest(action) {
+    let { userId, postId, resolve, reject } = action.payload
+
+    try {
+      let response = yield call(postApi.read, userId, postId)
+      let { entities } = normalize(response.body, postSchema)
+
+      entities.posts = zipSeriesPostsOrder(entities.posts)
+      yield put(postReadApiSuccess(response))
+      yield put(addEntities(entities))
+      resolve && (yield call(resolve, response.body))
+    } catch (error) {
+      let response = createApiError(error)
+
+      yield put(postReadApiFailure(response))
+      reject && (yield call(reject, response.body))
+    }
+  },
   *handlePostUpdateApiRequest(action) {
     let { postId, post, isSaveOnly, resolve, reject } = action.payload
 
@@ -210,6 +217,9 @@ export const rootSaga = {
   *onPostCreateApiRequest() {
     yield takeEvery(postCreateApiRequest, sagas.handlePostCreateApiRequest)
   },
+  *onPostReadApiRequest() {
+    yield takeEvery(postReadApiRequest, sagas.handlePostReadApiRequest)
+  },
   *onPostUpdateApiRequest() {
     yield takeEvery(postUpdateApiRequest, sagas.handlePostUpdateApiRequest)
   },
@@ -221,6 +231,7 @@ export const {
   postCreateApiRequest,
   postCreateApiSuccess,
   postCreateApiFailure,
+  postReadApiRequest,
   postReadApiSuccess,
   postReadApiFailure,
   postUpdateApiRequest,
@@ -243,7 +254,6 @@ export const {
 } = plainActionCreators
 export const {
   postListApiRequest,
-  postReadApiRequest,
   postDeleteApiRequest,
   postListMixedApiRequest,
   postListByUsernameApiRequest,
@@ -258,6 +268,11 @@ const defaultState = {
   context: {
     create: {
       post: {},
+      isPending: false,
+      isFulfilled: false,
+      isRejected: false,
+    },
+    read: {
       isPending: false,
       isFulfilled: false,
       isRejected: false,
@@ -383,6 +398,31 @@ const contextReducer = handleActions({
       isRejected: true,
     },
   }),
+  [postReadApiRequest]: (state) => ({
+    ...state,
+    read: {
+      ...state.read,
+      isPending: true,
+      isFulfilled: false,
+      isRejected: false,
+    },
+  }),
+  [postReadApiSuccess]: (state) => ({
+    ...state,
+    read: {
+      ...state.read,
+      isPending: false,
+      isFulfilled: true,
+    },
+  }),
+  [postReadApiFailure]: (state) => ({
+    ...state,
+    read: {
+      ...state.read,
+      isPending: false,
+      isRejected: true,
+    },
+  }),
   [postUpdateApiRequest]: (state, { payload: { isSaveOnly } }) => ({
     ...state,
     update: {
@@ -420,6 +460,7 @@ export default combineReducers({
 
 export let selectors = {
   getCreateContext: (state) => (state.context.create || {}),
+  getReadContext: (state) => (state.context.read || {}),
   getUpdateContext: (state) => (state.context.update || {}),
   getMixedPage: (state, pageId) => {
     let mixedPage = state.mixedPages[pageId] || {}
