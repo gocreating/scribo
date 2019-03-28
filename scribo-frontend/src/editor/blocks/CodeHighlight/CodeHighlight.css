@@ -15,5 +15,8 @@ textarea.code-highlight.editor:focus {
   color: white !important;
 }
 .code-highlight.content code {
-  font-size: 16px !important;
+  /*
+   * don't change font-size of code block,
+   * or the line-number block and line-highlight blocks will be in wrong position
+   */
 }

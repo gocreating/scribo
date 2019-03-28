@@ -9,10 +9,10 @@ import {
 
 let BlockToolbar = ({
   preview,
-  onPreviewClick,  
+  onPreviewClick,
   onRemoveClick,
 }) => (
-  <div className="toolbar">
+  <div className="toolbar-container">
     <Menu icon borderless fluid vertical compact size="mini">
       <Menu.Item
         link

@@ -7,12 +7,17 @@ import { selectors as authSelectors } from '../../ducks/auth'
 import { selectors as postSelectors } from '../../ducks/post'
 import AppLayout from '../../layouts/AppLayout'
 import NewOrEditForm from '../../forms/post/NewOrEditForm'
+import Prompt from '../../components/Prompt'
 import {
   postReadApiRequest,
   postUpdateApiRequest,
 } from '../../ducks/post'
 
 class EditPage extends Component {
+  state = {
+    isInitializing: true,
+  }
+
   static propTypes = {
     post: PropTypes.object,
     postRead: PropTypes.func,
@@ -33,44 +38,47 @@ class EditPage extends Component {
     return result
   }
 
-  updatePost = async (post) => {
-    let { loggedUser, postId, postUpdate } = this.props
-    let result = await postUpdate(loggedUser.id, postId, post)
-
-    if (result.error) {
-      return alert(result.error.message)
-    }
-    return result
-  }
-
   handleInitialize = async (cb) => {
+    await this.setState({ isInitializing: true })
+
     let result = await this.fetchPost()
 
+    await this.setState({ isInitializing: false })
     if (result) {
       cb(this.props.post)
     }
   }
 
-  handleUpdate = async (data) => {
-    let { loggedUser, push } = this.props
-    let result = await this.updatePost(data)
+  handleUpdate = (post) => {
+    let { postUpdate, postId } = this.props
 
-    if (result) {
-      push(`/@${loggedUser.username}/${result.slug}`)
-    }
+    postUpdate(postId, post, false, null, (result) => {
+      alert(result.error.message)
+    })
   }
 
-  handleSave = async (data) => {
-    await this.updatePost(data)
+  handleSave = (post) => {
+    let { postUpdate, postId } = this.props
+
+    postUpdate(postId, post, true, null, (result) => {
+      alert(result.error.message)
+    })
   }
 
   render() {
-    let { isLoading } = this.props
+    let { post, isSaveOnly, isPending, isFulfilled } = this.props
+    let { isInitializing } = this.state
+    let isLoading = post.isNotExist || !post.blocks || isInitializing
 
     return (
       <AppLayout placeholder={false} container={false} loading={isLoading}>
+        {!isFulfilled && (
+          <Prompt message="您可能有內容尚未儲存，是否確定要離開？" />
+        )}
         <NewOrEditForm
           seriesPostEditable
+          isSaving={isSaveOnly && isPending}
+          isUpdating={!isSaveOnly && isPending}
           onInitialize={this.handleInitialize}
           onSave={this.handleSave}
           onUpdate={this.handleUpdate}
@@ -83,18 +91,17 @@ class EditPage extends Component {
 
 export default withRouter(connect(({ auth, posts }, { match }) => {
   let loggedUser = authSelectors.getLoggedUser(auth)
+  let ctx = postSelectors.getUpdateContext(posts)
   let { postId } = match.params
   let post = postSelectors.getPost(posts, postId)
-  let isLoading = false
 
-  if (post.isNotExist || !post.blocks) {
-    isLoading = true
-  }
   return {
     loggedUser,
     postId,
     post,
-    isLoading,
+    isSaveOnly: ctx.isSaveOnly,
+    isPending: ctx.isPending,
+    isFulfilled: ctx.isFulfilled,
   }
 }, {
   postRead: postReadApiRequest,

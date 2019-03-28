@@ -1,7 +1,7 @@
 // ref:
 // - https://medium.com/@matthagemann/the-ultimate-way-to-slugify-a-url-string-in-javascript-b8e4a0d849e1
 // - https://gist.github.com/matthagemann/382adfc57adbd5af078dc93feef01fe1
-export default function slugify(string) {
+export default function slugify(string = '') {
     const a = 'àáäâãåèéëêìíïîòóöôùúüûñçßÿœæŕśńṕẃǵǹḿǘẍźḧ·/_,:;'
     const b = 'aaaaaaeeeeiiiioooouuuuncsyoarsnpwgnmuxzh------'
     const p = new RegExp(a.split('').join('|'), 'g')

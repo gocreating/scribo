@@ -24,7 +24,7 @@ class NewPage extends Component {
 
   render() {
     return (
-      <AppLayout>
+      <AppLayout title="註冊">
         <Segment basic>
           <Header>
             註冊Scribo帳戶

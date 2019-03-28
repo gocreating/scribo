@@ -1,11 +1,16 @@
 import React, { Component } from 'react'
 import { Draggable } from 'react-beautiful-dnd'
+import { Sticky } from 'semantic-ui-react'
 import BlockHandle from '../BlockHandle'
 import BlockToolbar from '../BlockToolbar'
 import { XEditorContext } from '../XEditor'
 
 let xBlock = (config) => (WrappedComponent) => {
   class BlockContainer extends Component {
+    state = {}
+
+    setRef = toolbarRef => this.setState({ toolbarRef })
+
     handlePreviewClick = () => {
       let {
         setPreviewByIndex,
@@ -79,7 +84,7 @@ let xBlock = (config) => (WrappedComponent) => {
       }
 
       return (
-        <div className="block-container">
+        <div className="block-container" ref={this.setRef}>
           <WrappedComponent
             block={blockWithDefaultValues}
             autoUpdateValues={this.autoUpdateValues}
@@ -90,13 +95,18 @@ let xBlock = (config) => (WrappedComponent) => {
             initialValues={block.values}
             enableReinitialize
           />
-          <BlockToolbar
-            preview={block.preview}
-            onPreviewClick={this.handlePreviewClick}
-            onPrependClick={this.handlePrependClick}
-            onAppendClick={this.handleAppendClick}
-            onRemoveClick={this.handleRemoveClick}
-          />
+          <Sticky
+            context={this.state.toolbarRef}
+            className="toolbar"
+          >
+            <BlockToolbar
+              preview={block.preview}
+              onPreviewClick={this.handlePreviewClick}
+              onPrependClick={this.handlePrependClick}
+              onAppendClick={this.handleAppendClick}
+              onRemoveClick={this.handleRemoveClick}
+            />
+          </Sticky>
           <BlockHandle dragHandleProps={dragHandleProps} />
         </div>
       )

@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import ReactDOM from 'react-dom'
 import { compose } from 'recompose'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
@@ -42,12 +43,15 @@ class NewOrEditForm extends Component {
 
   state = {
     isHeaderImageModalOpen: false,
-    targetSubmitButton: null,
     activeIndex: -1,
+    editorMinHeight: undefined,
   }
   xeditor = React.createRef()
 
-  setBlockBucketRef = blockBucketRef => this.setState({ blockBucketRef })
+  setMainEditorRef = mainEditorRef => this.setState({ mainEditorRef })
+  setBlockBucketRef = blockBucketRef => {
+    this.blockBucketRef = blockBucketRef
+  }
 
   componentDidMount() {
     let { onInitialize } = this.props
@@ -55,6 +59,21 @@ class NewOrEditForm extends Component {
     if (onInitialize) {
       onInitialize(this.handleInitialize)
     }
+  }
+
+  componentDidUpdate(prevProps) {
+    if (
+      this.blockBucketRef &&
+      !this.state.editorMinHeight
+    ) {
+      this.setEditorHeight()
+    }
+  }
+
+  setEditorHeight = () => {
+    this.setState({
+      editorMinHeight: ReactDOM.findDOMNode(this.blockBucketRef).offsetHeight,
+    })
   }
 
   handleInitialize = (post) => {
@@ -148,7 +167,7 @@ class NewOrEditForm extends Component {
     }
   };
 
-  handleSubmit = (targetConsumerFn, targetSubmitButton) => (data) => {
+  handleSubmit = (targetConsumerFn) => (data) => {
     let blocks = this.xeditor.current
       .getBlocks()
       .map(block => ({
@@ -157,7 +176,6 @@ class NewOrEditForm extends Component {
         values: block.values,
       }))
 
-    this.setState({ targetSubmitButton })
     // return a promise to trigger redux-form's `submitting` prop
     return new Promise((resolve, reject) => {
       resolve(targetConsumerFn({
@@ -170,25 +188,24 @@ class NewOrEditForm extends Component {
   render() {
     let {
       seriesPostEditable,
+      isCreating,
+      isSaving,
+      isUpdating,
       onCreate,
       onSave,
       onUpdate,
       loading,
-      submitting,
       handleSubmit,
       values,
       loggedUser,
     } = this.props
     let {
       isHeaderImageModalOpen,
-      targetSubmitButton,
       activeIndex,
+      editorMinHeight,
     } = this.state
     let headerImage = values.headerImage || {}
     let isAutoSlugify = (values.slug === slugify(values.title))
-    let isCreating = submitting && targetSubmitButton === 'create'
-    let isSaving = submitting && targetSubmitButton === 'save'
-    let isUpdating = submitting && targetSubmitButton === 'update'
 
     if (loading) {
       return null
@@ -283,6 +300,7 @@ class NewOrEditForm extends Component {
                       type="text"
                       placeholder="標題"
                       size="massive"
+                      autoComplete="off"
                     />
                   </Form.Field>
                   <Form.Field>
@@ -291,15 +309,23 @@ class NewOrEditForm extends Component {
                       component={Input}
                       type="text"
                       placeholder="副標題"
+                      autoComplete="off"
                     />
                   </Form.Field>
                 </Grid.Column>
               </Grid.Row>
 
               <Grid.Row>
-                <Grid.Column width={14}>
+                <Grid.Column
+                  width={14}
+                  style={{
+                    // sync min-height with height of block bucket to avoid oscillation
+                    // when editor height is smaller than block bucket height
+                    minHeight: editorMinHeight,
+                  }}
+                >
                   <Form.Field width={16}>
-                    <div ref={this.setBlockBucketRef}>
+                    <div ref={this.setMainEditorRef}>
                       <XEditor ref={this.xeditor} />
                     </div>
                   </Form.Field>
@@ -307,13 +333,13 @@ class NewOrEditForm extends Component {
                 <Grid.Column width={2}>
                   <Sticky
                     offset={20}
-                    context={this.state.blockBucketRef}
+                    context={this.state.mainEditorRef}
                   >
-                    <BlockBucket />
+                    <BlockBucket ref={this.setBlockBucketRef} />
                   </Sticky>
                 </Grid.Column>
               </Grid.Row>
-              
+
               <Grid.Row>
                 <Grid.Column>
                   <Accordion fluid styled>
@@ -365,7 +391,7 @@ class NewOrEditForm extends Component {
                     )}
                   </Accordion>
                 </Grid.Column>
-              </Grid.Row>              
+              </Grid.Row>
 
               <Grid.Row>
                 <Grid.Column>
@@ -383,7 +409,7 @@ class NewOrEditForm extends Component {
                       basic={!isCreating}
                       disabled={isCreating}
                       loading={isCreating}
-                      onClick={handleSubmit(this.handleSubmit(onCreate, 'create'))}
+                      onClick={handleSubmit(this.handleSubmit(onCreate))}
                     >
                       <FontAwesomeIcon icon={faCheck} />
                       {' 建立文章'}
@@ -394,7 +420,7 @@ class NewOrEditForm extends Component {
                       basic={!isSaving}
                       disabled={isSaving}
                       loading={isSaving}
-                      onClick={handleSubmit(this.handleSubmit(onSave, 'save'))}
+                      onClick={handleSubmit(this.handleSubmit(onSave))}
                     >
                       <FontAwesomeIcon icon={faSave} />
                       {' 儲存文章'}
@@ -405,7 +431,7 @@ class NewOrEditForm extends Component {
                       basic={!isUpdating}
                       disabled={isUpdating}
                       loading={isUpdating}
-                      onClick={handleSubmit(this.handleSubmit(onUpdate, 'update'))}
+                      onClick={handleSubmit(this.handleSubmit(onUpdate))}
                     >
                       <FontAwesomeIcon icon={faCheck} />
                       {' 更新文章'}
@@ -429,7 +455,7 @@ let enhance = compose(
     },
   }),
   connect(state => ({
-    values: getFormValues(FormTypes.POST_NEW_OR_EDIT)(state),
+    values: getFormValues(FormTypes.POST_NEW_OR_EDIT)(state) || {},
     loggedUser: selectors.getLoggedUser(state.auth),
   }))
 )

@@ -43,7 +43,7 @@ npm run dump
 
 ```
 /scribo $ heroku login
-/scribo $ heroku git:remote -a scribo
+/scribo $ heroku git:remote -a scribo-backend
 /scribo/scribo-backend $ npm run deploy
 ```
 

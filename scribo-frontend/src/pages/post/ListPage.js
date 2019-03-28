@@ -19,7 +19,12 @@ class ListPage extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.pageId !== this.props.pageId) {
+    let { username, pageId } = this.props
+
+    if (
+      username !== prevProps.username ||
+      pageId !== prevProps.pageId
+    ) {
       this.fetchPosts()
     }
   }
@@ -58,10 +63,14 @@ class ListPage extends Component {
   }
 
   render() {
-    let { posts, isLoading, pageId, meta } = this.props
+    let { posts, isLoading, pageId, meta, username } = this.props
 
     return (
-      <AppLayout placeholder loading={isLoading}>
+      <AppLayout
+        placeholder
+        loading={isLoading}
+        title={`@${username}`}
+      >
         <PostList posts={posts} />
         {!isLoading && posts.length === 0 && (
           <BlankPostList onInitClick={this.gotoNewPost} />

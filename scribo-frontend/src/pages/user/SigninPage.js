@@ -37,7 +37,7 @@ class NewPage extends Component {
 
   render() {
     return (
-      <AppLayout>
+      <AppLayout title="登入">
         <Segment basic>
           <Header>
             登入Scribo

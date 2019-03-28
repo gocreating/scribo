@@ -21,13 +21,22 @@
 
     /* block toolbar */
     .toolbar {
-      display: none;
+      visibility: hidden;
       position: absolute;
       top: 0px;
-      right: 100%;
+      padding-top: 15px;
+      margin-top: -15px;
       height: 100%;
+      margin-left: -15px;
       padding-left: 15px;
-      padding-right: 15px;
+      padding-right: 55px;
+      left: -55px; /* width:40 + padding:15 */
+
+      .toolbar-container {
+        /* below are cpoied from .ui.compact.menu */
+        display: inline-flex;
+        margin: 0;
+      }
 
       .handle {
         cursor: move !important;
@@ -35,7 +44,7 @@
     }
 
     &:hover .toolbar {
-      display: block;
+      visibility: visible;
     }
 
     /* block handle */
@@ -56,13 +65,15 @@
       visibility: hidden;
       position: absolute;
       left: 0px;
-      bottom: 100%;
-      width: 100%;
+      padding-left: 15px;
+      margin-left: -15px;
       padding-top: 15px;
+      margin-top: -15px;
       padding-bottom: 15px;
+      width: 100%;
+      top: -55px; /* height:40 + padding:15 */
 
       .props-toolbar-container {
-        background-color: #fff;
         /* below are cpoied from .ui.compact.menu */
         display: inline-flex;
         margin: 0;

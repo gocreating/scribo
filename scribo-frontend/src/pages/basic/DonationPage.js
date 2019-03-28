@@ -33,7 +33,7 @@ class DonationPage extends Component {
     let { donationSuccessCode, donationErrorCode } = query
 
     return (
-      <AppLayout placeholder={isMessageVisible}>
+      <AppLayout placeholder={isMessageVisible} title="贊助">
         <DonationMessage
           visible={isMessageVisible}
           successCode={donationSuccessCode}
