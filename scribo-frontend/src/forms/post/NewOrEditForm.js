@@ -195,7 +195,6 @@ class NewOrEditForm extends Component {
       onSave,
       onUpdate,
       loading,
-      submitting,
       handleSubmit,
       values,
       loggedUser,
