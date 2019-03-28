@@ -36,6 +36,9 @@ const plainActionCreators = createActions({
   POST_LIST_MIXED_API_FAILURE: (res) => ({ res }),
   POST_LIST_BY_USERNAME_API_SUCCESS: (res) => ({ res }),
   POST_LIST_BY_USERNAME_API_FAILURE: (res) => ({ res }),
+  POST_READ_BY_USERNAME_AND_SLUG_API_REQUEST: (username, postSlug, resolve, reject) => ({
+    username, postSlug, resolve, reject,
+  }),
   POST_READ_BY_USERNAME_AND_SLUG_API_SUCCESS: (res) => ({ res }),
   POST_READ_BY_USERNAME_AND_SLUG_API_FAILURE: (res) => ({ res }),
   SET_MIXED_PAGE: (pageId, postIds) => ({
@@ -126,24 +129,6 @@ const thunkActionCreators = {
       dispatch(setUserPageLoadingStatus(username, pageId, false))
     }
   },
-  postReadByUsernameAndSlugApiRequest: (username, postSlug) => async (dispatch) => {
-    let response = null
-
-    try {
-      response = await postApi.readByUsernameAndSlug(username, postSlug)
-      dispatch(postReadByUsernameAndSlugApiSuccess(response))
-      let { entities } = normalize(response.body, postSchema)
-      entities.posts = zipSeriesPostsOrder(entities.posts)
-      dispatch(addEntities(entities))
-      return response.body
-    } catch (error) {
-      let response = createApiError(error)
-      dispatch(postReadByUsernameAndSlugApiFailure(response))
-      return response.body
-    } finally {
-      dispatch(setPostLoadingStatus(response.body.id, false))
-    }
-  },
 }
 // Sagas
 export const sagas = {
@@ -181,6 +166,27 @@ export const sagas = {
 
       yield put(postReadApiFailure(response))
       reject && (yield call(reject, response.body))
+    }
+  },
+  *handlePostReadByUsernameAndSlugApiRequest(action) {
+    let { username, postSlug, resolve, reject } = action.payload
+    let response = null
+
+    try {
+      response = yield call(postApi.readByUsernameAndSlug, username, postSlug)
+
+      let { entities } = normalize(response.body, postSchema)
+
+      entities.posts = zipSeriesPostsOrder(entities.posts)
+      yield put(postReadByUsernameAndSlugApiSuccess(response))
+      yield put(addEntities(entities))
+      resolve && (yield call(resolve, response.body))
+    } catch (error) {
+      let response = createApiError(error)
+      yield put(postReadByUsernameAndSlugApiFailure(response))
+      reject && (yield call(reject, response.body))
+    } finally {
+      yield put(setPostLoadingStatus(response.body.id, false))
     }
   },
   *handlePostUpdateApiRequest(action) {
@@ -227,6 +233,12 @@ export const rootSaga = {
   *onPostReadApiRequest() {
     yield takeEvery(postReadApiRequest, sagas.handlePostReadApiRequest)
   },
+  *onPostReadByUsernameAndSlugApiRequest() {
+    yield takeEvery(
+      postReadByUsernameAndSlugApiRequest,
+      sagas.handlePostReadByUsernameAndSlugApiRequest
+    )
+  },
   *onPostUpdateApiRequest() {
     yield takeEvery(postUpdateApiRequest, sagas.handlePostUpdateApiRequest)
   },
@@ -255,6 +267,7 @@ export const {
   postListByUsernameApiStart,
   postListByUsernameApiSuccess,
   postListByUsernameApiFailure,
+  postReadByUsernameAndSlugApiRequest,
   postReadByUsernameAndSlugApiSuccess,
   postReadByUsernameAndSlugApiFailure,
   setMixedPage,
@@ -267,7 +280,6 @@ export const {
   postListApiRequest,
   postListMixedApiRequest,
   postListByUsernameApiRequest,
-  postReadByUsernameAndSlugApiRequest,
 } = thunkActionCreators
 
 // Reducer

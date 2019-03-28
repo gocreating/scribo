@@ -22,7 +22,7 @@ class PostApi extends ApiClient {
   listByUsername(username, ...rest) {
     return this.get(`/app-users/username/${username}/posts`, ...rest)
   }
-  readByUsernameAndSlug(username, postSlug, ...rest) {
+  readByUsernameAndSlug = (username, postSlug, ...rest) => {
     return this.get(`/app-users/username/${username}/posts/${postSlug}`, ...rest)
   }
 }
