@@ -10,6 +10,7 @@ import BlankPostList from '../../components/BlankPostList'
 import { selectors as authSelector } from '../../ducks/auth'
 import {
   postListByUsernameApiRequest,
+  redirectToNewPost,
   selectors as postSelector,
 } from '../../ducks/post'
 
@@ -29,27 +30,18 @@ class ListPage extends Component {
     }
   }
 
-  gotoNewPost = () => {
-    let { isAuth, push } = this.props
+  gotoNewPost = () => this.props.redirectToNewPost()
 
-    if (isAuth) {
-      push('/post/new')
-    } else {
-      push('/user/signin')
-    }
-  }
-
-  fetchPosts = async () => {
+  fetchPosts = () => {
     let {
       postListByUsername,
       username,
       pageId,
     } = this.props
-    let result = await postListByUsername(username, pageId)
 
-    if (result.error) {
-      return alert(result.error.message)
-    }
+    postListByUsername(username, pageId, null, (result) => {
+      alert(result.error.message)
+    })
   }
 
   handlePageChange = (e, data) => {
@@ -111,5 +103,6 @@ export default withRouter(connect(({
   }
 }, {
   postListByUsername: postListByUsernameApiRequest,
+  redirectToNewPost,
   push,
 })(ListPage))

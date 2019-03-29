@@ -34,6 +34,9 @@ const plainActionCreators = createActions({
   POST_DELETE_API_FAILURE: (res) => ({ res }),
   POST_LIST_MIXED_API_SUCCESS: (res) => ({ res }),
   POST_LIST_MIXED_API_FAILURE: (res) => ({ res }),
+  POST_LIST_BY_USERNAME_API_REQUEST: (username, pageId, resolve, reject) => ({
+    username, pageId, resolve, reject,
+  }),
   POST_LIST_BY_USERNAME_API_SUCCESS: (res) => ({ res }),
   POST_LIST_BY_USERNAME_API_FAILURE: (res) => ({ res }),
   POST_READ_BY_USERNAME_AND_SLUG_API_REQUEST: (username, postSlug, resolve, reject) => ({
@@ -56,6 +59,7 @@ const plainActionCreators = createActions({
   SET_POST_LOADING_STATUS: (postId, isLoading) => ({
     postId, isLoading,
   }),
+  REDIRECT_TO_NEW_POST: () => {},
 })
 const thunkActionCreators = {
   postListApiRequest: (userId) => async (dispatch) => {
@@ -107,31 +111,35 @@ const thunkActionCreators = {
       dispatch(setMixedPageLoadingStatus(1, false))
     }
   },
-  postListByUsernameApiRequest: (username, pageId) => async (dispatch) => {
-    dispatch(setUserPageLoadingStatus(username, pageId, true))
+}
+// Sagas
+export const sagas = {
+  *handlePostListByUsernameApiRequest(action) {
+    let { username, pageId, resolve, reject } = action.payload
+
+    yield put(setUserPageLoadingStatus(username, pageId, true))
     try {
-      let response = await postApi.listByUsername(username, {
+      let response = yield call(postApi.listByUsername, username, {
         params: {
           pageId,
         },
       })
-      dispatch(postListByUsernameApiSuccess(response))
       let { posts, meta } = response.body
       let { result, entities } = normalize(posts, [postSchema])
-      dispatch(addEntities(entities))
-      dispatch(setUserPage(username, pageId, meta, result))
-      return response.body
+
+      yield put(postListByUsernameApiSuccess(response))
+      yield put(addEntities(entities))
+      yield put(setUserPage(username, pageId, meta, result))
+      resolve && (yield call(resolve, response.body))
     } catch (error) {
       let response = createApiError(error)
-      dispatch(postListByUsernameApiFailure(response))
-      return response.body
+
+      yield put(postListByUsernameApiFailure(response))
+      reject && (yield call(reject, response.body))
     } finally {
-      dispatch(setUserPageLoadingStatus(username, pageId, false))
+      yield put(setUserPageLoadingStatus(username, pageId, false))
     }
   },
-}
-// Sagas
-export const sagas = {
   *handlePostCreateApiRequest(action) {
     let { post, resolve, reject } = action.payload
 
@@ -225,8 +233,23 @@ export const sagas = {
       reject && (yield call(reject, response.body))
     }
   },
+  *handleRedirectToNewPost(action) {
+    let isAuth = yield select(({ auth }) => authSelectors.getIsAuth(auth))
+
+    if (isAuth) {
+      yield put(push('/post/new'))
+    } else {
+      yield put(push('/user/signin'))
+    }
+  }
 }
 export const rootSaga = {
+  *onPostListByUsernameApiRequest() {
+    yield takeEvery(
+      postListByUsernameApiRequest,
+      sagas.handlePostListByUsernameApiRequest
+    )
+  },
   *onPostCreateApiRequest() {
     yield takeEvery(postCreateApiRequest, sagas.handlePostCreateApiRequest)
   },
@@ -244,6 +267,9 @@ export const rootSaga = {
   },
   *onPostDeleteApiRequest() {
     yield takeEvery(postDeleteApiRequest, sagas.handlePostDeleteApiRequest)
+  },
+  *onRedirectToNewPost() {
+    yield takeEvery(redirectToNewPost, sagas.handleRedirectToNewPost)
   },
 }
 
@@ -264,7 +290,7 @@ export const {
   postDeleteApiFailure,
   postListMixedApiSuccess,
   postListMixedApiFailure,
-  postListByUsernameApiStart,
+  postListByUsernameApiRequest,
   postListByUsernameApiSuccess,
   postListByUsernameApiFailure,
   postReadByUsernameAndSlugApiRequest,
@@ -275,11 +301,11 @@ export const {
   setUserPage,
   setUserPageLoadingStatus,
   setPostLoadingStatus,
+  redirectToNewPost,
 } = plainActionCreators
 export const {
   postListApiRequest,
   postListMixedApiRequest,
-  postListByUsernameApiRequest,
 } = thunkActionCreators
 
 // Reducer
