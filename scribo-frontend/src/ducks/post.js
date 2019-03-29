@@ -511,7 +511,9 @@ export let selectors = {
     if (filteredPostIds.length === 0) {
       return defaultPost
     }
-
+    if (filteredPostIds.length > 1) {
+      throw new Error('Duplicate (username, slug) pair, cannot retrieve post correctly.')
+    }
     let postId = filteredPostIds[0]
 
     return posts.entities[postId]
