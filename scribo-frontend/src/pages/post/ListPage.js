@@ -91,12 +91,13 @@ export default withRouter(connect(({
   let query = qs.parse(location.search)
   let pageId = query.page || 1
   let meta = postSelector.getUserPagesMeta(posts, username)
+  let ctx = postSelector.getListByUsernameContext(posts, username, pageId)
 
   return {
     isAuth: authSelector.getIsAuth(auth),
     username,
     posts: postSelector.getUserPostsWithAuthor(posts, users, username, pageId),
-    isLoading: postSelector.getUserPostsLoadingStatus(posts, username, pageId),
+    isLoading: ctx.isPending,
     query,
     pageId,
     meta,
