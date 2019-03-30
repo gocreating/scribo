@@ -13,6 +13,9 @@ const plainActionCreators = createActions({
   SIGNUP_API_SUCCESS: (res) => ({ res }),
   SIGNUP_API_FAILURE: (res) => ({ res }),
 
+  SIGNIN_API_REQUEST: (credentials, resolve, reject) => ({
+    credentials, resolve, reject,
+  }),
   SIGNIN_API_SUCCESS: (res) => ({ res }),
   SIGNIN_API_FAILURE: (res) => ({ res }),
 
@@ -20,30 +23,6 @@ const plainActionCreators = createActions({
   LOGOUT_API_FAILURE: (res) => ({ res }),
 })
 const thunkActionCreators = {
-  signinApiRequest: (credentials) => async (dispatch) => {
-    try {
-      let response = await userApi.signin(credentials)
-      let {
-        accessToken,
-        ttl,
-        tokenCreatedAt,
-        user,
-      } = response.body
-
-      dispatch(setAuth(
-        accessToken,
-        ttl,
-        tokenCreatedAt,
-        user
-      ))
-      dispatch(signinApiSuccess(response))
-      return response.body
-    } catch (error) {
-      let response = createApiError(error)
-      dispatch(signinApiFailure(response))
-      return response.body
-    }
-  },
   logoutApiRequest: () => async (dispatch) => {
     try {
       // userApi.logout() requires accessToken,
@@ -80,10 +59,54 @@ export const sagas = {
       reject && (yield call(reject, response.body))
     }
   },
+  *handleSigninApiRequest(action) {
+    let { credentials, resolve, reject } = action.payload
+    let parsedCredentials = {}
+
+    if (credentials.emailOrUsername.indexOf('@') >= 0) {
+      parsedCredentials = {
+        email: credentials.emailOrUsername,
+        password: credentials.password,
+      }
+    } else {
+      parsedCredentials = {
+        username: credentials.emailOrUsername,
+        password: credentials.password,
+      }
+    }
+
+    try {
+      let response = yield call(userApi.signin, parsedCredentials)
+      let {
+        accessToken,
+        ttl,
+        tokenCreatedAt,
+        user,
+      } = response.body
+
+      yield put(setAuth(
+        accessToken,
+        ttl,
+        tokenCreatedAt,
+        user
+      ))
+      yield put(signinApiSuccess(response))
+      yield put(push(`/@${user.username}`))
+      resolve && (yield call(resolve, response.body))
+    } catch (error) {
+      let response = createApiError(error)
+
+      yield put(signinApiFailure(response))
+      reject && (yield call(reject, response.body))
+    }
+  },
 }
 export const rootSaga = {
   *onSignupApiRequest() {
     yield takeEvery(signupApiRequest, sagas.handleSignupApiRequest)
+  },
+  *onSigninApiRequest() {
+    yield takeEvery(signinApiRequest, sagas.handleSigninApiRequest)
   },
 }
 
@@ -91,13 +114,15 @@ export const {
   signupApiRequest,
   signupApiSuccess,
   signupApiFailure,
+
+  signinApiRequest,
   signinApiSuccess,
   signinApiFailure,
+
   logoutApiSuccess,
   logoutApiFailure,
 } = plainActionCreators
 export const {
-  signinApiRequest,
   logoutApiRequest,
 } = thunkActionCreators
 
@@ -106,6 +131,11 @@ const defaultState = {
   entities: {},
   context: {
     signup: {
+      isPending: false,
+      isFulfilled: false,
+      isRejected: false,
+    },
+    signin: {
       isPending: false,
       isFulfilled: false,
       isRejected: false,
@@ -144,6 +174,31 @@ const contextReducer = handleActions({
       isRejected: true,
     },
   }),
+  [signinApiRequest]: (state) => ({
+    ...state,
+    signin: {
+      ...state.signin,
+      isPending: true,
+      isFulfilled: false,
+      isRejected: false,
+    },
+  }),
+  [signinApiSuccess]: (state) => ({
+    ...state,
+    signin: {
+      ...state.signin,
+      isPending: false,
+      isFulfilled: true,
+    },
+  }),
+  [signinApiFailure]: (state) => ({
+    ...state,
+    signin: {
+      ...state.signin,
+      isPending: false,
+      isRejected: true,
+    },
+  }),
 }, defaultState.context)
 
 export default combineReducers({
@@ -153,4 +208,5 @@ export default combineReducers({
 
 export let selectors = {
   getSignupContext: (state) => (state.context.signup || {}),
+  getSigninContext: (state) => (state.context.signin || {}),
 }

@@ -1,55 +1,37 @@
-import React, { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Segment, Header } from 'semantic-ui-react'
-import { push } from 'connected-react-router'
 import AppLayout from '../../layouts/AppLayout'
 import SigninForm from '../../forms/user/SigninForm'
-import { signinApiRequest } from '../../ducks/user'
+import {
+  signinApiRequest,
+  selectors as userSelector,
+} from '../../ducks/user'
 
-class NewPage extends Component {
-  static propTypes = {
-    signin: PropTypes.func,
-    push: PropTypes.func,
-  }
+let SigninPage = ({ signin, isSubmitting }) => (
+  <AppLayout placeholder title="登入">
+    <Segment basic>
+      <Header>
+        登入Scribo
+      </Header>
+      <SigninForm
+        onSubmit={data => signin(data, null, (result) => {
+          alert(result.error.message)
+        })}
+        isSubmitting={isSubmitting}
+      />
+    </Segment>
+  </AppLayout>
+)
 
-  handleSubmit = async (data) => {
-    let { signin, push } = this.props
-    let result
-
-    if (data.emailOrUsername.indexOf('@') >= 0) {
-      result = await signin({
-        email: data.emailOrUsername,
-        password: data.password,
-      })
-    } else {
-      result = await signin({
-        username: data.emailOrUsername,
-        password: data.password,
-      })
-    }
-
-    if (result.error) {
-      return alert(result.error.message)
-    }
-    push(`/@${result.user.username}`)
-  }
-
-  render() {
-    return (
-      <AppLayout title="登入">
-        <Segment basic>
-          <Header>
-            登入Scribo
-          </Header>
-          <SigninForm onSubmit={this.handleSubmit} />
-        </Segment>
-      </AppLayout>
-    )
-  }
+SigninPage.propTypes = {
+  signin: PropTypes.func,
+  isSubmitting: PropTypes.bool,
 }
 
-export default connect(null, {
+export default connect(({ users }) => ({
+  isSubmitting: userSelector.getSigninContext(users).isPending,
+}), {
   signin: signinApiRequest,
-  push,
-})(NewPage)
+})(SigninPage)
