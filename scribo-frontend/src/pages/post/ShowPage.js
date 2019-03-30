@@ -268,16 +268,8 @@ export default withRouter(connect(({ posts, users, auth }, { match }) => {
     username,
     postSlug,
   } = match.params
-  let post = {}
-  let isLoading = false
-
-  if (username) {
-    post = postSelectors.getPostByUsernameAndSlug(posts, users, username, postSlug)
-  }
-  if (post.isNotExist || !post.blocks) {
-    isLoading = true
-  }
-
+  let post = postSelectors.getPostByUsernameAndSlug(posts, users, username, postSlug)
+  let ctxPost = postSelectors.getEntitiesContext(posts, username, postSlug)
   let seriesPosts = post.seriesPosts || []
 
   seriesPosts.sort((a, b) => a.order - b.order)
@@ -287,7 +279,7 @@ export default withRouter(connect(({ posts, users, auth }, { match }) => {
     postSlug,
     post,
     seriesPosts,
-    isLoading,
+    isLoading: ctxPost.isPending,
     isAuth: authSelectors.getIsAuth(auth),
     loggedUserId: authSelectors.getLoggedUserId(auth),
   }

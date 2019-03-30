@@ -44,8 +44,12 @@ const plainActionCreators = createActions({
   POST_READ_BY_USERNAME_AND_SLUG_API_REQUEST: (username, postSlug, resolve, reject) => ({
     username, postSlug, resolve, reject,
   }),
-  POST_READ_BY_USERNAME_AND_SLUG_API_SUCCESS: (res) => ({ res }),
-  POST_READ_BY_USERNAME_AND_SLUG_API_FAILURE: (res) => ({ res }),
+  POST_READ_BY_USERNAME_AND_SLUG_API_SUCCESS: (res, username, postSlug) => ({
+    res, username, postSlug,
+  }),
+  POST_READ_BY_USERNAME_AND_SLUG_API_FAILURE: (res, username, postSlug) => ({
+    res, username, postSlug,
+  }),
 
   POST_UPDATE_API_REQUEST: (postId, post, isSaveOnly, resolve, reject) => ({
     postId, post, isSaveOnly, resolve, reject,
@@ -64,9 +68,6 @@ const plainActionCreators = createActions({
   }),
   SET_USER_PAGE: (username, pageId, meta, postIds) => ({
     username, pageId, meta, postIds,
-  }),
-  SET_USER_PAGE_LOADING_STATUS: (username, pageId, isLoading) => ({
-    username, pageId, isLoading,
   }),
   REDIRECT_TO_NEW_POST: () => {},
 })
@@ -185,23 +186,20 @@ export const sagas = {
   },
   *handlePostReadByUsernameAndSlugApiRequest(action) {
     let { username, postSlug, resolve, reject } = action.payload
-    let response = null
 
     try {
-      response = yield call(postApi.readByUsernameAndSlug, username, postSlug)
-
+      let response = yield call(postApi.readByUsernameAndSlug, username, postSlug)
       let { entities } = normalize(response.body, postSchema)
 
       entities.posts = zipSeriesPostsOrder(entities.posts)
-      yield put(postReadByUsernameAndSlugApiSuccess(response))
+      yield put(postReadByUsernameAndSlugApiSuccess(response, username, postSlug))
       yield put(addEntities(entities))
       resolve && (yield call(resolve, response.body))
     } catch (error) {
       let response = createApiError(error)
-      yield put(postReadByUsernameAndSlugApiFailure(response))
+
+      yield put(postReadByUsernameAndSlugApiFailure(response, username, postSlug))
       reject && (yield call(reject, response.body))
-    } finally {
-      yield put(setPostLoadingStatus(response.body.id, false))
     }
   },
   *handlePostUpdateApiRequest(action) {
@@ -320,7 +318,6 @@ export const {
 
   setMixedPage,
   setUserPage,
-  setPostLoadingStatus,
   redirectToNewPost,
 } = plainActionCreators
 export const {
@@ -335,6 +332,7 @@ const defaultState = {
   context: {
     listMixed: {},
     listByUsername: {},
+    entities: {},
     create: {
       isPending: false,
       isFulfilled: false,
@@ -364,17 +362,6 @@ const entitiesReducer = handleActions({
     ...state,
     ...entities.posts,
   }),
-  [setPostLoadingStatus]: (state, { payload: { postId, isLoading } }) => {
-    let post = state[postId] || {}
-
-    return {
-      ...state,
-      [postId]: {
-        ...post,
-        isLoading,
-      }
-    }
-  },
 }, defaultState.entities)
 
 const mixedPagesReducer = handleActions({
@@ -573,6 +560,58 @@ const contextReducer = handleActions({
       isRejected: true,
     },
   }),
+  [postReadByUsernameAndSlugApiRequest]: (state, {
+    payload: { username, postSlug },
+  }) => {
+    let postKey = `${username},${postSlug}`
+    let ctxEntity = state.entities[postKey] || {}
+
+    return {
+      ...state,
+      entities: {
+        [postKey]: {
+          ...ctxEntity,
+          isPending: true,
+          isFulfilled: false,
+          isRejected: false,
+        },
+      },
+    }
+  },
+  [postReadByUsernameAndSlugApiSuccess]: (state, {
+    payload: { username, postSlug },
+  }) => {
+    let postKey = `${username},${postSlug}`
+    let ctxEntity = state.entities[postKey] || {}
+
+    return {
+      ...state,
+      entities: {
+        [postKey]: {
+          ...ctxEntity,
+          isPending: false,
+          isFulfilled: true,
+        },
+      },
+    }
+  },
+  [postReadByUsernameAndSlugApiFailure]: (state, {
+    payload: { username, postSlug },
+  }) => {
+    let postKey = `${username},${postSlug}`
+    let ctxEntity = state.entities[postKey] || {}
+
+    return {
+      ...state,
+      entities: {
+        [postKey]: {
+          ...ctxEntity,
+          isPending: false,
+          isRejected: true,
+        },
+      },
+    }
+  },
   [postUpdateApiRequest]: (state, { payload: { isSaveOnly } }) => ({
     ...state,
     update: {
@@ -618,6 +657,9 @@ export let selectors = {
   },
   getCreateContext: (state) => (state.context.create || {}),
   getReadContext: (state) => (state.context.read || {}),
+  getEntitiesContext: (state, username, postSlug) => (
+    state.context.entities[`${username},${postSlug}`] || {}
+  ),
   getUpdateContext: (state) => (state.context.update || {}),
   getMixedPage: (state, pageId) => {
     let mixedPage = state.mixedPages[pageId] || {}
@@ -654,12 +696,6 @@ export let selectors = {
     let posts = elements.map(postId => state.entities[postId])
 
     return posts
-  },
-  getUserPostsLoadingStatus(state, username, pageId) {
-    let userPage = this.getUserPage(state, username, pageId)
-    let isLoading = userPage.isLoading || false
-
-    return isLoading
   },
   getMixedPostsWithAuthor(state, userEntity) {
     let posts = this.getMixedPosts(state)
