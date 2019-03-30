@@ -19,27 +19,10 @@ const plainActionCreators = createActions({
   SIGNIN_API_SUCCESS: (res) => ({ res }),
   SIGNIN_API_FAILURE: (res) => ({ res }),
 
+  LOGOUT_API_REQUEST: (resolve, reject) => ({ resolve, reject }),
   LOGOUT_API_SUCCESS: (res) => ({ res }),
   LOGOUT_API_FAILURE: (res) => ({ res }),
 })
-const thunkActionCreators = {
-  logoutApiRequest: () => async (dispatch) => {
-    try {
-      // userApi.logout() requires accessToken,
-      // so don't clear auth before the request is fired
-      let response = await userApi.logout()
-
-      dispatch(logoutApiSuccess(response))
-      return response.body
-    } catch (error) {
-      let response = createApiError(error)
-      dispatch(logoutApiFailure(response))
-      return response.body
-    } finally {
-      dispatch(clearAuth())
-    }
-  },
-}
 
 // Sagas
 export const sagas = {
@@ -100,6 +83,30 @@ export const sagas = {
       reject && (yield call(reject, response.body))
     }
   },
+  *handleLogoutApiRequest(action) {
+    let { resolve, reject } = action.payload
+
+    try {
+      // userApi.logout() requires accessToken,
+      // so don't clear auth before the request is fired
+      let response = yield call(userApi.logout)
+
+      yield put(logoutApiSuccess(response))
+      yield put(push('/user/signin'))
+      yield put(clearAuth())
+      resolve && (yield call(resolve, response.body))
+    } catch (error) {
+      let response = createApiError(error)
+
+      yield put(logoutApiFailure(response))
+      if (window.confirm(
+        `登出時發生以下錯誤，是否強制登出？\n${response.body.error.message}`
+      )) {
+        yield put(clearAuth())
+      }
+      reject && (yield call(reject, response.body))
+    }
+  },
 }
 export const rootSaga = {
   *onSignupApiRequest() {
@@ -107,6 +114,9 @@ export const rootSaga = {
   },
   *onSigninApiRequest() {
     yield takeEvery(signinApiRequest, sagas.handleSigninApiRequest)
+  },
+  *onLogoutApiRequest() {
+    yield takeEvery(logoutApiRequest, sagas.handleLogoutApiRequest)
   },
 }
 
@@ -119,12 +129,10 @@ export const {
   signinApiSuccess,
   signinApiFailure,
 
+  logoutApiRequest,
   logoutApiSuccess,
   logoutApiFailure,
 } = plainActionCreators
-export const {
-  logoutApiRequest,
-} = thunkActionCreators
 
 // Reducer
 const defaultState = {
@@ -136,6 +144,11 @@ const defaultState = {
       isRejected: false,
     },
     signin: {
+      isPending: false,
+      isFulfilled: false,
+      isRejected: false,
+    },
+    logout: {
       isPending: false,
       isFulfilled: false,
       isRejected: false,
@@ -199,6 +212,31 @@ const contextReducer = handleActions({
       isRejected: true,
     },
   }),
+  [logoutApiRequest]: (state) => ({
+    ...state,
+    logout: {
+      ...state.logout,
+      isPending: true,
+      isFulfilled: false,
+      isRejected: false,
+    },
+  }),
+  [logoutApiSuccess]: (state) => ({
+    ...state,
+    logout: {
+      ...state.logout,
+      isPending: false,
+      isFulfilled: true,
+    },
+  }),
+  [logoutApiFailure]: (state) => ({
+    ...state,
+    logout: {
+      ...state.logout,
+      isPending: false,
+      isRejected: true,
+    },
+  }),
 }, defaultState.context)
 
 export default combineReducers({
@@ -209,4 +247,5 @@ export default combineReducers({
 export let selectors = {
   getSignupContext: (state) => (state.context.signup || {}),
   getSigninContext: (state) => (state.context.signin || {}),
+  getLogoutContext: (state) => (state.context.logout || {}),
 }
