@@ -14,12 +14,9 @@ class HomePage extends Component {
   }
 
   fetchPosts = async () => {
-    let { postListMixed } = this.props
-    let result = await postListMixed()
-
-    if (result.error) {
-      return alert(result.error.message)
-    }
+    this.props.postListMixed(1, null, (result) => {
+      alert(result.error.message)
+    })
   }
 
   render() {
@@ -38,7 +35,7 @@ class HomePage extends Component {
 
 export default connect(({ posts, users }) => ({
   posts: postSelector.getMixedPostsWithAuthor(posts, users),
-  isLoading: postSelector.getMixedPostsLoadingStatus(posts),
+  isLoading: postSelector.getListMixedContext(posts, 1).isPending,
 }), {
   postListMixed: postListMixedApiRequest,
 })(HomePage)
