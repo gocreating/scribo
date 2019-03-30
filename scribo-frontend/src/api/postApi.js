@@ -1,7 +1,7 @@
 import ApiClient from './ApiClient'
 
 class PostApi extends ApiClient {
-  list(userId, ...rest) {
+  list = (userId, ...rest) => {
     return this.get(`/app-users/${userId}/posts`, ...rest)
   }
   listMixed = (...rest) => {

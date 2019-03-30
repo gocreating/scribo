@@ -1,42 +1,36 @@
-import React, { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Segment, Header } from 'semantic-ui-react'
-import { push } from 'connected-react-router'
 import AppLayout from '../../layouts/AppLayout'
 import SignupForm from '../../forms/user/SignupForm'
 import { signupApiRequest } from '../../ducks/user'
+import { selectors as userSelector } from '../../ducks/user'
 
-class NewPage extends Component {
-  static propTypes = {
-    signup: PropTypes.func,
-    push: PropTypes.func,
-  }
+let NewPage = ({ signup, isSubmitting }) => (
+  <AppLayout placeholder title="註冊">
+    <Segment basic>
+      <Header>
+        註冊Scribo帳戶
+      </Header>
+      <SignupForm
+        isSubmitting={isSubmitting}
+        onSubmit={(data) => {
+          signup(data, null, (result) => {
+            alert(result.error.message)
+          })
+        }}
+      />
+    </Segment>
+  </AppLayout>
+)
 
-  handleSubmit = async (data) => {
-    let result = await this.props.signup(data)
-
-    if (result.error) {
-      return alert(result.error.message)
-    }
-    this.props.push('/user/signin')
-  }
-
-  render() {
-    return (
-      <AppLayout title="註冊">
-        <Segment basic>
-          <Header>
-            註冊Scribo帳戶
-          </Header>
-          <SignupForm onSubmit={this.handleSubmit} />
-        </Segment>
-      </AppLayout>
-    )
-  }
+NewPage.propTypes = {
+  signup: PropTypes.func,
 }
 
-export default connect(null, {
+export default connect(({ users }) => ({
+  isSubmitting: userSelector.getSignupContext(users).isPending,
+}), {
   signup: signupApiRequest,
-  push,
 })(NewPage)
