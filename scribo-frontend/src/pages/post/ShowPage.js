@@ -268,7 +268,9 @@ export default withRouter(connect(({ posts, users, auth }, { match }) => {
     username,
     postSlug,
   } = match.params
-  let post = postSelectors.getPostByUsernameAndSlug(posts, users, username, postSlug)
+  let post = postSelectors.getPostByUsernameAndSlug(
+    posts, users.entities, username, postSlug
+  )
   let ctxPost = postSelectors.getEntitiesContext(posts, username, postSlug)
   let seriesPosts = post.seriesPosts || []
 

@@ -34,7 +34,7 @@ class HomePage extends Component {
 }
 
 export default connect(({ posts, users }) => ({
-  posts: postSelector.getMixedPostsWithAuthor(posts, users),
+  posts: postSelector.getMixedPostsWithAuthor(posts, users.entities),
   isLoading: postSelector.getListMixedContext(posts, 1).isPending,
 }), {
   postListMixed: postListMixedApiRequest,

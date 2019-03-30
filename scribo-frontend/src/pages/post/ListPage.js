@@ -96,7 +96,9 @@ export default withRouter(connect(({
   return {
     isAuth: authSelector.getIsAuth(auth),
     username,
-    posts: postSelector.getUserPostsWithAuthor(posts, users, username, pageId),
+    posts: postSelector.getUserPostsWithAuthor(
+      posts, users.entities, username, pageId
+    ),
     isLoading: ctx.isPending,
     query,
     pageId,
