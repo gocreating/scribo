@@ -4,8 +4,10 @@ import { connect } from 'react-redux'
 import { Segment, Header } from 'semantic-ui-react'
 import AppLayout from '../../layouts/AppLayout'
 import SignupForm from '../../forms/user/SignupForm'
-import { signupApiRequest } from '../../ducks/user'
-import { selectors as userSelector } from '../../ducks/user'
+import {
+  signupApiRequest,
+  selectors as userSelector,
+} from '../../ducks/user'
 
 let NewPage = ({ signup, isSubmitting }) => (
   <AppLayout placeholder title="註冊">
@@ -27,6 +29,7 @@ let NewPage = ({ signup, isSubmitting }) => (
 
 NewPage.propTypes = {
   signup: PropTypes.func,
+  isSubmitting: PropTypes.bool,
 }
 
 export default connect(({ users }) => ({
