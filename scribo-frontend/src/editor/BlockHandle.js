@@ -6,6 +6,7 @@ let BlockHandle = ({ dragHandleProps }) => (
   <div
     className="handle"
     {...dragHandleProps}
+    tabIndex="-1"
   >
     <FontAwesomeIcon icon={faGripVertical} />
   </div>

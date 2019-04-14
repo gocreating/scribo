@@ -1,6 +1,6 @@
 {
   "name": "scribo-client",
-  "version": "0.10.0",
+  "version": "0.11.0",
   "private": true,
   "homepage": "https://gocreating.github.io/scribo/",
   "dependencies": {

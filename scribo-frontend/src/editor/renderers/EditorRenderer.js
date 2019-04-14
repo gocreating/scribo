@@ -7,6 +7,7 @@ import MarkdownEditor from '../blocks/Markdown/MarkdownEditor'
 import ImageEditor from '../blocks/Image/ImageEditor'
 import QuoteEditor from '../blocks/Quote/QuoteEditor'
 import UnknownEditor from '../blocks/Unknown/UnknownEditor'
+import DropZonePlaceholder from '../utils/DropZonePlaceholder'
 import BlockTypes from '../../constants/BlockTypes'
 
 let renderMap = {
@@ -26,6 +27,7 @@ let EditorRenderer = ({ blocks }) => (
         ref={provided.innerRef}
         {...provided.droppableProps}
       >
+        <DropZonePlaceholder attached="top" />
         {blocks.map((block, idx) => {
           let Block = (
             renderMap[block.type] ||
@@ -45,6 +47,7 @@ let EditorRenderer = ({ blocks }) => (
           )
         })}
         {provided.placeholder}
+        <DropZonePlaceholder attached="bottom" />
       </div>
     )}
   </Droppable>

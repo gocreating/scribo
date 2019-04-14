@@ -14,39 +14,20 @@ import {
 } from '../../ducks/post'
 
 class EditPage extends Component {
-  state = {
-    isInitializing: true,
-  }
-
   static propTypes = {
     post: PropTypes.object,
     postRead: PropTypes.func,
     postUpdate: PropTypes.func,
   }
 
-  fetchPost = async () => {
-    let {
-      loggedUser,
-      postId,
-      postRead,
-    } = this.props
-    let result = await postRead(loggedUser.id, postId)
+  handleInitialize = (cb) => {
+    let { postRead, loggedUser, postId } = this.props
 
-    if (result.error) {
-      return alert(result.error.message)
-    }
-    return result
-  }
-
-  handleInitialize = async (cb) => {
-    await this.setState({ isInitializing: true })
-
-    let result = await this.fetchPost()
-
-    await this.setState({ isInitializing: false })
-    if (result) {
+    postRead(loggedUser.id, postId, (result) => {
       cb(this.props.post)
-    }
+    }, (result) => {
+      alert(result.error.message)
+    })
   }
 
   handleUpdate = (post) => {
@@ -66,12 +47,16 @@ class EditPage extends Component {
   }
 
   render() {
-    let { post, isSaveOnly, isPending, isFulfilled } = this.props
-    let { isInitializing } = this.state
+    let { post, isInitializing, isSaveOnly, isPending, isFulfilled } = this.props
     let isLoading = post.isNotExist || !post.blocks || isInitializing
 
     return (
-      <AppLayout placeholder={false} container={false} loading={isLoading}>
+      <AppLayout
+        placeholder={false} 
+        container={false}
+        loading={isLoading}
+        title="編輯文章"
+      >
         {!isFulfilled && (
           <Prompt message="您可能有內容尚未儲存，是否確定要離開？" />
         )}
@@ -91,7 +76,8 @@ class EditPage extends Component {
 
 export default withRouter(connect(({ auth, posts }, { match }) => {
   let loggedUser = authSelectors.getLoggedUser(auth)
-  let ctx = postSelectors.getUpdateContext(posts)
+  let ctxRead = postSelectors.getReadContext(posts)
+  let ctxUpdate = postSelectors.getUpdateContext(posts)
   let { postId } = match.params
   let post = postSelectors.getPost(posts, postId)
 
@@ -99,9 +85,10 @@ export default withRouter(connect(({ auth, posts }, { match }) => {
     loggedUser,
     postId,
     post,
-    isSaveOnly: ctx.isSaveOnly,
-    isPending: ctx.isPending,
-    isFulfilled: ctx.isFulfilled,
+    isInitializing: ctxRead.isPending,
+    isSaveOnly: ctxUpdate.isSaveOnly,
+    isPending: ctxUpdate.isPending,
+    isFulfilled: ctxUpdate.isFulfilled,
   }
 }, {
   postRead: postReadApiRequest,

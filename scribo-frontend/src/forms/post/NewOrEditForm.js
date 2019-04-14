@@ -317,7 +317,9 @@ class NewOrEditForm extends Component {
 
               <Grid.Row>
                 <Grid.Column
-                  width={14}
+                  computer={14}
+                  tablet={13}
+                  mobile={12}
                   style={{
                     // sync min-height with height of block bucket to avoid oscillation
                     // when editor height is smaller than block bucket height
@@ -330,7 +332,11 @@ class NewOrEditForm extends Component {
                     </div>
                   </Form.Field>
                 </Grid.Column>
-                <Grid.Column width={2}>
+                <Grid.Column
+                  computer={2}
+                  tablet={3}
+                  mobile={4}
+                >
                   <Sticky
                     offset={20}
                     context={this.state.mainEditorRef}

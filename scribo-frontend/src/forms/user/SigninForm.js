@@ -4,7 +4,7 @@ import { Button, Form } from 'semantic-ui-react'
 import Input from '../../fields/Input'
 import FormTypes from '../../constants/FormTypes'
 
-let SignupForm= ({ onSubmit, handleSubmit }) => (
+let SignupForm= ({ isSubmitting, onSubmit, handleSubmit }) => (
   <Form onSubmit={handleSubmit(onSubmit)}>
     <Form.Field>
       <label>電子信箱 / 使用者帳號</label>
@@ -22,7 +22,13 @@ let SignupForm= ({ onSubmit, handleSubmit }) => (
         type="password"
       />
     </Form.Field>
-    <Button basic>登入</Button>
+    <Button
+      basic
+      disabled={isSubmitting}
+      loading={isSubmitting}
+    >
+      登入
+    </Button>
   </Form>
 )
 
