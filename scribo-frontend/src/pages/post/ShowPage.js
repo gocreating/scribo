@@ -5,6 +5,7 @@ import { withRouter } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 import moment from 'moment'
 import {
+  Message,
   Grid,
   Divider,
   Container,
@@ -70,9 +71,7 @@ class ShowPage extends Component {
       postSlug,
     } = this.props
 
-    postReadByUsernameAndSlug(username, postSlug, null, (result) => {
-      alert(result.error.message)
-    })
+    postReadByUsernameAndSlug(username, postSlug)
   }
 
   deletePost = () => {
@@ -104,6 +103,7 @@ class ShowPage extends Component {
       post,
       seriesPosts,
       isLoading,
+      isError,
       isAuth,
       loggedUserId,
     } = this.props
@@ -115,6 +115,17 @@ class ShowPage extends Component {
       updatedAt &&
       moment(updatedAt).diff(createdAt) > 1000
     )
+
+    if (isError) {
+      return (
+        <AppLayout placeholder title="無法顯示文章">
+          <Message negative>
+            <Message.Header>無法顯示文章</Message.Header>
+            <p>很抱歉，您所瀏覽的文章可能不存在。</p>
+          </Message>
+        </AppLayout>
+      )
+    }
 
     return (
       <AppLayout
@@ -282,6 +293,7 @@ export default withRouter(connect(({ posts, users, auth }, { match }) => {
     post,
     seriesPosts,
     isLoading: ctxPost.isPending,
+    isError: ctxPost.isRejected,
     isAuth: authSelectors.getIsAuth(auth),
     loggedUserId: authSelectors.getLoggedUserId(auth),
   }
