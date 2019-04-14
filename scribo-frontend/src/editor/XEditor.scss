@@ -26,12 +26,15 @@
       top: 0px;
       padding-top: 15px;
       margin-top: -15px;
-      height: 100%;
+      height: calc(100% + 15px);
       margin-left: -15px;
       padding-left: 15px;
-      padding-right: 55px;
+      padding-right: 15px;
       left: -55px; /* width:40 + padding:15 */
 
+      &.stuck-container {
+        padding-right: 55px;
+      }
       .toolbar-container {
         /* below are cpoied from .ui.compact.menu */
         display: inline-flex;
@@ -70,7 +73,7 @@
       padding-top: 15px;
       margin-top: -15px;
       padding-bottom: 15px;
-      width: 100%;
+      width: calc(100% + 15px);
       top: -55px; /* height:40 + padding:15 */
 
       .props-toolbar-container {
