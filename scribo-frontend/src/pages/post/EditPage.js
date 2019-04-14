@@ -51,7 +51,12 @@ class EditPage extends Component {
     let isLoading = post.isNotExist || !post.blocks || isInitializing
 
     return (
-      <AppLayout placeholder={false} container={false} loading={isLoading}>
+      <AppLayout
+        placeholder={false} 
+        container={false}
+        loading={isLoading}
+        title="編輯文章"
+      >
         {!isFulfilled && (
           <Prompt message="您可能有內容尚未儲存，是否確定要離開？" />
         )}
