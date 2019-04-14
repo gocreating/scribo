@@ -14,39 +14,62 @@ import zipSeriesPostsOrder from '../utils/zipSeriesPostsOrder'
 const plainActionCreators = createActions({
   POST_LIST_API_SUCCESS: (res) => ({ res }),
   POST_LIST_API_FAILURE: (res) => ({ res }),
+
+  POST_LIST_MIXED_API_REQUEST: (pageId, resolve, reject) => ({
+    pageId, resolve, reject,
+  }),
+  POST_LIST_MIXED_API_SUCCESS: (res, pageId) => ({ res, pageId }),
+  POST_LIST_MIXED_API_FAILURE: (res, pageId) => ({ res, pageId }),
+
+  POST_LIST_BY_USERNAME_API_REQUEST: (username, pageId, resolve, reject) => ({
+    username, pageId, resolve, reject,
+  }),
+  POST_LIST_BY_USERNAME_API_SUCCESS: (res, username, pageId) => ({
+    res, username, pageId,
+  }),
+  POST_LIST_BY_USERNAME_API_FAILURE: (res, username, pageId) => ({
+    res, username, pageId,
+  }),
+
   POST_CREATE_API_REQUEST: (post, resolve, reject) => ({ post, resolve, reject }),
   POST_CREATE_API_SUCCESS: (res) => ({ res }),
   POST_CREATE_API_FAILURE: (res) => ({ res }),
+
+  POST_READ_API_REQUEST: (userId, postId, resolve, reject) => ({
+    userId, postId, resolve, reject,
+  }),
   POST_READ_API_SUCCESS: (res) => ({ res }),
   POST_READ_API_FAILURE: (res) => ({ res }),
+
+  POST_READ_BY_USERNAME_AND_SLUG_API_REQUEST: (username, postSlug, resolve, reject) => ({
+    username, postSlug, resolve, reject,
+  }),
+  POST_READ_BY_USERNAME_AND_SLUG_API_SUCCESS: (res, username, postSlug) => ({
+    res, username, postSlug,
+  }),
+  POST_READ_BY_USERNAME_AND_SLUG_API_FAILURE: (res, username, postSlug) => ({
+    res, username, postSlug,
+  }),
+
   POST_UPDATE_API_REQUEST: (postId, post, isSaveOnly, resolve, reject) => ({
     postId, post, isSaveOnly, resolve, reject,
   }),
   POST_UPDATE_API_SUCCESS: (res) => ({ res }),
   POST_UPDATE_API_FAILURE: (res) => ({ res }),
+
+  POST_DELETE_API_REQUEST: (userId, postId, resolve, reject) => ({
+    userId, postId, resolve, reject,
+  }),
   POST_DELETE_API_SUCCESS: (res) => ({ res }),
   POST_DELETE_API_FAILURE: (res) => ({ res }),
-  POST_LIST_MIXED_API_SUCCESS: (res) => ({ res }),
-  POST_LIST_MIXED_API_FAILURE: (res) => ({ res }),
-  POST_LIST_BY_USERNAME_API_SUCCESS: (res) => ({ res }),
-  POST_LIST_BY_USERNAME_API_FAILURE: (res) => ({ res }),
-  POST_READ_BY_USERNAME_AND_SLUG_API_SUCCESS: (res) => ({ res }),
-  POST_READ_BY_USERNAME_AND_SLUG_API_FAILURE: (res) => ({ res }),
+
   SET_MIXED_PAGE: (pageId, postIds) => ({
     pageId, postIds,
-  }),
-  SET_MIXED_PAGE_LOADING_STATUS: (pageId, isLoading) => ({
-    pageId, isLoading,
   }),
   SET_USER_PAGE: (username, pageId, meta, postIds) => ({
     username, pageId, meta, postIds,
   }),
-  SET_USER_PAGE_LOADING_STATUS: (username, pageId, isLoading) => ({
-    username, pageId, isLoading,
-  }),
-  SET_POST_LOADING_STATUS: (postId, isLoading) => ({
-    postId, isLoading,
-  }),
+  REDIRECT_TO_NEW_POST: () => {},
 })
 const thunkActionCreators = {
   postListApiRequest: (userId) => async (dispatch) => {
@@ -81,91 +104,50 @@ const thunkActionCreators = {
       return response.body
     }
   },
-  postListMixedApiRequest: (username) => async (dispatch) => {
-    dispatch(setMixedPageLoadingStatus(1, true))
+}
+// Sagas
+export const sagas = {
+  *handlePostListMixedApiRequest(action) {
+    let { pageId, resolve, reject } = action.payload
+
     try {
-      let response = await postApi.listMixed()
-      dispatch(postListMixedApiSuccess(response))
+      let response = yield call(postApi.listMixed)
       let { result, entities } = normalize(response.body, [postSchema])
-      dispatch(addEntities(entities))
-      dispatch(setMixedPage(1, result))
-      return response.body
+
+      yield put(postListMixedApiSuccess(response, pageId))
+      yield put(addEntities(entities))
+      yield put(setMixedPage(1, result))
+      resolve && (yield call(resolve, response.body))
     } catch (error) {
       let response = createApiError(error)
-      dispatch(postListMixedApiFailure(response))
-      return response.body
-    } finally {
-      dispatch(setMixedPageLoadingStatus(1, false))
+
+      yield put(postListMixedApiFailure(response, pageId))
+      reject && (yield call(reject, response.body))
     }
   },
-  postListByUsernameApiRequest: (username, pageId) => async (dispatch) => {
-    dispatch(setUserPageLoadingStatus(username, pageId, true))
+  *handlePostListByUsernameApiRequest(action) {
+    let { username, pageId, resolve, reject } = action.payload
+
     try {
-      let response = await postApi.listByUsername(username, {
+      let response = yield call(postApi.listByUsername, username, {
         params: {
           pageId,
         },
       })
-      dispatch(postListByUsernameApiSuccess(response))
       let { posts, meta } = response.body
       let { result, entities } = normalize(posts, [postSchema])
-      dispatch(addEntities(entities))
-      dispatch(setUserPage(username, pageId, meta, result))
-      return response.body
-    } catch (error) {
-      let response = createApiError(error)
-      dispatch(postListByUsernameApiFailure(response))
-      return response.body
-    } finally {
-      dispatch(setUserPageLoadingStatus(username, pageId, false))
-    }
-  },
-  postReadApiRequest: (userId, postId) => async (dispatch) => {
-    try {
-      let response = await postApi.read(userId, postId)
-      dispatch(postReadApiSuccess(response))
-      let { entities } = normalize(response.body, postSchema)
-      entities.posts = zipSeriesPostsOrder(entities.posts)
-      dispatch(addEntities(entities))
-      return response.body
-    } catch (error) {
-      let response = createApiError(error)
-      dispatch(postReadApiFailure(response))
-      return response.body
-    }
-  },
-  postReadByUsernameAndSlugApiRequest: (username, postSlug) => async (dispatch) => {
-    let response = null
 
-    try {
-      response = await postApi.readByUsernameAndSlug(username, postSlug)
-      dispatch(postReadByUsernameAndSlugApiSuccess(response))
-      let { entities } = normalize(response.body, postSchema)
-      entities.posts = zipSeriesPostsOrder(entities.posts)
-      dispatch(addEntities(entities))
-      return response.body
+      yield put(postListByUsernameApiSuccess(response, username, pageId))
+      yield put(addEntities(entities))
+      yield put(setUserPage(username, pageId, meta, result))
+      resolve && (yield call(resolve, response.body))
     } catch (error) {
       let response = createApiError(error)
-      dispatch(postReadByUsernameAndSlugApiFailure(response))
-      return response.body
-    } finally {
-      dispatch(setPostLoadingStatus(response.body.id, false))
-    }
-  },
-  postDeleteApiRequest: (userId, postId) => async (dispatch) => {
-    try {
-      let response = await postApi.delete(userId, postId)
 
-      dispatch(postDeleteApiSuccess(response))
-      return response.body || {}
-    } catch ({ response }) {
-      dispatch(postDeleteApiFailure(response))
-      return response.body || {}
+      yield put(postListByUsernameApiFailure(response, username, pageId))
+      reject && (yield call(reject, response.body))
     }
   },
-}
-// Sagas
-export const sagas = {
   *handlePostCreateApiRequest(action) {
     let { post, resolve, reject } = action.payload
 
@@ -181,6 +163,42 @@ export const sagas = {
       let response = createApiError(error)
 
       yield put(postCreateApiFailure(response))
+      reject && (yield call(reject, response.body))
+    }
+  },
+  *handlePostReadApiRequest(action) {
+    let { userId, postId, resolve, reject } = action.payload
+
+    try {
+      let response = yield call(postApi.read, userId, postId)
+      let { entities } = normalize(response.body, postSchema)
+
+      entities.posts = zipSeriesPostsOrder(entities.posts)
+      yield put(postReadApiSuccess(response))
+      yield put(addEntities(entities))
+      resolve && (yield call(resolve, response.body))
+    } catch (error) {
+      let response = createApiError(error)
+
+      yield put(postReadApiFailure(response))
+      reject && (yield call(reject, response.body))
+    }
+  },
+  *handlePostReadByUsernameAndSlugApiRequest(action) {
+    let { username, postSlug, resolve, reject } = action.payload
+
+    try {
+      let response = yield call(postApi.readByUsernameAndSlug, username, postSlug)
+      let { entities } = normalize(response.body, postSchema)
+
+      entities.posts = zipSeriesPostsOrder(entities.posts)
+      yield put(postReadByUsernameAndSlugApiSuccess(response, username, postSlug))
+      yield put(addEntities(entities))
+      resolve && (yield call(resolve, response.body))
+    } catch (error) {
+      let response = createApiError(error)
+
+      yield put(postReadByUsernameAndSlugApiFailure(response, username, postSlug))
       reject && (yield call(reject, response.body))
     }
   },
@@ -205,49 +223,105 @@ export const sagas = {
       reject && (yield call(reject, response.body))
     }
   },
+  *handlePostDeleteApiRequest(action) {
+    let { userId, postId, resolve, reject } = action.payload
+
+    try {
+      let response = yield call(postApi.delete, userId, postId)
+
+      yield put(postDeleteApiSuccess(response))
+      resolve && (yield call(resolve, response.body))
+    } catch (error) {
+      let response = createApiError(error)
+
+      yield put(postDeleteApiFailure(response))
+      reject && (yield call(reject, response.body))
+    }
+  },
+  *handleRedirectToNewPost(action) {
+    let isAuth = yield select(({ auth }) => authSelectors.getIsAuth(auth))
+
+    if (isAuth) {
+      yield put(push('/post/new'))
+    } else {
+      yield put(push('/user/signin'))
+    }
+  }
 }
 export const rootSaga = {
+  *onPostListMixedApiRequest() {
+    yield takeEvery(
+      postListMixedApiRequest,
+      sagas.handlePostListMixedApiRequest
+    )
+  },
+  *onPostListByUsernameApiRequest() {
+    yield takeEvery(
+      postListByUsernameApiRequest,
+      sagas.handlePostListByUsernameApiRequest
+    )
+  },
   *onPostCreateApiRequest() {
     yield takeEvery(postCreateApiRequest, sagas.handlePostCreateApiRequest)
   },
+  *onPostReadApiRequest() {
+    yield takeEvery(postReadApiRequest, sagas.handlePostReadApiRequest)
+  },
+  *onPostReadByUsernameAndSlugApiRequest() {
+    yield takeEvery(
+      postReadByUsernameAndSlugApiRequest,
+      sagas.handlePostReadByUsernameAndSlugApiRequest
+    )
+  },
   *onPostUpdateApiRequest() {
     yield takeEvery(postUpdateApiRequest, sagas.handlePostUpdateApiRequest)
+  },
+  *onPostDeleteApiRequest() {
+    yield takeEvery(postDeleteApiRequest, sagas.handlePostDeleteApiRequest)
+  },
+  *onRedirectToNewPost() {
+    yield takeEvery(redirectToNewPost, sagas.handleRedirectToNewPost)
   },
 }
 
 export const {
   postListApiSuccess,
   postListApiFailure,
+
+  postListMixedApiRequest,
+  postListMixedApiSuccess,
+  postListMixedApiFailure,
+
+  postListByUsernameApiRequest,
+  postListByUsernameApiSuccess,
+  postListByUsernameApiFailure,
+
   postCreateApiRequest,
   postCreateApiSuccess,
   postCreateApiFailure,
+
+  postReadApiRequest,
   postReadApiSuccess,
   postReadApiFailure,
+
+  postReadByUsernameAndSlugApiRequest,
+  postReadByUsernameAndSlugApiSuccess,
+  postReadByUsernameAndSlugApiFailure,
+
   postUpdateApiRequest,
   postUpdateApiSuccess,
   postUpdateApiFailure,
+
+  postDeleteApiRequest,
   postDeleteApiSuccess,
   postDeleteApiFailure,
-  postListMixedApiSuccess,
-  postListMixedApiFailure,
-  postListByUsernameApiStart,
-  postListByUsernameApiSuccess,
-  postListByUsernameApiFailure,
-  postReadByUsernameAndSlugApiSuccess,
-  postReadByUsernameAndSlugApiFailure,
+
   setMixedPage,
-  setMixedPageLoadingStatus,
   setUserPage,
-  setUserPageLoadingStatus,
-  setPostLoadingStatus,
+  redirectToNewPost,
 } = plainActionCreators
 export const {
   postListApiRequest,
-  postReadApiRequest,
-  postDeleteApiRequest,
-  postListMixedApiRequest,
-  postListByUsernameApiRequest,
-  postReadByUsernameAndSlugApiRequest,
 } = thunkActionCreators
 
 // Reducer
@@ -256,8 +330,15 @@ const defaultState = {
   mixedPages: {},
   userPages: {},
   context: {
+    listMixed: {},
+    listByUsername: {},
+    entities: {},
     create: {
-      post: {},
+      isPending: false,
+      isFulfilled: false,
+      isRejected: false,
+    },
+    read: {
       isPending: false,
       isFulfilled: false,
       isRejected: false,
@@ -281,17 +362,6 @@ const entitiesReducer = handleActions({
     ...state,
     ...entities.posts,
   }),
-  [setPostLoadingStatus]: (state, { payload: { postId, isLoading } }) => {
-    let post = state[postId] || {}
-
-    return {
-      ...state,
-      [postId]: {
-        ...post,
-        isLoading,
-      }
-    }
-  },
 }, defaultState.entities)
 
 const mixedPagesReducer = handleActions({
@@ -304,17 +374,6 @@ const mixedPagesReducer = handleActions({
         ...mixedPage,
         elements: postIds,
       }
-    }
-  },
-  [setMixedPageLoadingStatus]: (state, { payload: { pageId, isLoading } }) => {
-    let mixedPage = state[pageId] || {}
-
-    return {
-      ...state,
-      [pageId]: {
-        ...mixedPage,
-        isLoading,
-      },
     }
   },
 }, defaultState.mixedPages)
@@ -338,26 +397,119 @@ const userPagesReducer = handleActions({
       },
     }
   },
-  [setUserPageLoadingStatus]: (state, {
-    payload: { username, pageId, isLoading },
-  }) => {
-    let userPages = state[username] || {}
-    let userPage = userPages[pageId] || {}
+}, defaultState.userPages)
+
+const contextReducer = handleActions({
+  [postListMixedApiRequest]: (state, { payload: { pageId } }) => {
+    let ctxListMixedOfPage = state.listMixed[pageId] || {}
 
     return {
       ...state,
-      [username]: {
-        ...userPages,
+      listMixed: {
+        ...state.listMixed,
         [pageId]: {
-          ...userPage,
-          isLoading,
+          ...ctxListMixedOfPage,
+          isPending: true,
+          isFulfilled: false,
+          isRejected: false,
         },
       },
     }
   },
-}, defaultState.userPages)
+  [postListMixedApiSuccess]: (state, { payload: { pageId } }) => {
+    let ctxListMixedOfPage = state.listMixed[pageId] || {}
 
-const contextReducer = handleActions({
+    return {
+      ...state,
+      listMixed: {
+        ...state.listMixed,
+        [pageId]: {
+          ...ctxListMixedOfPage,
+          isPending: false,
+          isFulfilled: true,
+        },
+      },
+    }
+  },
+  [postListMixedApiFailure]: (state, { payload: { pageId } }) => {
+    let ctxListMixedOfPage = state.listMixed[pageId] || {}
+
+    return {
+      ...state,
+      listMixed: {
+        ...state.listMixed,
+        [pageId]: {
+          ...ctxListMixedOfPage,
+          isPending: false,
+          isRejected: true,
+        },
+      },
+    }
+  },
+  [postListByUsernameApiRequest]: (state, { payload: { username, pageId } }) => {
+    let ctxListByUsernameOfUsername = state.listByUsername[username] || {}
+    let ctxListByUsernameOfUsernameAndPage = (
+      ctxListByUsernameOfUsername[pageId] || {}
+    )
+
+    return {
+      ...state,
+      listByUsername: {
+        ...state.listByUsername,
+        [username]: {
+          ...ctxListByUsernameOfUsername,
+          [pageId]: {
+            ...ctxListByUsernameOfUsernameAndPage,
+            isPending: true,
+            isFulfilled: false,
+            isRejected: false,
+          },
+        },
+      },
+    }
+  },
+  [postListByUsernameApiSuccess]: (state, { payload: { username, pageId } }) => {
+    let ctxListByUsernameOfUsername = state.listByUsername[username] || {}
+    let ctxListByUsernameOfUsernameAndPage = (
+      ctxListByUsernameOfUsername[pageId] || {}
+    )
+
+    return {
+      ...state,
+      listByUsername: {
+        ...state.listByUsername,
+        [username]: {
+          ...ctxListByUsernameOfUsername,
+          [pageId]: {
+            ...ctxListByUsernameOfUsernameAndPage,
+            isPending: false,
+            isFulfilled: true,
+          },
+        },
+      },
+    }
+  },
+  [postListByUsernameApiFailure]: (state, { payload: { username, pageId } }) => {
+    let ctxListByUsernameOfUsername = state.listByUsername[username] || {}
+    let ctxListByUsernameOfUsernameAndPage = (
+      ctxListByUsernameOfUsername[pageId] || {}
+    )
+
+    return {
+      ...state,
+      listByUsername: {
+        ...state.listByUsername,
+        [username]: {
+          ...ctxListByUsernameOfUsername,
+          [pageId]: {
+            ...ctxListByUsernameOfUsernameAndPage,
+            isPending: false,
+            isRejected: true,
+          },
+        },
+      },
+    }
+  },
   [postCreateApiRequest]: (state) => ({
     ...state,
     create: {
@@ -383,6 +535,83 @@ const contextReducer = handleActions({
       isRejected: true,
     },
   }),
+  [postReadApiRequest]: (state) => ({
+    ...state,
+    read: {
+      ...state.read,
+      isPending: true,
+      isFulfilled: false,
+      isRejected: false,
+    },
+  }),
+  [postReadApiSuccess]: (state) => ({
+    ...state,
+    read: {
+      ...state.read,
+      isPending: false,
+      isFulfilled: true,
+    },
+  }),
+  [postReadApiFailure]: (state) => ({
+    ...state,
+    read: {
+      ...state.read,
+      isPending: false,
+      isRejected: true,
+    },
+  }),
+  [postReadByUsernameAndSlugApiRequest]: (state, {
+    payload: { username, postSlug },
+  }) => {
+    let postKey = `${username},${postSlug}`
+    let ctxEntity = state.entities[postKey] || {}
+
+    return {
+      ...state,
+      entities: {
+        [postKey]: {
+          ...ctxEntity,
+          isPending: true,
+          isFulfilled: false,
+          isRejected: false,
+        },
+      },
+    }
+  },
+  [postReadByUsernameAndSlugApiSuccess]: (state, {
+    payload: { username, postSlug },
+  }) => {
+    let postKey = `${username},${postSlug}`
+    let ctxEntity = state.entities[postKey] || {}
+
+    return {
+      ...state,
+      entities: {
+        [postKey]: {
+          ...ctxEntity,
+          isPending: false,
+          isFulfilled: true,
+        },
+      },
+    }
+  },
+  [postReadByUsernameAndSlugApiFailure]: (state, {
+    payload: { username, postSlug },
+  }) => {
+    let postKey = `${username},${postSlug}`
+    let ctxEntity = state.entities[postKey] || {}
+
+    return {
+      ...state,
+      entities: {
+        [postKey]: {
+          ...ctxEntity,
+          isPending: false,
+          isRejected: true,
+        },
+      },
+    }
+  },
   [postUpdateApiRequest]: (state, { payload: { isSaveOnly } }) => ({
     ...state,
     update: {
@@ -419,7 +648,18 @@ export default combineReducers({
 })
 
 export let selectors = {
+  getListMixedContext: (state, pageId=1) => (state.context.listMixed[pageId] || {}),
+  getListByUsernameContext: (state, username, pageId=1) => {
+    let ctxUsername = state.context.listByUsername[username] || {}
+    let ctxUsernameOfPage = ctxUsername[pageId] || {}
+
+    return ctxUsernameOfPage
+  },
   getCreateContext: (state) => (state.context.create || {}),
+  getReadContext: (state) => (state.context.read || {}),
+  getEntitiesContext: (state, username, postSlug) => (
+    state.context.entities[`${username},${postSlug}`] || {}
+  ),
   getUpdateContext: (state) => (state.context.update || {}),
   getMixedPage: (state, pageId) => {
     let mixedPage = state.mixedPages[pageId] || {}
@@ -456,18 +696,6 @@ export let selectors = {
     let posts = elements.map(postId => state.entities[postId])
 
     return posts
-  },
-  getMixedPostsLoadingStatus(state) {
-    let mixedPage = this.getMixedPage(state, '1')
-    let isLoading = mixedPage.isLoading || false
-
-    return isLoading
-  },
-  getUserPostsLoadingStatus(state, username, pageId) {
-    let userPage = this.getUserPage(state, username, pageId)
-    let isLoading = userPage.isLoading || false
-
-    return isLoading
   },
   getMixedPostsWithAuthor(state, userEntity) {
     let posts = this.getMixedPosts(state)

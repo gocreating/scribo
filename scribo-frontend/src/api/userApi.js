@@ -1,13 +1,13 @@
 import ApiClient from './ApiClient'
 
 class UserApi extends ApiClient {
-  signup(user) {
+  signup = (user) => {
     return this.post('/app-users', { data: user })
   }
-  signin(user) {
+  signin = (user) => {
     return this.post('/app-users/login', { data: user })
   }
-  logout() {
+  logout = () => {
     return this.post('/app-users/logout')
   }
 }

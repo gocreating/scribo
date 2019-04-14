@@ -10,6 +10,7 @@ import BlankPostList from '../../components/BlankPostList'
 import { selectors as authSelector } from '../../ducks/auth'
 import {
   postListByUsernameApiRequest,
+  redirectToNewPost,
   selectors as postSelector,
 } from '../../ducks/post'
 
@@ -29,27 +30,18 @@ class ListPage extends Component {
     }
   }
 
-  gotoNewPost = () => {
-    let { isAuth, push } = this.props
+  gotoNewPost = () => this.props.redirectToNewPost()
 
-    if (isAuth) {
-      push('/post/new')
-    } else {
-      push('/user/signin')
-    }
-  }
-
-  fetchPosts = async () => {
+  fetchPosts = () => {
     let {
       postListByUsername,
       username,
       pageId,
     } = this.props
-    let result = await postListByUsername(username, pageId)
 
-    if (result.error) {
-      return alert(result.error.message)
-    }
+    postListByUsername(username, pageId, null, (result) => {
+      alert(result.error.message)
+    })
   }
 
   handlePageChange = (e, data) => {
@@ -99,17 +91,21 @@ export default withRouter(connect(({
   let query = qs.parse(location.search)
   let pageId = query.page || 1
   let meta = postSelector.getUserPagesMeta(posts, username)
+  let ctx = postSelector.getListByUsernameContext(posts, username, pageId)
 
   return {
     isAuth: authSelector.getIsAuth(auth),
     username,
-    posts: postSelector.getUserPostsWithAuthor(posts, users, username, pageId),
-    isLoading: postSelector.getUserPostsLoadingStatus(posts, username, pageId),
+    posts: postSelector.getUserPostsWithAuthor(
+      posts, users.entities, username, pageId
+    ),
+    isLoading: ctx.isPending,
     query,
     pageId,
     meta,
   }
 }, {
   postListByUsername: postListByUsernameApiRequest,
+  redirectToNewPost,
   push,
 })(ListPage))

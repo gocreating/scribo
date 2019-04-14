@@ -2,12 +2,14 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Menu, Container, Button } from 'semantic-ui-react'
 import { Link } from 'react-router-dom'
-import { push } from 'connected-react-router'
-import { logoutApiRequest } from '../ducks/user'
-import { selectors } from '../ducks/auth'
+import {
+  logoutApiRequest,
+  selectors as userSelectors
+} from '../ducks/user'
+import { selectors as authSelectors } from '../ducks/auth'
 import './Navigation.scss'
 
-let Navigation = ({ isAuth, loggedUsername, logout, push }) => (
+let Navigation = ({ isAuth, isLoggingOut, loggedUsername, logout }) => (
   <div className="navigation">
     <Container>
       <Menu borderless stackable attached="top" color="orange">
@@ -31,10 +33,8 @@ let Navigation = ({ isAuth, loggedUsername, logout, push }) => (
           )}
           {isAuth && (
             <Menu.Item
-              onClick={() => {
-                logout()
-                push('/user/signin')
-              }}
+              disabled={isLoggingOut}
+              onClick={() => logout()}
             >
               登出
             </Menu.Item>
@@ -53,10 +53,10 @@ let Navigation = ({ isAuth, loggedUsername, logout, push }) => (
   </div>
 )
 
-export default connect(({ auth }) => ({
-  isAuth: selectors.getIsAuth(auth),
-  loggedUsername: selectors.getLoggedUser(auth).username,
+export default connect(({ auth, users }) => ({
+  isAuth: authSelectors.getIsAuth(auth),
+  loggedUsername: authSelectors.getLoggedUser(auth).username,
+  isLoggingOut: userSelectors.getLogoutContext(users).isPending,
 }), {
   logout: logoutApiRequest,
-  push,
 })(Navigation)
