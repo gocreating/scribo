@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import config from '../config'
 
-const SHORTNAME = config.disqusShortname
+const SHORTNAME = config.disqusShortname.replace('#', '')
 const WEBSITE_URL = config.host
 
 class DisqusThread extends Component {
