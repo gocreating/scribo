@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import config from '../config'
 
-const SHORTNAME = config.disqusShortname.replace('#', '')
-const WEBSITE_URL = config.host
+const SHORTNAME = config.disqusShortname
+const WEBSITE_URL = config.host.replace('#', '')
 
 class DisqusThread extends Component {
   componentDidMount() {
