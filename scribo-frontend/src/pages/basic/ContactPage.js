@@ -23,7 +23,6 @@ let ContactPage = () => (
         <Divider section />
         <DisqusThread
           id="contact-page"
-          title="Discuss About Scribo"
           path="/contact"
         />
       </Grid.Column>

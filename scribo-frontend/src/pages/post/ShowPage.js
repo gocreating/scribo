@@ -261,7 +261,6 @@ class ShowPage extends Component {
                 {post.blocks && (
                   <DisqusThread
                     id={`post-id-${post.id}`}
-                    title={post.title}
                     path={`/@${username}/${post.slug}`}
                   />
                 )}
