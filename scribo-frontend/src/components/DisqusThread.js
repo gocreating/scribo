@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import config from '../config'
 
 const SHORTNAME = config.disqusShortname
-const WEBSITE_URL = config.host.replace('#', '')
+const WEBSITE_URL = config.host.replace(/#/g, 'fuck-disqus/')
 
 class DisqusThread extends Component {
   componentDidMount() {
@@ -23,7 +23,7 @@ class DisqusThread extends Component {
         // ref: <https://help.disqus.com/installation/multi-lingual-websites>
         this.language = 'zh'
         this.page = this.page || {}
-        // this.page.url = WEBSITE_URL + path
+        this.page.url = WEBSITE_URL + path
         this.page.identifier = id
       }
 
