@@ -23,7 +23,7 @@ class DisqusThread extends Component {
         // ref: <https://help.disqus.com/installation/multi-lingual-websites>
         this.language = 'zh'
         this.page = this.page || {}
-        this.page.url = WEBSITE_URL + path
+        // this.page.url = WEBSITE_URL + path
         this.page.identifier = id
       }
 
