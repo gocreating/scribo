@@ -22,13 +22,15 @@ import authReducer from './ducks/auth'
 import userReducer from './ducks/user'
 import postReducer from './ducks/post'
 
-// let storage = (
-//   typeof window !== 'undefined'
-//     ? new CookieStorage(Cookies)
-//     : null
-// )
+export const isServer = !(
+  typeof window !== 'undefined' &&
+  window.document &&
+  window.document.createElement
+);
 
-let history = typeof window !== 'undefined' ? createBrowserHistory() : createMemoryHistory()
+let history = isServer ? createMemoryHistory() : createBrowserHistory()
+// Do we have preloaded state available? Great, save it.
+const initialState = isServer ? {} : window.__PRELOADED_STATE__;
 // let history = createBrowserHistory()
 let persistConfig = {
   key: 'root',
@@ -68,7 +70,7 @@ if (process.env.NODE_ENV === 'development') {
 
 let store = createStore(
   connectRouter(history)(persistedReducer),
-  {},
+  initialState,
   compose(applyMiddleware(...middlewares))
 )
 
