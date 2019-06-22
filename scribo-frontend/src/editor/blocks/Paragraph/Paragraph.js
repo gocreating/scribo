@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import pangu from 'pangu'
-import Han from 'han-css'
 import Typesettings from './Typesettings'
 import 'han-css/dist/han.min.css'
 import './Paragraph.css'
@@ -12,7 +11,8 @@ class Paragraph extends Component {
     let { block } = this.props
     let { typesetting } = block.values
 
-    if (typesetting === Typesettings.HAN) {
+    if (typeof window !== 'undefined' && typesetting === Typesettings.HAN) {
+      const Han = require('han-css')
       Han(this.paragraphRef.current).render()
     }
   }

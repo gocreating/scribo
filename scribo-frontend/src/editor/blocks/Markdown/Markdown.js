@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import ReactMarkdown from 'react-markdown'
 import breaks from 'remark-breaks'
 import math from 'remark-math'
-import Han from 'han-css'
 // import Text from './renderers/Text'
 import Paragraph from './renderers/Paragraph'
 import Blockquote from './renderers/Blockquote'
@@ -43,7 +42,10 @@ class Markdown extends Component {
   markdownRef = React.createRef()
 
   componentDidMount() {
-    Han(this.markdownRef.current).render()
+    if (typeof window !== 'undefined') {
+      const Han = require('han-css')
+      Han(this.markdownRef.current).render()
+    }
   }
 
   render() {

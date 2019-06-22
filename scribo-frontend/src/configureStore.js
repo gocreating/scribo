@@ -8,9 +8,11 @@ import {
   connectRouter,
   routerMiddleware,
 } from 'connected-react-router'
-import { createHashHistory } from 'history'
+import { createBrowserHistory, createMemoryHistory } from 'history'
 import { persistStore, persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
+// import { CookieStorage } from 'redux-persist-cookie-storage'
+// import Cookies from 'cookies-js'
 import { reducer as formReducer } from 'redux-form'
 import { createLogger } from 'redux-logger'
 import createSagaMiddleware from 'redux-saga'
@@ -20,19 +22,28 @@ import authReducer from './ducks/auth'
 import userReducer from './ducks/user'
 import postReducer from './ducks/post'
 
-let history = createHashHistory()
+// let storage = (
+//   typeof window !== 'undefined'
+//     ? new CookieStorage(Cookies)
+//     : null
+// )
+
+let history = typeof window !== 'undefined' ? createBrowserHistory() : createMemoryHistory()
+// let history = createBrowserHistory()
 let persistConfig = {
   key: 'root',
   storage,
   whitelist: ['auth'],
 }
 let rootReducer = combineReducers({
+  router: connectRouter(history),
   form: formReducer,
   auth: authReducer,
   users: userReducer,
   posts: postReducer,
 })
 let persistedReducer = persistReducer(persistConfig, rootReducer)
+
 let sagaMiddleware = createSagaMiddleware()
 let logger = createLogger({
   diff: true,
